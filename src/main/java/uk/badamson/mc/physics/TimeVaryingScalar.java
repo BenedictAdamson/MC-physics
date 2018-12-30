@@ -20,6 +20,7 @@ package uk.badamson.mc.physics;
 
 import java.time.Duration;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import net.jcip.annotations.Immutable;
 
 /**
@@ -43,5 +44,5 @@ public interface TimeVaryingScalar {
      * @throws NullPointerException
      *             If {@code t} is null.
      */
-    public double at(Duration t);
+    public double at(@NonNull Duration t);
 }

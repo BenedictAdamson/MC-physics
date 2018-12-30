@@ -21,6 +21,7 @@ package uk.badamson.mc.physics;
 import java.time.Duration;
 import java.util.function.ToDoubleFunction;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import net.jcip.annotations.Immutable;
 
 /**
@@ -51,7 +52,7 @@ public abstract class AbstractTimeVaryingScalar implements TimeVaryingScalar, To
      *             If {@code value} is null.
      */
     @Override
-    public final double applyAsDouble(final Duration value) {
+    public final double applyAsDouble(@NonNull final Duration value) {
         return at(value);
     }
 }
