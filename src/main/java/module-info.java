@@ -25,7 +25,7 @@ module uk.badamson.mc.physics {
     exports uk.badamson.mc.physics;
 
     requires com.github.spotbugs.annotations;
-    requires uk.badamson.mc.math;
+    requires transitive uk.badamson.mc.math;
 
     // Automatic modules:
     requires jcip.annotations;
