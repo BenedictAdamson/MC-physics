@@ -3,8 +3,8 @@
  *
  * This file is part of MC-physics.
  *
- * MC-physics is free software: you can redistribute it and/or modify it under the
- * terms of the GNU General Public License as published by the Free Software
+ * MC-physics is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
  * Foundation, either version 3 of the License, or (at your option) any later
  * version.
  *
@@ -25,6 +25,7 @@ module uk.badamson.mc.physics {
     exports uk.badamson.mc.physics;
 
     requires com.github.spotbugs.annotations;
+    requires uk.badamson.mc.math;
 
     // Automatic modules:
     requires jcip.annotations;

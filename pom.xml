@@ -14,4 +14,11 @@
 		<developerConnection>scm:git:git@github.com:BenedictAdamson/MC-physics.git</developerConnection>
 		<url>https://github.com/BenedictAdamson/MC-physics</url>
 	</scm>
+	<dependencies>
+		<dependency>
+			<groupId>uk.badamson.mc</groupId>
+			<artifactId>MC-math</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+	</dependencies>
 </project>
