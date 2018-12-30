@@ -1,7 +1,7 @@
 package uk.badamson.mc.physics;
-/* 
+/*
  * © Copyright Benedict Adamson 2018.
- * 
+ *
  * This file is part of MC-physics.
  *
  * MC-physics is free software: you can redistribute it and/or modify
@@ -18,6 +18,8 @@ package uk.badamson.mc.physics;
  * along with MC-physics.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.time.Duration;
 
 import uk.badamson.mc.ObjectTest;
@@ -28,17 +30,32 @@ import uk.badamson.mc.ObjectTest;
  */
 public class AbstractTimeVaryingScalarTest {
 
-    public static void assertInvariants(AbstractTimeVaryingScalar s) {
+    public static double applyAsDouble(final AbstractTimeVaryingScalar s, final Duration value) {
+        final double result = s.applyAsDouble(value);
+
+        assertInvariants(s);
+        assertEquals(Double.doubleToLongBits(s.at(value)), Double.doubleToLongBits(result),
+                "The applyAsDouble(Duration) method simply delegates to the at(Duration) method.");
+
+        return result;
+    }
+
+    public static void assertInvariants(final AbstractTimeVaryingScalar s) {
         ObjectTest.assertInvariants(s);// inherited
         TimeVaryingScalarTest.assertInvariants(s);// inherited
     }
 
-    public static void assertInvariants(AbstractTimeVaryingScalar s1, AbstractTimeVaryingScalar s2) {
+    public static void assertInvariants(final AbstractTimeVaryingScalar s1, final AbstractTimeVaryingScalar s2) {
         ObjectTest.assertInvariants(s1, s2);// inherited
         TimeVaryingScalarTest.assertInvariants(s1, s2);// inherited
     }
 
-    public static double at(AbstractTimeVaryingScalar s, Duration t) {
+    public static void assertInvariants(final AbstractTimeVaryingScalar s, final Duration t) {
+        assertEquals(Double.doubleToLongBits(s.at(t)), Double.doubleToLongBits(s.applyAsDouble(t)),
+                "The applyAsDouble(Duration) method simply delegates to the at(Duration) method.");
+    }
+
+    public static double at(final AbstractTimeVaryingScalar s, final Duration t) {
         final double result = TimeVaryingScalarTest.at(s, t);// inherited
 
         assertInvariants(s);

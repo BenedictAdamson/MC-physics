@@ -1,7 +1,7 @@
 package uk.badamson.mc.physics;
-/* 
+/*
  * © Copyright Benedict Adamson 2018.
- * 
+ *
  * This file is part of MC-physics.
  *
  * MC-physics is free software: you can redistribute it and/or modify
@@ -28,15 +28,24 @@ import java.time.Duration;
  */
 public class TimeVaryingScalarTest {
 
-    public static void assertInvariants(TimeVaryingScalar s) {
+    static final Duration T_1 = Duration.ofSeconds(0);
+    static final Duration T_2 = Duration.ofSeconds(2);
+    static final Duration T_3 = Duration.ofSeconds(3);
+    static final Duration T_4 = Duration.ofSeconds(5);
+
+    public static void assertInvariants(final TimeVaryingScalar s) {
         // Do nothing.
     }
 
-    public static void assertInvariants(TimeVaryingScalar s1, TimeVaryingScalar s2) {
+    public static void assertInvariants(final TimeVaryingScalar s, final Duration t) {
         // Do nothing.
     }
 
-    public static double at(TimeVaryingScalar s, Duration t) {
+    public static void assertInvariants(final TimeVaryingScalar s1, final TimeVaryingScalar s2) {
+        // Do nothing.
+    }
+
+    public static double at(final TimeVaryingScalar s, final Duration t) {
         final double result = s.at(t);
 
         assertInvariants(s);

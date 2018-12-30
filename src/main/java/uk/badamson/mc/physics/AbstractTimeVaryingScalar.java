@@ -1,7 +1,7 @@
 package uk.badamson.mc.physics;
-/* 
+/*
  * © Copyright Benedict Adamson 2018.
- * 
+ *
  * This file is part of MC-physics.
  *
  * MC-physics is free software: you can redistribute it and/or modify
@@ -35,4 +35,23 @@ public abstract class AbstractTimeVaryingScalar implements TimeVaryingScalar, To
         // Do nothing
     }
 
+    /**
+     * <p>
+     * Applies this function to the given argument.
+     * </p>
+     * <ul>
+     * <li>The {@link #applyAsDouble(Duration)} method simply delegates to the
+     * {@link #at(Duration)} method.</li>
+     * </ul>
+     *
+     * @param value
+     *            the function argument
+     * @return the function result.
+     * @throws NullPointerException
+     *             If {@code value} is null.
+     */
+    @Override
+    public final double applyAsDouble(final Duration value) {
+        return at(value);
+    }
 }
