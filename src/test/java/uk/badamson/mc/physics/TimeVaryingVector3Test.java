@@ -18,6 +18,8 @@ package uk.badamson.mc.physics;
  * along with MC-physics.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.time.Duration;
 
 import uk.badamson.mc.math.ImmutableVector3;
@@ -51,6 +53,7 @@ public class TimeVaryingVector3Test {
         final ImmutableVector3 result = v.at(t);
 
         assertInvariants(v);
+        assertNotNull(result, "Not null, result");
 
         return result;
     }
