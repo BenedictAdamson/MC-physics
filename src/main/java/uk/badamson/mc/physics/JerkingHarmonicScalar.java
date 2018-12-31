@@ -54,6 +54,8 @@ import net.jcip.annotations.Immutable;
  * f<sub>c</sub>, f<sub>s</sub>, f<sub>1</sub>, f<sub>2</sub>, f<sub>3</sub>,
  * &omega;<sub>e</sub> and &omega;<sub>h</sub> being constant parameters.
  * </p>
+ * 
+ * @see JerkingHarmonicVector3
  */
 @Immutable
 public final class JerkingHarmonicScalar extends AbstractTimeVaryingScalar {

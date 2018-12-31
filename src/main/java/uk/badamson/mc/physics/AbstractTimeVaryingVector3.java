@@ -29,6 +29,8 @@ import uk.badamson.mc.math.ImmutableVector3;
  * <p>
  * A skeleton implementation of a functor for a time varying 3D vector property.
  * </p>
+ * 
+ * @see AbstractTimeVaryingScalar
  */
 @Immutable
 public abstract class AbstractTimeVaryingVector3 implements TimeVaryingVector3, Function<Duration, ImmutableVector3> {
