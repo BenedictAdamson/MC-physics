@@ -53,7 +53,7 @@ public abstract class AbstractTimeVaryingVector3 implements TimeVaryingVector3, 
      *             If {@code value} is null.
      */
     @Override
-    public final ImmutableVector3 apply(@NonNull final Duration value) {
+    public final @NonNull ImmutableVector3 apply(@NonNull final Duration value) {
         return at(value);
     }
 }

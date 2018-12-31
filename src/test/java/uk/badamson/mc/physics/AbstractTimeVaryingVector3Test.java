@@ -19,6 +19,7 @@ package uk.badamson.mc.physics;
  */
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.time.Duration;
 
@@ -35,6 +36,7 @@ public class AbstractTimeVaryingVector3Test {
         final ImmutableVector3 result = v.apply(value);
 
         assertInvariants(v);
+        assertNotNull(result, "Non null, result");
         assertEquals(v.at(value), result, "The apply(Duration) method simply delegates to the at(Duration) method.");
 
         return result;
