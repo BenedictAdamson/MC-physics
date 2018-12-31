@@ -27,9 +27,11 @@ import uk.badamson.mc.math.ImmutableVector3;
 
 /**
  * <p>
- * A functor for a notionally time varying 3D vector property that in fact does
- * not vary with time.
+ * A {@linkplain TimeVaryingVector3 functor for a notionally time varying 3D
+ * vector property} that in fact does not vary with time.
  * </p>
+ *
+ * @see ConstantScalar
  */
 @Immutable
 public final class ConstantVector3 extends AbstractTimeVaryingVector3 {

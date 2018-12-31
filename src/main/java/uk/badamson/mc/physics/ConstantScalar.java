@@ -25,9 +25,11 @@ import net.jcip.annotations.Immutable;
 
 /**
  * <p>
- * A functor for a notionally time varying scalar property that in fact does not
- * vary with time.
+ * A {@linkplain TimeVaryingScalar functor for a notionally time varying scalar
+ * property} that in fact does not vary with time.
  * </p>
+ *
+ * @see ConstantVector3
  */
 @Immutable
 public final class ConstantScalar extends AbstractTimeVaryingScalar {

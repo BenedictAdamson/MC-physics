@@ -27,7 +27,7 @@ import net.jcip.annotations.Immutable;
 /**
  * <p>
  * A {@linkplain TimeVaryingScalar functor for a time varying scalar property}
- * that can have <i>jerk</i> and <i>harmonic</i> variation.
+ * that can have <i>jerk</i> and <i>damped harmonic</i> variation.
  * </p>
  * <p>
  * The class allows for a linear <dfn>jerk</dfn>; that is, a linear variation of

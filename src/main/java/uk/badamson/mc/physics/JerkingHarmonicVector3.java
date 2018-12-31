@@ -28,7 +28,7 @@ import uk.badamson.mc.math.ImmutableVector3;
 /**
  * <p>
  * A {@linkplain TimeVaryingVector3 functor for a time varying 3D vector
- * property} that can have <i>jerk</i> and <i>harmonic</i> variation.
+ * property} that can have <i>jerk</i> and <i>damped harmonic</i> variation.
  * </p>
  * <p>
  * The class allows for a linear <dfn>jerk</dfn>; that is, a linear variation of
