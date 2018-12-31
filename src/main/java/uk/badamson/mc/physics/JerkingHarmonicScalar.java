@@ -35,10 +35,10 @@ import net.jcip.annotations.Immutable;
  * value.
  * </p>
  * <p>
- * The class allows for <dfn>damped harmoni</dfn> variation; that is, a decaying
- * sinusoidal variation of its value. That also allows for exponentially
- * decaying and growing variation as a special case of zero frequency of the
- * sinusoidal variation.
+ * The class allows for <dfn>damped harmonic</dfn> variation; that is, a
+ * decaying sinusoidal variation of its value. That also allows for
+ * exponentially decaying and growing variation as a special case of zero
+ * frequency of the sinusoidal variation.
  * </p>
  * <p>
  * The timewise variation of the scalar is given by the expression
