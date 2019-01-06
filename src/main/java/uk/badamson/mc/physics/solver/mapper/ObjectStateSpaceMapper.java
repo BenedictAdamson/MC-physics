@@ -18,6 +18,7 @@ package uk.badamson.mc.physics.solver.mapper;
  * along with MC-physics.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import net.jcip.annotations.Immutable;
 import uk.badamson.mc.math.ImmutableVectorN;
 
@@ -32,13 +33,14 @@ public interface ObjectStateSpaceMapper<OBJECT> {
 
     /**
      * <p>
-     * Using this mapping to convert an object to (part of) a state-space vector.
+     * Use this mapping to convert an object to (part of) a state-space vector.
      * </p>
      * <ul>
-     * <li>The method <em>adds</em> the components of the given state-space vector.
-     * Normally, the state-space vector should have been initialised to zero.</li>
+     * <li>The method <em>adds</em> to the components of the given state-space
+     * vector. Normally, the state-space vector should have been initialised to
+     * zero.</li>
      * <li>This is the inverse operation of the {@link #toObject(ImmutableVectorN)}
-     * method.
+     * method.</li>
      * </ul>
      *
      * @param state
@@ -58,7 +60,7 @@ public interface ObjectStateSpaceMapper<OBJECT> {
      *             {@code state} array is not {@linkplain #isValidForDimension(int)
      *             valid} for this mapper.
      */
-    public void fromObject(double[] state, OBJECT object);
+    public void fromObject(@NonNull double[] state, @NonNull OBJECT object);
 
     /**
      * <p>
@@ -74,7 +76,7 @@ public interface ObjectStateSpaceMapper<OBJECT> {
 
     /**
      * <p>
-     * Using this mapping to convert (part of) a state-space vector to an object.
+     * Use this mapping to convert (part of) a state-space vector to an object.
      * </p>
      *
      * @param state
@@ -88,5 +90,5 @@ public interface ObjectStateSpaceMapper<OBJECT> {
      *             {@code state} array is not {@linkplain #isValidForDimension(int)
      *             valid} for this mapper.
      */
-    public OBJECT toObject(ImmutableVectorN state);
+    public @NonNull OBJECT toObject(@NonNull ImmutableVectorN state);
 }

@@ -20,6 +20,7 @@ package uk.badamson.mc.physics.solver.mapper;
 
 import java.util.Objects;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import net.jcip.annotations.Immutable;
 import uk.badamson.mc.math.ImmutableVectorN;
 import uk.badamson.mc.math.Quaternion;
@@ -70,7 +71,7 @@ public final class QuaternionStateSpaceMapper implements ObjectStateSpaceMapper<
      *             {@inheritDoc}
      */
     @Override
-    public final void fromObject(final double[] state, final Quaternion object) {
+    public final void fromObject(@NonNull final double[] state, @NonNull final Quaternion object) {
         Objects.requireNonNull(state, "state");
         Objects.requireNonNull(object, "object");
         state[index0] += object.getA();
@@ -102,7 +103,7 @@ public final class QuaternionStateSpaceMapper implements ObjectStateSpaceMapper<
      *             {@inheritDoc}
      */
     @Override
-    public final Quaternion toObject(final ImmutableVectorN state) {
+    public final @NonNull Quaternion toObject(@NonNull final ImmutableVectorN state) {
         Objects.requireNonNull(state, "state");
         return Quaternion.create(state.get(index0), state.get(index0 + 1), state.get(index0 + 2),
                 state.get(index0 + 3));

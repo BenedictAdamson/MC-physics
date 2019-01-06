@@ -20,6 +20,7 @@ package uk.badamson.mc.physics.solver.mapper;
 
 import java.util.Objects;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import net.jcip.annotations.Immutable;
 import uk.badamson.mc.math.ImmutableVector3;
 import uk.badamson.mc.math.ImmutableVectorN;
@@ -61,13 +62,14 @@ public final class ImmutableVector3StateSpaceMapper implements VectorStateSpaceM
     }
 
     @Override
-    public final void fromObject(final double[] state, final ImmutableVector3 object) {
+    public final void fromObject(@NonNull final double[] state, @NonNull final ImmutableVector3 object) {
         fromVector(state, object);
     }
 
     @Override
-    public final void fromVector(final double[] state, final Vector vector) {
+    public final void fromVector(@NonNull final double[] state, @NonNull final Vector vector) {
         Objects.requireNonNull(state, "state");
+        Objects.requireNonNull(vector, "vector");
         if (!isValidForDimension(state.length)) {
             throw new IllegalArgumentException("state.length " + state.length + " index0 " + index0);
         }
@@ -102,7 +104,7 @@ public final class ImmutableVector3StateSpaceMapper implements VectorStateSpaceM
     }
 
     @Override
-    public final ImmutableVector3 toObject(final ImmutableVectorN state) {
+    public final @NonNull ImmutableVector3 toObject(@NonNull final ImmutableVectorN state) {
         Objects.requireNonNull(state, "state");
         if (!isValidForDimension(state.getDimension())) {
             throw new IllegalArgumentException("state.dimension " + state.getDimension() + " index " + index0);

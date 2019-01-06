@@ -18,6 +18,7 @@ package uk.badamson.mc.physics.solver.mapper;
  * along with MC-physics.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import net.jcip.annotations.Immutable;
 import uk.badamson.mc.math.ImmutableVectorN;
 import uk.badamson.mc.math.Vector;
@@ -46,18 +47,19 @@ public interface VectorStateSpaceMapper<VECTOR extends Vector> extends MatrixSta
      *             {@inheritDoc}
      */
     @Override
-    public void fromObject(double[] state, VECTOR object);
+    public void fromObject(@NonNull double[] state, @NonNull VECTOR object);
 
     /**
      * <p>
-     * Using this mapping to convert a vector object to (part of) a state-space
+     * Use this mapping to convert a vector object to (part of) a state-space
      * vector.
      * </p>
      * <ul>
-     * <li>The method <em>adds</em> the components of the given state-space vector.
-     * Normally, the state-space vector should have been initialised to zero.</li>
+     * <li>The method <em>adds</em> to the components of the given state-space
+     * vector. Normally, the state-space vector should have been initialised to
+     * zero.</li>
      * <li>This is the inverse operation of the {@link #toObject(ImmutableVectorN)}
-     * method.
+     * method.</li>
      * </ul>
      *
      * @param state
@@ -77,7 +79,7 @@ public interface VectorStateSpaceMapper<VECTOR extends Vector> extends MatrixSta
      *             {@code vector} does not equal the {@linkplain #getDimension()
      *             dimension} of this mapper.
      */
-    public void fromVector(double[] state, Vector vector);
+    public void fromVector(@NonNull double[] state, @NonNull Vector vector);
 
     /**
      * <p>

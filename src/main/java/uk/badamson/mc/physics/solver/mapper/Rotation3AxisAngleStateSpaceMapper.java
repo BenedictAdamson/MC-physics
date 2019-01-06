@@ -20,6 +20,7 @@ package uk.badamson.mc.physics.solver.mapper;
 
 import java.util.Objects;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import net.jcip.annotations.Immutable;
 import uk.badamson.mc.math.ImmutableVectorN;
 import uk.badamson.mc.math.Rotation3AxisAngle;
@@ -39,6 +40,7 @@ import uk.badamson.mc.math.Rotation3AxisAngle;
 public final class Rotation3AxisAngleStateSpaceMapper implements ObjectStateSpaceMapper<Rotation3AxisAngle> {
 
     private final int rotationIndex;
+    @NonNull
     private final ImmutableVector3StateSpaceMapper axisMapper;
 
     /**
@@ -50,12 +52,12 @@ public final class Rotation3AxisAngleStateSpaceMapper implements ObjectStateSpac
      *             if {@code rotationIndex} is negative.
      */
     public Rotation3AxisAngleStateSpaceMapper(final int rotationIndex,
-            final ImmutableVector3StateSpaceMapper axisMapper) {
+            @NonNull final ImmutableVector3StateSpaceMapper axisMapper) {
         if (rotationIndex < 0) {
             throw new IllegalArgumentException("rotationIndex " + rotationIndex);
         }
         this.rotationIndex = rotationIndex;
-        this.axisMapper = Objects.requireNonNull(axisMapper, "quaternionMapper");
+        this.axisMapper = Objects.requireNonNull(axisMapper, "axisMapper");
     }
 
     /**
@@ -67,7 +69,7 @@ public final class Rotation3AxisAngleStateSpaceMapper implements ObjectStateSpac
      *             {@inheritDoc}
      */
     @Override
-    public final void fromObject(final double[] state, final Rotation3AxisAngle object) {
+    public final void fromObject(@NonNull final double[] state, @NonNull final Rotation3AxisAngle object) {
         Objects.requireNonNull(state, "state");
         Objects.requireNonNull(object, "object");
         state[rotationIndex] += object.getAngle();
@@ -88,7 +90,7 @@ public final class Rotation3AxisAngleStateSpaceMapper implements ObjectStateSpac
      *             {@inheritDoc}
      */
     @Override
-    public final Rotation3AxisAngle toObject(final ImmutableVectorN state) {
+    public final @NonNull Rotation3AxisAngle toObject(@NonNull final ImmutableVectorN state) {
         return Rotation3AxisAngle.valueOfAxisAngle(axisMapper.toObject(state), state.get(rotationIndex));
     }
 

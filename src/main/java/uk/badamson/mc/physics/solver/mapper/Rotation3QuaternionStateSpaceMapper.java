@@ -20,6 +20,7 @@ package uk.badamson.mc.physics.solver.mapper;
 
 import java.util.Objects;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import net.jcip.annotations.Immutable;
 import uk.badamson.mc.math.ImmutableVectorN;
 import uk.badamson.mc.math.Quaternion;
@@ -39,6 +40,7 @@ import uk.badamson.mc.math.Rotation3Quaternion;
 @Immutable
 public final class Rotation3QuaternionStateSpaceMapper implements ObjectStateSpaceMapper<Rotation3Quaternion> {
 
+    @NonNull
     private final QuaternionStateSpaceMapper quaternionMapper;
 
     /**
@@ -50,7 +52,7 @@ public final class Rotation3QuaternionStateSpaceMapper implements ObjectStateSpa
      * @throws NullPointerException
      *             If {@code quaternionMapper} is null
      */
-    public Rotation3QuaternionStateSpaceMapper(final QuaternionStateSpaceMapper quaternionMapper) {
+    public Rotation3QuaternionStateSpaceMapper(@NonNull final QuaternionStateSpaceMapper quaternionMapper) {
         this.quaternionMapper = Objects.requireNonNull(quaternionMapper, "quaternionMapper");
     }
 
@@ -63,7 +65,7 @@ public final class Rotation3QuaternionStateSpaceMapper implements ObjectStateSpa
      *             {@inheritDoc}
      */
     @Override
-    public final void fromObject(final double[] state, final Rotation3Quaternion object) {
+    public final void fromObject(@NonNull final double[] state, @NonNull final Rotation3Quaternion object) {
         Objects.requireNonNull(state, "state");
         Objects.requireNonNull(object, "object");
         quaternionMapper.fromObject(state, object.getVersor());
@@ -83,7 +85,7 @@ public final class Rotation3QuaternionStateSpaceMapper implements ObjectStateSpa
      *             {@inheritDoc}
      */
     @Override
-    public final Rotation3Quaternion toObject(final ImmutableVectorN state) {
+    public final @NonNull Rotation3Quaternion toObject(@NonNull final ImmutableVectorN state) {
         return Rotation3Quaternion.valueOf(quaternionMapper.toObject(state));
     }
 
