@@ -87,11 +87,11 @@ public class VersorErrorTest {
 
         assertInvariants(term);
 
-        assertThat("energy error", e, closeTo(eExpected, eTolerance));
-        assertThat("dedex[0]", dedx[0], closeTo(deda2 * versor.getA(), dedxTolerance));
-        assertThat("dedex[1]", dedx[1], closeTo(deda2 * versor.getB(), dedxTolerance));
-        assertThat("dedex[2]", dedx[2], closeTo(deda2 * versor.getC(), dedxTolerance));
-        assertThat("dedex[3]", dedx[3], closeTo(deda2 * versor.getD(), dedxTolerance));
+        assertThat("energy error", Double.valueOf(e), closeTo(eExpected, eTolerance));
+        assertThat("dedex[0]", Double.valueOf(dedx[0]), closeTo(deda2 * versor.getA(), dedxTolerance));
+        assertThat("dedex[1]", Double.valueOf(dedx[1]), closeTo(deda2 * versor.getB(), dedxTolerance));
+        assertThat("dedex[2]", Double.valueOf(dedx[2]), closeTo(deda2 * versor.getC(), dedxTolerance));
+        assertThat("dedex[3]", Double.valueOf(dedx[3]), closeTo(deda2 * versor.getD(), dedxTolerance));
     }
 
     private static void evaluate_versor(double length, double mass, Quaternion versor, double dt) {
@@ -105,11 +105,11 @@ public class VersorErrorTest {
 
         assertInvariants(term);
 
-        assertThat("energy error", e, closeTo(0, Double.MIN_NORMAL));
-        assertThat("dedex[0]", dedx[0], closeTo(0, Double.MIN_NORMAL));
-        assertThat("dedex[1]", dedx[1], closeTo(0, Double.MIN_NORMAL));
-        assertThat("dedex[2]", dedx[2], closeTo(0, Double.MIN_NORMAL));
-        assertThat("dedex[3]", dedx[3], closeTo(0, Double.MIN_NORMAL));
+        assertThat("energy error", Double.valueOf(e), closeTo(0, Double.MIN_NORMAL));
+        assertThat("dedex[0]", Double.valueOf(dedx[0]), closeTo(0, Double.MIN_NORMAL));
+        assertThat("dedex[1]", Double.valueOf(dedx[1]), closeTo(0, Double.MIN_NORMAL));
+        assertThat("dedex[2]", Double.valueOf(dedx[2]), closeTo(0, Double.MIN_NORMAL));
+        assertThat("dedex[3]", Double.valueOf(dedx[3]), closeTo(0, Double.MIN_NORMAL));
     }
 
     private static final double tolerance(double expected) {

@@ -54,7 +54,7 @@ public class MassConservationErrorTest {
 
         assertEquals(massTerm, term.getMassTerm(), "massTerm");
         for (int j = 0; j < massTransferInto.length; ++j) {
-            assertEquals(massTransferInto[j], term.isMassTransferInto(j), "massTransferInto[" + j + "]");
+            assertEquals(Boolean.valueOf(massTransferInto[j]), Boolean.valueOf(term.isMassTransferInto(j)), "massTransferInto[" + j + "]");
             assertEquals(advectionMassRateTerm[j],
                     term.getAdvectionMassRateTerm(j), "advectionMassRateTerm[" + j + "]");
         }

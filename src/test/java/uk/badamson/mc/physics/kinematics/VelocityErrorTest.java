@@ -45,7 +45,7 @@ public class VelocityErrorTest {
         final int velocityVectorMapperDimension = velocityVectorMapper.getDimension();
 
         assertTrue(0.0 < mass && Double.isFinite(mass), "Mass <" + mass + "> is positive and  finite");
-        assertThat("spaceDimension", spaceDimension, org.hamcrest.number.OrderingComparison.greaterThanOrEqualTo(1));
+        assertThat("spaceDimension", Integer.valueOf(spaceDimension), org.hamcrest.number.OrderingComparison.greaterThanOrEqualTo(Integer.valueOf(1)));
         assertEquals(velocityVectorMapperDimension, spaceDimension, "The number of dimensions equals the number of dimensions of the velocity vector mapper."
                 );
         assertEquals(

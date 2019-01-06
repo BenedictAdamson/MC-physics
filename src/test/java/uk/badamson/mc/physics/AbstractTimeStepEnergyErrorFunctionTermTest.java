@@ -32,7 +32,7 @@ public class AbstractTimeStepEnergyErrorFunctionTermTest {
 
         @Override
         public boolean matchesSafely(Double item) {
-            return item != null && Double.isFinite(item);
+            return item != null && Double.isFinite(item.doubleValue());
         }
     }// class
 
@@ -50,7 +50,7 @@ public class AbstractTimeStepEnergyErrorFunctionTermTest {
     }
 
     public static void assertIsReferenceScale(String name, double scale) {
-        assertThat(name, scale, allOf(greaterThan(0.0), IS_FINITE));
+        assertThat(name, Double.valueOf(scale), allOf(greaterThan(Double.valueOf(0.0)), IS_FINITE));
     }
 
     public static double evaluate(AbstractTimeStepEnergyErrorFunctionTerm term, double[] dedx, ImmutableVectorN state0,

@@ -16,8 +16,8 @@ public class VectorStateSpaceMapperTest {
     public static <VECTOR extends Vector> void assertInvariants(VectorStateSpaceMapper<VECTOR> mapper) {
         MatrixStateSpaceMapperTest.assertInvariants(mapper);// inherited
 
-        assertThat("Number of dimensions", mapper.getDimension(),
-                org.hamcrest.number.OrderingComparison.greaterThanOrEqualTo(1));
+        assertThat("Number of dimensions", Integer.valueOf(mapper.getDimension()),
+                org.hamcrest.number.OrderingComparison.greaterThanOrEqualTo(Integer.valueOf(1)));
     }
 
     public static <VECTOR extends Vector> void assertInvariants(VectorStateSpaceMapper<VECTOR> mapper1,

@@ -60,7 +60,7 @@ public class MomentumConservationErrorTest {
             assertEquals(velocityTerm[i], term.getVelocityTerm(i), "velocityTerm[" + i + "]");
         }
         for (int j = 0; j < massTransferInto.length; ++j) {
-            assertEquals(massTransferInto[j], term.isMassTransferInto(j), "massTransferInto[" + j + "]");
+            assertEquals(Boolean.valueOf(massTransferInto[j]), Boolean.valueOf(term.isMassTransferInto(j)), "massTransferInto[" + j + "]");
             assertEquals(advectionMassRateTerm[j],
                     term.getAdvectionMassRateTerm(j), "advectionMassRateTerm[" + j + "]");
             for (int i = 0; i < velocityTerm.length; ++i) {
@@ -69,7 +69,7 @@ public class MomentumConservationErrorTest {
             }
         }
         for (int k = 0; k < forceOn.length; ++k) {
-            assertEquals(forceOn[k], term.isForceOn(k), "forceOn[" + k + "]");
+            assertEquals(Boolean.valueOf(forceOn[k]), Boolean.valueOf(term.isForceOn(k)), "forceOn[" + k + "]");
             for (int i = 0; i < velocityTerm.length; ++i) {
                 assertEquals(forceTerm[k * velocityTerm.length + i],
                         term.getForceTerm(k, i), "forceTerm[" + k + "," + i + "]");

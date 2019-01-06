@@ -45,7 +45,7 @@ public class PositionErrorTest {
         final int positionVectorMapperDimension = positionVectorMapper.getDimension();
 
         AbstractTimeStepEnergyErrorFunctionTermTest.assertIsReferenceScale("mass", mass);
-        assertThat("spaceDimension", spaceDimension, org.hamcrest.number.OrderingComparison.greaterThanOrEqualTo(1));
+        assertThat("spaceDimension", Integer.valueOf(spaceDimension), org.hamcrest.number.OrderingComparison.greaterThanOrEqualTo(Integer.valueOf(1)));
         assertEquals(positionVectorMapperDimension, spaceDimension, "The number of dimensions equals the number of dimensions of the position vector mapper."
                 );
         assertEquals(
