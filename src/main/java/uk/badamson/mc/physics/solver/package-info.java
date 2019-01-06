@@ -1,7 +1,7 @@
 /**
- * Classes for parallel discrete event physics simulation.
+ * Classes for solving physics simulation equations.
  */
-package uk.badamson.mc.physics;
+package uk.badamson.mc.physics.solver;
 /*
  * © Copyright Benedict Adamson 2018-19.
  *
