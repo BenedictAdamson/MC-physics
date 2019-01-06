@@ -1,11 +1,11 @@
 package uk.badamson.mc.physics;
 
-import static org.junit.Assert.assertEquals;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
 
 import uk.badamson.mc.math.ImmutableVector1;
-import uk.badamson.mc.math.ImmutableVector1Test;
 import uk.badamson.mc.math.ImmutableVectorN;
 import uk.badamson.mc.math.Vector;
 
@@ -19,7 +19,7 @@ public class ImmutableVector1StateSpaceMapperTest {
     public static void assertInvariants(ImmutableVector1StateSpaceMapper mapper) {
         VectorStateSpaceMapperTest.assertInvariants(mapper);// inherited
 
-        assertEquals("Number of dimensions", mapper.getDimension(), 1);
+        assertEquals(mapper.getDimension(), 1, "Number of dimensions");
     }
 
     public static void assertInvariants(ImmutableVector1StateSpaceMapper mapper1,
@@ -31,7 +31,6 @@ public class ImmutableVector1StateSpaceMapperTest {
         VectorStateSpaceMapperTest.fromObject(mapper, state, vector);
 
         assertInvariants(mapper);// check for side-effects
-        ImmutableVector1Test.assertInvariants(vector);// check for side-effects
     }
 
     private static void fromObject(int index, int stateSize, double state0, double x) {
@@ -43,7 +42,7 @@ public class ImmutableVector1StateSpaceMapperTest {
 
         fromObject(mapper, state, vector);
 
-        assertEquals("state[index]", state0 + x, state[index], tolerance);
+        assertEquals(state0 + x, state[index], tolerance, "state[index]");
     }
 
     private static void fromToObjectSymmetry(ImmutableVector1StateSpaceMapper mapper, double[] state,
@@ -53,7 +52,7 @@ public class ImmutableVector1StateSpaceMapperTest {
 
         final ImmutableVector1 reconstructed = toObject(mapper, stateVector);
 
-        assertEquals("Symmetric", original, reconstructed);
+        assertEquals(original, reconstructed, "Symmetric");
     }
 
     private static void fromToObjectSymmetry(int index, int stateSize, ImmutableVector1 original) {
@@ -70,7 +69,7 @@ public class ImmutableVector1StateSpaceMapperTest {
 
         final ImmutableVector1 reconstructed = toObject(mapper, stateVector);
 
-        assertEquals("Symmetric", original, reconstructed);
+        assertEquals(original, reconstructed, "Symmetric");
     }
 
     private static void fromToVectorSymmetry(int index, int stateSize, ImmutableVector1 original) {
@@ -90,7 +89,6 @@ public class ImmutableVector1StateSpaceMapperTest {
         ImmutableVector1 vector = VectorStateSpaceMapperTest.toObject(mapper, state);
 
         assertInvariants(mapper);// check for side-effects
-        ImmutableVector1Test.assertInvariants(vector);
 
         return vector;
     }

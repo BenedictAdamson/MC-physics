@@ -1,9 +1,9 @@
 package uk.badamson.mc.physics;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -11,10 +11,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import uk.badamson.mc.ObjectTest;
-import uk.badamson.mc.math.FunctionNWithGradientTest;
 import uk.badamson.mc.math.FunctionNWithGradientValue;
 import uk.badamson.mc.math.ImmutableVectorN;
 
@@ -90,23 +89,22 @@ public class TimeStepEnergyErrorFunctionTest {
 
     public static void assertInvariants(TimeStepEnergyErrorFunction f) {
         ObjectTest.assertInvariants(f);// inherited
-        FunctionNWithGradientTest.assertInvariants(f);// inherited
 
         final ImmutableVectorN x0 = f.getX0();
         final double dt = f.getDt();
         final Collection<TimeStepEnergyErrorFunctionTerm> terms = f.getTerms();
 
-        assertNotNull("Always have a state vector of the physical system at the current point in time.", x0);// guard
-        assertNotNull("Always have a collection of terms.", terms);// guard
+        assertNotNull(x0, "Always have a state vector of the physical system at the current point in time.");// guard
+        assertNotNull(terms, "Always have a collection of terms.");// guard
 
-        assertTrue("The time-step <" + dt + "> is positive and finite.", 0.0 < dt && Double.isFinite(dt));
+        assertTrue(0.0 < dt && Double.isFinite(dt), "The time-step <" + dt + "> is positive and finite.");
         for (TimeStepEnergyErrorFunctionTerm term : terms) {
-            assertNotNull("The collection of terms does not contain any null elements.", term);// guard
+            assertNotNull(term, "The collection of terms does not contain any null elements.");// guard
             TimeStepEnergyErrorFunctionTermTest.assertInvariants(term);
         }
         assertEquals(
-                "The dimension equals the dimension of the state vector of the physical system at the current point in time.",
-                x0.getDimension(), f.getDimension());
+                x0.getDimension(), f.getDimension(), "The dimension equals the dimension of the state vector of the physical system at the current point in time."
+                );
     }
 
     public static void assertInvariants(TimeStepEnergyErrorFunction f1, TimeStepEnergyErrorFunction f2) {
@@ -118,15 +116,15 @@ public class TimeStepEnergyErrorFunctionTest {
         final TimeStepEnergyErrorFunction f = new TimeStepEnergyErrorFunction(x0, dt, terms);
 
         assertInvariants(f);
-        assertSame("x0", x0, f.getX0());
-        assertEquals("dt", dt, f.getDt(), Double.MIN_NORMAL);
-        assertEquals("terms", terms, f.getTerms());
+        assertSame(x0, f.getX0(), "x0");
+        assertEquals(dt, f.getDt(), Double.MIN_NORMAL, "dt");
+        assertEquals(terms, f.getTerms(), "terms");
 
         return f;
     }
 
     private static FunctionNWithGradientValue value(TimeStepEnergyErrorFunction f, ImmutableVectorN x) {
-        final FunctionNWithGradientValue fx = FunctionNWithGradientTest.value(f, x);// inherited
+        final FunctionNWithGradientValue fx = f.value(x);
 
         return fx;
     }
@@ -135,10 +133,10 @@ public class TimeStepEnergyErrorFunctionTest {
         final List<TimeStepEnergyErrorFunctionTerm> terms = Collections.emptyList();
         final TimeStepEnergyErrorFunction f = new TimeStepEnergyErrorFunction(x0, dt, terms);
 
-        final FunctionNWithGradientValue fx = FunctionNWithGradientTest.value(f, x);// inherited
+        final FunctionNWithGradientValue fx = f.value(x);
 
-        assertEquals("value.f", fx.getF(), 0.0, Double.MIN_NORMAL);
-        assertEquals("value.dfDx <" + fx.getDfDx() + "> magnitude", fx.getDfDx().magnitude(), 0.0, Double.MIN_NORMAL);
+        assertEquals(fx.getF(), 0.0, Double.MIN_NORMAL, "value.f");
+        assertEquals(fx.getDfDx().magnitude(), 0.0, Double.MIN_NORMAL, "value.dfDx <" + fx.getDfDx() + "> magnitude");
     }
 
     private static void value_quadraticTerm(double x0, double dt, double x, double xMin, double eMin, double expectedE,
@@ -149,8 +147,8 @@ public class TimeStepEnergyErrorFunctionTest {
 
         final FunctionNWithGradientValue fx = value(f, ImmutableVectorN.create(x));// inherited
 
-        assertEquals("value.f", expectedE, fx.getF(), Double.MIN_NORMAL);
-        assertEquals("value.dfDx", expectedDeDx, fx.getDfDx().get(0), Double.MIN_NORMAL);
+        assertEquals(expectedE, fx.getF(), Double.MIN_NORMAL, "value.f");
+        assertEquals(expectedDeDx, fx.getDfDx().get(0), Double.MIN_NORMAL, "value.dfDx");
     }
 
     @Test
@@ -281,7 +279,7 @@ public class TimeStepEnergyErrorFunctionTest {
 
         final FunctionNWithGradientValue fx = value(f, ImmutableVectorN.create(x));// inherited
 
-        assertEquals("value.f", expectedE, fx.getF(), Double.MIN_NORMAL);
-        assertEquals("value.dfDx", expectedDeDx, fx.getDfDx().get(0), Double.MIN_NORMAL);
+        assertEquals(expectedE, fx.getF(), Double.MIN_NORMAL, "value.f");
+        assertEquals(expectedDeDx, fx.getDfDx().get(0), Double.MIN_NORMAL, "value.dfDx");
     }
 }

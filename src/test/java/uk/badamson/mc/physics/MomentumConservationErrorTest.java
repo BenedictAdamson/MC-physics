@@ -1,9 +1,9 @@
 package uk.badamson.mc.physics;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import uk.badamson.mc.math.ImmutableVectorN;
 
@@ -21,22 +21,22 @@ public class MomentumConservationErrorTest {
         final int numberOfForces = term.getNumberOfForces();
         final int numberOfMassTransfers = term.getNumberOfMassTransfers();
 
-        assertTrue("numberOfMassTransfers not negative", 0 <= numberOfMassTransfers);
-        assertTrue("numberOfForces not negative", 0 <= numberOfForces);
-        assertTrue("spaceDimension is positive", 0 < spaceDimension);
+        assertTrue(0 <= numberOfMassTransfers, "numberOfMassTransfers not negative");
+        assertTrue(0 <= numberOfForces, "numberOfForces not negative");
+        assertTrue(0 < spaceDimension, "spaceDimension is positive");
 
-        assertTrue("massTerm is not negative", 0 <= term.getMassTerm());
+        assertTrue(0 <= term.getMassTerm(), "massTerm is not negative");
         for (int i = 0; i < spaceDimension; ++i) {
-            assertTrue("velocityTerm is not negative", 0 <= term.getVelocityTerm(i));
+            assertTrue(0 <= term.getVelocityTerm(i), "velocityTerm is not negative");
             for (int j = 0; j < numberOfMassTransfers; ++j) {
-                assertTrue("advectionVelocityTerm is not negative", 0 <= term.getAdvectionVelocityTerm(j, i));
+                assertTrue(0 <= term.getAdvectionVelocityTerm(j, i), "advectionVelocityTerm is not negative");
             }
             for (int k = 0; k < numberOfForces; ++k) {
-                assertTrue("forceTerm is not negative", 0 <= term.getForceTerm(k, i));
+                assertTrue(0 <= term.getForceTerm(k, i), "forceTerm is not negative");
             }
         }
         for (int j = 0; j < numberOfMassTransfers; ++j) {
-            assertTrue("advectionMassRateTerm is not negative", 0 <= term.getAdvectionMassRateTerm(j));
+            assertTrue(0 <= term.getAdvectionMassRateTerm(j), "advectionMassRateTerm is not negative");
         }
     }
 
@@ -51,28 +51,28 @@ public class MomentumConservationErrorTest {
 
         assertInvariants(term);
 
-        assertEquals("spaceDimension", velocityTerm.length, term.getSpaceDimension());
-        assertEquals("numberOfMassTransfers", massTransferInto.length, term.getNumberOfMassTransfers());
-        assertEquals("numberOfForces", forceOn.length, term.getNumberOfForces());
+        assertEquals(velocityTerm.length, term.getSpaceDimension(), "spaceDimension");
+        assertEquals(massTransferInto.length, term.getNumberOfMassTransfers(), "numberOfMassTransfers");
+        assertEquals(forceOn.length, term.getNumberOfForces(), "numberOfForces");
 
-        assertEquals("massTerm", massTerm, term.getMassTerm());
+        assertEquals(massTerm, term.getMassTerm(), "massTerm");
         for (int i = 0; i < velocityTerm.length; ++i) {
-            assertEquals("velocityTerm[" + i + "]", velocityTerm[i], term.getVelocityTerm(i));
+            assertEquals(velocityTerm[i], term.getVelocityTerm(i), "velocityTerm[" + i + "]");
         }
         for (int j = 0; j < massTransferInto.length; ++j) {
-            assertEquals("massTransferInto[" + j + "]", massTransferInto[j], term.isMassTransferInto(j));
-            assertEquals("advectionMassRateTerm[" + j + "]", advectionMassRateTerm[j],
-                    term.getAdvectionMassRateTerm(j));
+            assertEquals(massTransferInto[j], term.isMassTransferInto(j), "massTransferInto[" + j + "]");
+            assertEquals(advectionMassRateTerm[j],
+                    term.getAdvectionMassRateTerm(j), "advectionMassRateTerm[" + j + "]");
             for (int i = 0; i < velocityTerm.length; ++i) {
-                assertEquals("advectionVelocityTerm[" + j + "," + i + "]",
-                        advectionVelocityTerm[j * velocityTerm.length + i], term.getAdvectionVelocityTerm(j, i));
+                assertEquals(
+                        advectionVelocityTerm[j * velocityTerm.length + i], term.getAdvectionVelocityTerm(j, i), "advectionVelocityTerm[" + j + "," + i + "]");
             }
         }
         for (int k = 0; k < forceOn.length; ++k) {
-            assertEquals("forceOn[" + k + "]", forceOn[k], term.isForceOn(k));
+            assertEquals(forceOn[k], term.isForceOn(k), "forceOn[" + k + "]");
             for (int i = 0; i < velocityTerm.length; ++i) {
-                assertEquals("forceTerm[" + k + "," + i + "]", forceTerm[k * velocityTerm.length + i],
-                        term.getForceTerm(k, i));
+                assertEquals(forceTerm[k * velocityTerm.length + i],
+                        term.getForceTerm(k, i), "forceTerm[" + k + "," + i + "]");
             }
         }
 
@@ -84,7 +84,7 @@ public class MomentumConservationErrorTest {
         final double e = AbstractTimeStepEnergyErrorFunctionTermTest.evaluate(term, dedx, state0, state, dt);// inherited
 
         assertInvariants(term);
-        assertTrue("value is not negative", 0.0 <= e);
+        assertTrue(0.0 <= e, "value is not negative");
 
         return e;
     }
@@ -108,11 +108,11 @@ public class MomentumConservationErrorTest {
 
         final double e = evaluate(term, dedx, state0, state, dt);
 
-        assertEquals("e", expectedE, e, 1E-8);
-        assertEquals("dedm", expectedDedm, dedx[0], 1E-8);
-        assertEquals("dedv", expectedDedv, dedx[1], 1E-8);
-        assertEquals("dedmrate", expectedDedmrate, dedx[2], 1E-8);
-        assertEquals("dedu", expectedDedu, dedx[3], 1E-8);
+        assertEquals(expectedE, e, 1E-8, "e");
+        assertEquals(expectedDedm, dedx[0], 1E-8, "dedm");
+        assertEquals(expectedDedv, dedx[1], 1E-8, "dedv");
+        assertEquals(expectedDedmrate, dedx[2], 1E-8, "dedmrate");
+        assertEquals(expectedDedu, dedx[3], 1E-8, "dedu");
     }
 
     private static void evaluate_1Closed(double dedm0, double dedv0, double m0, double v0, double m, double v,
@@ -134,9 +134,9 @@ public class MomentumConservationErrorTest {
 
         final double e = evaluate(term, dedx, state0, state, dt);
 
-        assertEquals("e", expectedE, e, 1E-8);
-        assertEquals("dedm", expectedDedm, dedx[0], 1E-8);
-        assertEquals("dedv", expectedDedv, dedx[1], 1E-8);
+        assertEquals(expectedE, e, 1E-8, "e");
+        assertEquals(expectedDedm, dedx[0], 1E-8, "dedm");
+        assertEquals(expectedDedv, dedx[1], 1E-8, "dedv");
     }
 
     private static void evaluate_1Force(boolean forceOn, double m0, double v0, double f0, double m, double v, double f,
@@ -157,10 +157,10 @@ public class MomentumConservationErrorTest {
 
         final double e = evaluate(term, dedx, state0, state, dt);
 
-        assertEquals("e", expectedE, e, 1E-8);
-        assertEquals("dedm", expectedDedm, dedx[0], 1E-8);
-        assertEquals("dedv", expectedDedv, dedx[1], 1E-8);
-        assertEquals("dedf", expectedDedf, dedx[2], 1E-8);
+        assertEquals(expectedE, e, 1E-8, "e");
+        assertEquals(expectedDedm, dedx[0], 1E-8, "dedm");
+        assertEquals(expectedDedv, dedx[1], 1E-8, "dedv");
+        assertEquals(expectedDedf, dedx[2], 1E-8, "dedf");
     }
 
     @Test

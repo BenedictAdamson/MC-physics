@@ -1,11 +1,11 @@
 package uk.badamson.mc.physics.kinematics;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import uk.badamson.mc.math.ImmutableVector1;
 import uk.badamson.mc.math.ImmutableVectorN;
@@ -44,13 +44,13 @@ public class VelocityErrorTest {
 
         final int velocityVectorMapperDimension = velocityVectorMapper.getDimension();
 
-        assertTrue("Mass <" + mass + "> is positive and  finite", 0.0 < mass && Double.isFinite(mass));
+        assertTrue(0.0 < mass && Double.isFinite(mass), "Mass <" + mass + "> is positive and  finite");
         assertThat("spaceDimension", spaceDimension, org.hamcrest.number.OrderingComparison.greaterThanOrEqualTo(1));
-        assertEquals("The number of dimensions equals the number of dimensions of the velocity vector mapper.",
-                velocityVectorMapperDimension, spaceDimension);
+        assertEquals(velocityVectorMapperDimension, spaceDimension, "The number of dimensions equals the number of dimensions of the velocity vector mapper."
+                );
         assertEquals(
-                "The dimension of the acceleration vector mapper is equal to the dimension of the velocity vector mapper.",
-                velocityVectorMapperDimension, accelerationVectorMapper.getDimension());
+                velocityVectorMapperDimension, accelerationVectorMapper.getDimension(), "The dimension of the acceleration vector mapper is equal to the dimension of the velocity vector mapper."
+                );
     }
 
     public static <VECTOR extends Vector> void assertInvariants(VelocityError<VECTOR> term1,
@@ -65,9 +65,9 @@ public class VelocityErrorTest {
 
         assertInvariants(term);
 
-        assertEquals("mass", mass, term.getMass(), Double.MIN_NORMAL);
-        assertSame("velocityVectorMapper", velocityVectorMapper, term.getVelocityVectorMapper());
-        assertSame("accelerationVectorMapper", accelerationVectorMapper, term.getAccelerationVectorMapper());
+        assertEquals(mass, term.getMass(), Double.MIN_NORMAL, "mass");
+        assertSame(velocityVectorMapper, term.getVelocityVectorMapper(), "velocityVectorMapper");
+        assertSame(accelerationVectorMapper, term.getAccelerationVectorMapper(), "accelerationVectorMapper");
 
         return term;
     }
@@ -97,9 +97,9 @@ public class VelocityErrorTest {
 
         final double e = evaluate(term, dedx, state0, state, dt);
 
-        assertEquals("energy", eExpected, e, tolerance);
-        assertEquals("dedx[velocityTerm]", dEDVExpected, dedx[velocityTerm], tolerance);
-        assertEquals("dedx[accelerationTerm]", dEDAExpected, dedx[accelerationTerm], tolerance);
+        assertEquals(eExpected, e, tolerance, "energy");
+        assertEquals(dEDVExpected, dedx[velocityTerm], tolerance, "dedx[velocityTerm]");
+        assertEquals(dEDAExpected, dedx[accelerationTerm], tolerance, "dedx[accelerationTerm]");
     }
 
     private static final void evaluate_1Minimum(double mass, double dedv0, double deda0, double v0, double a0, double v,

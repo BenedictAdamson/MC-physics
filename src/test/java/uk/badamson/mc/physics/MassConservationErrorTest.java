@@ -1,9 +1,9 @@
 package uk.badamson.mc.physics;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import uk.badamson.mc.math.ImmutableVectorN;
 
@@ -25,13 +25,13 @@ public class MassConservationErrorTest {
         final int numberOfMassTransfers = term.getNumberOfMassTransfers();
         final double timeReference = term.getSpecificEnergyReference();
 
-        assertTrue("numberOfMassTransfers not negative", 0 <= numberOfMassTransfers);
+        assertTrue(0 <= numberOfMassTransfers, "numberOfMassTransfers not negative");
 
-        assertTrue("timeReference is positive and finite", 0.0 < timeReference && Double.isFinite(timeReference));
+        assertTrue(0.0 < timeReference && Double.isFinite(timeReference), "timeReference is positive and finite");
 
-        assertTrue("massTerm is not negative", 0 <= term.getMassTerm());
+        assertTrue(0 <= term.getMassTerm(), "massTerm is not negative");
         for (int j = 0; j < numberOfMassTransfers; ++j) {
-            assertTrue("advectionMassRateTerm is not negative", 0 <= term.getAdvectionMassRateTerm(j));
+            assertTrue(0 <= term.getAdvectionMassRateTerm(j), "advectionMassRateTerm is not negative");
         }
     }
 
@@ -46,17 +46,17 @@ public class MassConservationErrorTest {
 
         assertInvariants(term);
 
-        assertEquals("massReference", massReference, term.getMassReference(), Double.MIN_NORMAL);
-        assertEquals("specificEnergyReference", specificEnergyReference, term.getSpecificEnergyReference(),
-                Double.MIN_NORMAL);
+        assertEquals(massReference, term.getMassReference(), Double.MIN_NORMAL, "massReference");
+        assertEquals(specificEnergyReference, term.getSpecificEnergyReference(),
+                Double.MIN_NORMAL, "specificEnergyReference");
 
-        assertEquals("numberOfMassTransfers", massTransferInto.length, term.getNumberOfMassTransfers());
+        assertEquals(massTransferInto.length, term.getNumberOfMassTransfers(), "numberOfMassTransfers");
 
-        assertEquals("massTerm", massTerm, term.getMassTerm());
+        assertEquals(massTerm, term.getMassTerm(), "massTerm");
         for (int j = 0; j < massTransferInto.length; ++j) {
-            assertEquals("massTransferInto[" + j + "]", massTransferInto[j], term.isMassTransferInto(j));
-            assertEquals("advectionMassRateTerm[" + j + "]", advectionMassRateTerm[j],
-                    term.getAdvectionMassRateTerm(j));
+            assertEquals(massTransferInto[j], term.isMassTransferInto(j), "massTransferInto[" + j + "]");
+            assertEquals(advectionMassRateTerm[j],
+                    term.getAdvectionMassRateTerm(j), "advectionMassRateTerm[" + j + "]");
         }
 
         return term;
@@ -67,7 +67,7 @@ public class MassConservationErrorTest {
         final double e = AbstractTimeStepEnergyErrorFunctionTermTest.evaluate(term, dedx, state0, state, dt);// inherited
 
         assertInvariants(term);
-        assertTrue("value is not negative", 0.0 <= e);
+        assertTrue(0.0 <= e, "value is not negative");
 
         return e;
     }
@@ -86,8 +86,8 @@ public class MassConservationErrorTest {
 
         final double e = evaluate(term, dedx, state0, state, dt);
 
-        assertEquals("e", eExpected, e, 1E-6);
-        assertEquals("dedm", dedmExpected, dedx[0], 1E-6);
+        assertEquals(eExpected, e, 1E-6, "e");
+        assertEquals(dedmExpected, dedx[0], 1E-6, "dedm");
     }
 
     private static void evaluate_open(double massReference, double specificEnergyReference, boolean massTransferInto,
@@ -104,9 +104,9 @@ public class MassConservationErrorTest {
 
         final double e = evaluate(term, dedx, state0, state, dt);
 
-        assertEquals("e", eExpected, e, 1E-6);
-        assertEquals("dedm", dedmExpected, dedx[0], 1E-6);
-        assertEquals("dedmrate0", dedmrateExpected, dedx[1], 1E-6);
+        assertEquals(eExpected, e, 1E-6, "e");
+        assertEquals(dedmExpected, dedx[0], 1E-6, "dedm");
+        assertEquals(dedmrateExpected, dedx[1], 1E-6, "dedmrate0");
     }
 
     @Test

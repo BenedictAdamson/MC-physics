@@ -1,10 +1,9 @@
 package uk.badamson.mc.physics;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import uk.badamson.mc.math.ImmutableVectorN;
 import uk.badamson.mc.math.Matrix;
-import uk.badamson.mc.math.MatrixTest;
 
 /**
  * <p>
@@ -27,7 +26,6 @@ public class MatrixStateSpaceMapperTest {
         ObjectStateSpaceMapperTest.fromObject(mapper, state, matrix);
 
         assertInvariants(mapper);// check for side-effects
-        MatrixTest.assertInvariants(matrix);// check for side-effects
     }
 
     public static <MATRIX extends Matrix> void fromToObjectSymmetry(MatrixStateSpaceMapper<MATRIX> mapper,
@@ -37,7 +35,7 @@ public class MatrixStateSpaceMapperTest {
 
         final MATRIX reconstructed = toObject(mapper, stateVector);
 
-        assertEquals("Symmetric", original, reconstructed);
+        assertEquals(original, reconstructed, "Symmetric");
     }
 
     public static <MATRIX extends Matrix> MATRIX toObject(MatrixStateSpaceMapper<MATRIX> mapper,
@@ -45,7 +43,6 @@ public class MatrixStateSpaceMapperTest {
         MATRIX matrix = ObjectStateSpaceMapperTest.toObject(mapper, state);
 
         assertInvariants(mapper);// check for side-effects
-        MatrixTest.assertInvariants(matrix);
 
         return matrix;
     }

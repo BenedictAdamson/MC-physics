@@ -1,9 +1,9 @@
 package uk.badamson.mc.physics.dynamics;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import uk.badamson.mc.math.ImmutableVectorN;
 import uk.badamson.mc.physics.AbstractTimeStepEnergyErrorFunctionTermTest;
@@ -32,26 +32,26 @@ public class Newton2ErrorTest {
         final double massReference = term.getMassReference();
         final double timeReference = term.getTimeReference();
 
-        assertTrue("numberOfMassTransfers not negative", 0 <= numberOfMassTransfers);
-        assertTrue("numberOfForces not negative", 0 <= numberOfForces);
-        assertTrue("spaceDimension is positive", 0 < spaceDimension);
+        assertTrue(0 <= numberOfMassTransfers, "numberOfMassTransfers not negative");
+        assertTrue(0 <= numberOfForces, "numberOfForces not negative");
+        assertTrue(0 < spaceDimension, "spaceDimension is positive");
 
-        assertTrue("massReference is positive and finite", 0.0 < massReference && Double.isFinite(massReference));
-        assertTrue("timeReference is positive and finite", 0.0 < timeReference && Double.isFinite(timeReference));
+        assertTrue(0.0 < massReference && Double.isFinite(massReference), "massReference is positive and finite");
+        assertTrue(0.0 < timeReference && Double.isFinite(timeReference), "timeReference is positive and finite");
 
-        assertTrue("massTerm is not negative", 0 <= term.getMassTerm());
+        assertTrue(0 <= term.getMassTerm(), "massTerm is not negative");
         for (int i = 0; i < spaceDimension; ++i) {
-            assertTrue("accelerationTerm is not negative", 0 <= term.getAccelerationTerm(i));
-            assertTrue("velocityTerm is not negative", 0 <= term.getVelocityTerm(i));
+            assertTrue(0 <= term.getAccelerationTerm(i), "accelerationTerm is not negative");
+            assertTrue(0 <= term.getVelocityTerm(i), "velocityTerm is not negative");
             for (int j = 0; j < numberOfMassTransfers; ++j) {
-                assertTrue("advectionVelocityTerm is not negative", 0 <= term.getAdvectionVelocityTerm(j, i));
+                assertTrue(0 <= term.getAdvectionVelocityTerm(j, i), "advectionVelocityTerm is not negative");
             }
             for (int k = 0; k < numberOfForces; ++k) {
-                assertTrue("forceTerm is not negative", 0 <= term.getForceTerm(k, i));
+                assertTrue(0 <= term.getForceTerm(k, i), "forceTerm is not negative");
             }
         }
         for (int j = 0; j < numberOfMassTransfers; ++j) {
-            assertTrue("advectionMassRateTerm is not negative", 0 <= term.getAdvectionMassRateTerm(j));
+            assertTrue(0 <= term.getAdvectionMassRateTerm(j), "advectionMassRateTerm is not negative");
         }
     }
 
@@ -67,32 +67,32 @@ public class Newton2ErrorTest {
 
         assertInvariants(term);
 
-        assertEquals("massReference", massReference, term.getMassReference(), Double.MIN_NORMAL);
-        assertEquals("timeReference", timeReference, term.getTimeReference(), Double.MIN_NORMAL);
+        assertEquals(massReference, term.getMassReference(), Double.MIN_NORMAL, "massReference");
+        assertEquals(timeReference, term.getTimeReference(), Double.MIN_NORMAL, "timeReference");
 
-        assertEquals("spaceDimension", velocityTerm.length, term.getSpaceDimension());
-        assertEquals("numberOfMassTransfers", massTransferInto.length, term.getNumberOfMassTransfers());
-        assertEquals("numberOfForces", forceOn.length, term.getNumberOfForces());
+        assertEquals(velocityTerm.length, term.getSpaceDimension(), "spaceDimension");
+        assertEquals(massTransferInto.length, term.getNumberOfMassTransfers(), "numberOfMassTransfers");
+        assertEquals(forceOn.length, term.getNumberOfForces(), "numberOfForces");
 
-        assertEquals("massTerm", massTerm, term.getMassTerm());
+        assertEquals(massTerm, term.getMassTerm(), "massTerm");
         for (int i = 0; i < velocityTerm.length; ++i) {
-            assertEquals("velocityTerm[" + i + "]", velocityTerm[i], term.getVelocityTerm(i));
-            assertEquals("accelerationTerm[" + i + "]", accelerationTerm[i], term.getAccelerationTerm(i));
+            assertEquals(velocityTerm[i], term.getVelocityTerm(i), "velocityTerm[" + i + "]");
+            assertEquals(accelerationTerm[i], term.getAccelerationTerm(i), "accelerationTerm[" + i + "]");
         }
         for (int j = 0; j < massTransferInto.length; ++j) {
-            assertEquals("massTransferInto[" + j + "]", massTransferInto[j], term.isMassTransferInto(j));
-            assertEquals("advectionMassRateTerm[" + j + "]", advectionMassRateTerm[j],
-                    term.getAdvectionMassRateTerm(j));
+            assertEquals(massTransferInto[j], term.isMassTransferInto(j), "massTransferInto[" + j + "]");
+            assertEquals(advectionMassRateTerm[j],
+                    term.getAdvectionMassRateTerm(j), "advectionMassRateTerm[" + j + "]");
             for (int i = 0; i < velocityTerm.length; ++i) {
-                assertEquals("advectionVelocityTerm[" + j + "," + i + "]",
-                        advectionVelocityTerm[j * velocityTerm.length + i], term.getAdvectionVelocityTerm(j, i));
+                assertEquals(
+                        advectionVelocityTerm[j * velocityTerm.length + i], term.getAdvectionVelocityTerm(j, i), "advectionVelocityTerm[" + j + "," + i + "]");
             }
         }
         for (int k = 0; k < forceOn.length; ++k) {
-            assertEquals("forceOn[" + k + "]", forceOn[k], term.isForceOn(k));
+            assertEquals(forceOn[k], term.isForceOn(k), "forceOn[" + k + "]");
             for (int i = 0; i < velocityTerm.length; ++i) {
-                assertEquals("forceTerm[" + k + "," + i + "]", forceTerm[k * velocityTerm.length + i],
-                        term.getForceTerm(k, i));
+                assertEquals(forceTerm[k * velocityTerm.length + i],
+                        term.getForceTerm(k, i), "forceTerm[" + k + "," + i + "]");
             }
         }
 
@@ -104,7 +104,7 @@ public class Newton2ErrorTest {
         final double e = AbstractTimeStepEnergyErrorFunctionTermTest.evaluate(term, dedx, state0, state, dt);// inherited
 
         assertInvariants(term);
-        assertTrue("value is not negative", 0.0 <= e);
+        assertTrue(0.0 <= e, "value is not negative");
 
         return e;
     }
@@ -131,12 +131,12 @@ public class Newton2ErrorTest {
 
         final double e = evaluate(term, dedx, state0, state, dt);
 
-        assertEquals("e", expectedE, e, 1E-8);
-        assertEquals("dedm", expectedDedm, dedx[0], 1E-8);
-        assertEquals("dedv", expectedDedv, dedx[1], 1E-8);
-        assertEquals("deda", expectedDeda, dedx[2], 1E-8);
-        assertEquals("dedmrate", expectedDedmrate, dedx[3], 1E-8);
-        assertEquals("dedu", expectedDedu, dedx[4], 1E-8);
+        assertEquals(expectedE, e, 1E-8, "e");
+        assertEquals(expectedDedm, dedx[0], 1E-8, "dedm");
+        assertEquals(expectedDedv, dedx[1], 1E-8, "dedv");
+        assertEquals(expectedDeda, dedx[2], 1E-8, "deda");
+        assertEquals(expectedDedmrate, dedx[3], 1E-8, "dedmrate");
+        assertEquals(expectedDedu, dedx[4], 1E-8, "dedu");
     }
 
     private static void evaluate_1Closed(double massReference, double timeReference, double dedm0, double dedv0,
@@ -160,10 +160,10 @@ public class Newton2ErrorTest {
 
         final double e = evaluate(term, dedx, state0, state, dt);
 
-        assertEquals("e", expectedE, e, 1E-8);
-        assertEquals("dedm", expectedDedm, dedx[0], 1E-8);
-        assertEquals("dedv", expectedDedv, dedx[1], 1E-8);
-        assertEquals("deda", expectedDeda, dedx[2], 1E-8);
+        assertEquals(expectedE, e, 1E-8, "e");
+        assertEquals(expectedDedm, dedx[0], 1E-8, "dedm");
+        assertEquals(expectedDedv, dedx[1], 1E-8, "dedv");
+        assertEquals(expectedDeda, dedx[2], 1E-8, "deda");
     }
 
     private static void evaluate_1Force(double massReference, double timeReference, boolean forceOn, double m0,
@@ -187,11 +187,11 @@ public class Newton2ErrorTest {
 
         final double e = evaluate(term, dedx, state0, state, dt);
 
-        assertEquals("e", expectedE, e, 1E-8);
-        assertEquals("dedm", expectedDedm, dedx[0], 1E-8);
-        assertEquals("dedv", expectedDedv, dedx[1], 1E-8);
-        assertEquals("deda", expectedDeda, dedx[2], 1E-8);
-        assertEquals("dedf", expectedDedf, dedx[3], 1E-8);
+        assertEquals(expectedE, e, 1E-8, "e");
+        assertEquals(expectedDedm, dedx[0], 1E-8, "dedm");
+        assertEquals(expectedDedv, dedx[1], 1E-8, "dedv");
+        assertEquals(expectedDeda, dedx[2], 1E-8, "deda");
+        assertEquals(expectedDedf, dedx[3], 1E-8, "dedf");
     }
 
     @Test

@@ -1,11 +1,11 @@
 package uk.badamson.mc.physics.kinematics;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import uk.badamson.mc.math.ImmutableVector1;
 import uk.badamson.mc.math.ImmutableVectorN;
@@ -35,8 +35,8 @@ public class PositionErrorTest {
         final VectorStateSpaceMapper<VECTOR> positionVectorMapper = term.getPositionVectorMapper();
         final VectorStateSpaceMapper<VECTOR> velocityVectorMapper = term.getVelocityVectorMapper();
 
-        assertNotNull("positionVectorMapper", positionVectorMapper);// guard
-        assertNotNull("velocityVectorMapper", velocityVectorMapper);// guard
+        assertNotNull(positionVectorMapper, "positionVectorMapper");// guard
+        assertNotNull(velocityVectorMapper, "velocityVectorMapper");// guard
 
         VectorStateSpaceMapperTest.assertInvariants(positionVectorMapper);
         VectorStateSpaceMapperTest.assertInvariants(velocityVectorMapper);
@@ -46,11 +46,11 @@ public class PositionErrorTest {
 
         AbstractTimeStepEnergyErrorFunctionTermTest.assertIsReferenceScale("mass", mass);
         assertThat("spaceDimension", spaceDimension, org.hamcrest.number.OrderingComparison.greaterThanOrEqualTo(1));
-        assertEquals("The number of dimensions equals the number of dimensions of the position vector mapper.",
-                positionVectorMapperDimension, spaceDimension);
+        assertEquals(positionVectorMapperDimension, spaceDimension, "The number of dimensions equals the number of dimensions of the position vector mapper."
+                );
         assertEquals(
-                "The dimension of the velocity vector mapper is equal to the dimension of the position vector mapper.",
-                positionVectorMapperDimension, velocityVectorMapper.getDimension());
+                positionVectorMapperDimension, velocityVectorMapper.getDimension(),                 "The dimension of the velocity vector mapper is equal to the dimension of the position vector mapper."
+);
     }
 
     public static <VECTOR extends Vector> void assertInvariants(PositionError<VECTOR> term1,
@@ -64,9 +64,9 @@ public class PositionErrorTest {
 
         assertInvariants(term);
 
-        assertEquals("mass", mass, term.getMass(), Double.MIN_NORMAL);
-        assertSame("positionVectorMapper", positionVectorMapper, term.getPositionVectorMapper());
-        assertSame("velocityVectorMapper", velocityVectorMapper, term.getVelocityVectorMapper());
+        assertEquals(mass, term.getMass(), Double.MIN_NORMAL, "mass");
+        assertSame(positionVectorMapper, term.getPositionVectorMapper(), "positionVectorMapper");
+        assertSame(velocityVectorMapper, term.getVelocityVectorMapper(), "velocityVectorMapper");
 
         return term;
     }
@@ -93,9 +93,9 @@ public class PositionErrorTest {
 
         final double e = evaluate(term, dedx, ImmutableVectorN.create(x0, v0), ImmutableVectorN.create(x, v), dt);
 
-        assertEquals("energy", eExpected, e, tolerance);
-        assertEquals("dedx[positionTerm]", dEDXExpected, dedx[positionTerm], tolerance);
-        assertEquals("dedx[velocityTerm]", dEDVExpected, dedx[velocityTerm], tolerance);
+        assertEquals(eExpected, e, tolerance, "energy");
+        assertEquals(dEDXExpected, dedx[positionTerm], tolerance, "dedx[positionTerm]");
+        assertEquals(dEDVExpected, dedx[velocityTerm], tolerance, "dedx[velocityTerm]");
     }
 
     private static void evaluate_1Minimum(final double mass, final int positionTerm, final int velocityTerm,

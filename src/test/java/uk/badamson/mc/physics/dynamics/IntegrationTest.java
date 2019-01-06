@@ -1,13 +1,16 @@
 package uk.badamson.mc.physics.dynamics;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import uk.badamson.mc.math.FunctionNWithGradientTest;
+import uk.badamson.mc.math.Function1WithGradient;
+import uk.badamson.mc.math.Function1WithGradientValue;
+import uk.badamson.mc.math.FunctionNWithGradient;
 import uk.badamson.mc.math.FunctionNWithGradientValue;
 import uk.badamson.mc.math.ImmutableVectorN;
 import uk.badamson.mc.math.MinN;
@@ -77,6 +80,42 @@ public class IntegrationTest {
 
     private static final int[] advectionVelocityTerm = {};
 
+    private static int sign(final double x) {
+        if (x < -Double.MIN_NORMAL) {
+            return -1;
+        } else if (Double.MIN_NORMAL < x) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    private static void assertValueConsistentWithGradient(final Function1WithGradient f, final double x1,
+            final double x2, final int n) {
+        assert 3 <= n;
+        final Function1WithGradientValue[] fx = new Function1WithGradientValue[n];
+        for (int i = 0; i < n; ++i) {
+            final double x = x1 + (x2 - x1) * i / n;
+            fx[i] = f.value(x);
+        }
+        for (int i = 1; i < n - 1; i++) {
+            final Function1WithGradientValue fl = fx[i - 1];
+            final Function1WithGradientValue fi = fx[i];
+            final Function1WithGradientValue fr = fx[i + 1];
+            final double dfl = fi.getF() - fl.getF();
+            final double dfr = fr.getF() - fi.getF();
+            assertTrue(sign(dfl) != sign(dfr) || sign(fi.getDfDx()) == sign(dfl),
+                    "Consistent gradient <" + fl + "," + fi + "," + fr + ">");
+        }
+    }
+
+    private static void assertValueConsistentWithGradientAlongLine(final FunctionNWithGradient f, final double w1,
+            final double w2, final int n, final ImmutableVectorN x0, final ImmutableVectorN dx) {
+        final Function1WithGradient fLine = MinN.createLineFunction(f, x0, dx);
+        assertValueConsistentWithGradient(fLine, w1, w2, n);
+    }
+
+    
     private static void assert1DConstantForceErrorFunctionConsitentWithGradientAlongLine(boolean forceOn,
             double massReference, double timeReference, double specificEnergyReference, double m0, double x0, double v0,
             double a0, double dt, double dm, double dx, double dv, double da, double df, double tolerance, double w1,
@@ -85,7 +124,7 @@ public class IntegrationTest {
                 timeReference, specificEnergyReference, m0, x0, v0, a0, dt);
         final ImmutableVectorN s0 = create1DStateVector(m0, x0, v0, a0, m0 * a0);
         final ImmutableVectorN ds = create1DStateVector(dm, dx, dv, da, df);
-        FunctionNWithGradientTest.assertValueConsistentWithGradientAlongLine(errorFunction, w1, w2, n, s0, ds);
+        assertValueConsistentWithGradientAlongLine(errorFunction, w1, w2, n, s0, ds);
     }
 
     private static void constantForceSolution(boolean forceOn, double massReference, double timeReference,
@@ -105,11 +144,11 @@ public class IntegrationTest {
         final double a = state.get(3);
         final double f = state.get(4);
 
-        assertEquals("m", m0, m, tolerance);
-        assertEquals("x", x0 + dt * (v0 + 0.5 * a0 * dt), x, tolerance);
-        assertEquals("v", v0 + dt * a0, v, tolerance);
-        assertEquals("a", a0, a, tolerance);
-        assertEquals("f", f0, f, tolerance);
+        assertEquals(m0, m, tolerance, "m");
+        assertEquals(x0 + dt * (v0 + 0.5 * a0 * dt), x, tolerance, "x");
+        assertEquals(v0 + dt * a0, v, tolerance, "v");
+        assertEquals(a0, a, tolerance, "a");
+        assertEquals(f0, f, tolerance, "f");
     }
 
     private static TimeStepEnergyErrorFunction create1DConstantForceErrorFunction(boolean forceOn, double massReference,

@@ -1,12 +1,11 @@
 package uk.badamson.mc.physics;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import uk.badamson.mc.math.ImmutableVectorN;
 import uk.badamson.mc.math.Quaternion;
-import uk.badamson.mc.math.QuaternionTest;
 
 /**
  * <p>
@@ -32,17 +31,16 @@ public class QuaternionStateSpaceMapperTest {
 
         fromObject(mapper, state, q2);
 
-        assertEquals("state[index0]", sum.getA(), state[index0], tolerance);
-        assertEquals("state[index0+1]", sum.getB(), state[index0 + 1], tolerance);
-        assertEquals("state[index0+2]", sum.getC(), state[index0 + 2], tolerance);
-        assertEquals("state[index0+3]", sum.getD(), state[index0 + 3], tolerance);
+        assertEquals(sum.getA(), state[index0], tolerance, "state[index0]");
+        assertEquals(sum.getB(), state[index0 + 1], tolerance, "state[index0+1]");
+        assertEquals(sum.getC(), state[index0 + 2], tolerance, "state[index0+2]");
+        assertEquals(sum.getD(), state[index0 + 3], tolerance, "state[index0+3]");
     }
 
     public static void fromObject(QuaternionStateSpaceMapper mapper, double[] state, Quaternion quaternion) {
         ObjectStateSpaceMapperTest.fromObject(mapper, state, quaternion);
 
         assertInvariants(mapper);// check for side-effects
-        QuaternionTest.assertInvariants(quaternion);// check for side-effects
     }
 
     private static void fromToObjectSymmetry(int index0, int stateSize, Quaternion original) {
@@ -58,14 +56,13 @@ public class QuaternionStateSpaceMapperTest {
 
         final Quaternion reconstructed = toObject(mapper, stateVector);
 
-        assertEquals("Symmetric", original, reconstructed);
+        assertEquals(original, reconstructed, "Symmetric");
     }
 
     public static Quaternion toObject(QuaternionStateSpaceMapper mapper, ImmutableVectorN state) {
         Quaternion vector = ObjectStateSpaceMapperTest.toObject(mapper, state);
 
         assertInvariants(mapper);// check for side-effects
-        QuaternionTest.assertInvariants(vector);
 
         return vector;
     }

@@ -1,16 +1,18 @@
 package uk.badamson.mc.physics;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static uk.badamson.mc.math.Rotation3Test.closeToRotation3;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
+import org.junit.jupiter.api.Test;
 
 import uk.badamson.mc.math.ImmutableVector3;
 import uk.badamson.mc.math.ImmutableVectorN;
 import uk.badamson.mc.math.Quaternion;
+import uk.badamson.mc.math.Rotation3;
 import uk.badamson.mc.math.Rotation3Quaternion;
-import uk.badamson.mc.math.Rotation3QuaternionTest;
 
 /**
  * <p>
@@ -42,10 +44,10 @@ public class Rotation3QuaternionStateSpaceMapperTest {
 
         fromObject(rotationMapper, state, r2);
 
-        assertEquals("state[index0]", sum.getA(), state[index0], tolerance);
-        assertEquals("state[index0+1]", sum.getB(), state[index0 + 1], tolerance);
-        assertEquals("state[index0+2]", sum.getC(), state[index0 + 2], tolerance);
-        assertEquals("state[index0+3]", sum.getD(), state[index0 + 3], tolerance);
+        assertEquals(sum.getA(), state[index0], tolerance, "state[index0]");
+        assertEquals(sum.getB(), state[index0 + 1], tolerance, "state[index0+1]");
+        assertEquals(sum.getC(), state[index0 + 2], tolerance, "state[index0+2]");
+        assertEquals(sum.getD(), state[index0 + 3], tolerance, "state[index0+3]");
     }
 
     public static void fromObject(Rotation3QuaternionStateSpaceMapper mapper, double[] state,
@@ -53,7 +55,6 @@ public class Rotation3QuaternionStateSpaceMapperTest {
         ObjectStateSpaceMapperTest.fromObject(mapper, state, quaternion);
 
         assertInvariants(mapper);// check for side-effects
-        Rotation3QuaternionTest.assertInvariants(quaternion);// check for side-effects
     }
 
     private static void fromToObjectSymmetry(int index0, int stateSize, Rotation3Quaternion original) {
@@ -65,6 +66,46 @@ public class Rotation3QuaternionStateSpaceMapperTest {
         fromToObjectSymmetry(rotationMapper, state, original);
     }
 
+    private static class IsCloseTo extends TypeSafeMatcher<Rotation3> {
+        private final double tolerance;
+        private final Rotation3 value;
+
+        private IsCloseTo(final Rotation3 value, final double tolerance) {
+            this.tolerance = tolerance;
+            this.value = value;
+        }
+
+        @Override
+        public void describeMismatchSafely(final Rotation3 item, final Description mismatchDescription) {
+            mismatchDescription.appendValue(item).appendText(" differed by ")
+                    .appendValue(Double.valueOf(distance(item)));
+        }
+
+        @Override
+        public void describeTo(final Description description) {
+            description.appendText("a rotation within ").appendValue(Double.valueOf(tolerance)).appendText(" of ")
+                    .appendValue(value);
+        }
+
+        private final double distance(final Rotation3 item) {
+            return value.getVersor().distance(item.getVersor());
+        }
+
+        @Override
+        public boolean matchesSafely(final Rotation3 item) {
+            return distance(item) <= tolerance;
+        }
+    }// class
+    
+
+    private static final double TOLERANCE = 4.0 * (Math.nextUp(1.0) - 1.0);
+    public static Matcher<Rotation3> closeToRotation3(final Rotation3 operand) {
+        return new IsCloseTo(operand, TOLERANCE);
+    }
+
+    public static Matcher<Rotation3> closeToRotation3(final Rotation3 operand, final double tolerance) {
+        return new IsCloseTo(operand, tolerance);
+    }
     private static void fromToObjectSymmetry(Rotation3QuaternionStateSpaceMapper mapper, double[] state,
             Rotation3Quaternion original) {
         mapper.fromObject(state, original);
@@ -79,7 +120,6 @@ public class Rotation3QuaternionStateSpaceMapperTest {
         Rotation3Quaternion vector = ObjectStateSpaceMapperTest.toObject(mapper, state);
 
         assertInvariants(mapper);// check for side-effects
-        Rotation3QuaternionTest.assertInvariants(vector);
 
         return vector;
     }

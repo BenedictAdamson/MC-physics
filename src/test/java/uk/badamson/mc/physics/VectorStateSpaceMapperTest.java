@@ -1,11 +1,10 @@
 package uk.badamson.mc.physics;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import uk.badamson.mc.math.ImmutableVectorN;
 import uk.badamson.mc.math.Vector;
-import uk.badamson.mc.math.VectorTest;
 
 /**
  * <p>
@@ -31,7 +30,6 @@ public class VectorStateSpaceMapperTest {
         MatrixStateSpaceMapperTest.fromObject(mapper, state, vector);
 
         assertInvariants(mapper);// check for side-effects
-        VectorTest.assertInvariants(vector);// check for side-effects
     }
 
     public static <VECTOR extends Vector> void fromToObjectSymmetry(VectorStateSpaceMapper<VECTOR> mapper,
@@ -41,7 +39,7 @@ public class VectorStateSpaceMapperTest {
 
         final VECTOR reconstructed = toObject(mapper, stateVector);
 
-        assertEquals("Symmetric", original, reconstructed);
+        assertEquals(original, reconstructed, "Symmetric");
     }
 
     public static <VECTOR extends Vector> void fromToVectorSymmetry(VectorStateSpaceMapper<VECTOR> mapper,
@@ -51,7 +49,7 @@ public class VectorStateSpaceMapperTest {
 
         final VECTOR reconstructed = toObject(mapper, stateVector);
 
-        assertEquals("Symmetric", original, reconstructed);
+        assertEquals(original, reconstructed, "Symmetric");
     }
 
     public static <VECTOR extends Vector> void fromVector(VectorStateSpaceMapper<VECTOR> mapper, double[] state,
@@ -59,7 +57,6 @@ public class VectorStateSpaceMapperTest {
         mapper.fromVector(state, vector);
 
         assertInvariants(mapper);// check for side effects
-        VectorTest.assertInvariants(vector);// check for side-effects
     }
 
     public static <VECTOR extends Vector> VECTOR toObject(VectorStateSpaceMapper<VECTOR> mapper,
@@ -67,7 +64,6 @@ public class VectorStateSpaceMapperTest {
         VECTOR vector = MatrixStateSpaceMapperTest.toObject(mapper, state);
 
         assertInvariants(mapper);// check for side-effects
-        VectorTest.assertInvariants(vector);
 
         return vector;
     }

@@ -1,12 +1,12 @@
 package uk.badamson.mc.physics;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.number.IsCloseTo.closeTo;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import uk.badamson.mc.math.ImmutableVectorN;
 import uk.badamson.mc.math.Quaternion;
@@ -36,7 +36,7 @@ public class VersorErrorTest {
         final double length = term.getLength();
         final QuaternionStateSpaceMapper quaternionMapper = term.getQuaternionMapper();
 
-        assertNotNull("quaternionMapper", quaternionMapper);// guard
+        assertNotNull(quaternionMapper, "quaternionMapper");// guard
 
         AbstractTimeStepEnergyErrorFunctionTermTest.assertIsReferenceScale("mass", mass);
         AbstractTimeStepEnergyErrorFunctionTermTest.assertIsReferenceScale("length", length);
@@ -51,9 +51,9 @@ public class VersorErrorTest {
 
         assertInvariants(term);
 
-        assertEquals("length", length, term.getLength(), Double.MIN_NORMAL);
-        assertEquals("mass", mass, term.getMass(), Double.MIN_NORMAL);
-        assertSame("quaternionMapper", quaternionMapper, term.getQuaternionMapper());
+        assertEquals(length, term.getLength(), Double.MIN_NORMAL, "length");
+        assertEquals(mass, term.getMass(), Double.MIN_NORMAL, "mass");
+        assertSame(quaternionMapper, term.getQuaternionMapper(), "quaternionMapper");
 
         return term;
     }
