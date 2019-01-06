@@ -34,6 +34,11 @@ import uk.badamson.mc.math.MinN;
 import uk.badamson.mc.physics.dynamics.Newton2Error;
 import uk.badamson.mc.physics.kinematics.PositionError;
 import uk.badamson.mc.physics.kinematics.VelocityError;
+import uk.badamson.mc.physics.solver.AbstractTimeStepEnergyErrorFunctionTerm;
+import uk.badamson.mc.physics.solver.MassConservationError;
+import uk.badamson.mc.physics.solver.MomentumConservationError;
+import uk.badamson.mc.physics.solver.TimeStepEnergyErrorFunction;
+import uk.badamson.mc.physics.solver.TimeStepEnergyErrorFunctionTerm;
 import uk.badamson.mc.physics.solver.mapper.ImmutableVector1StateSpaceMapper;
 
 /**

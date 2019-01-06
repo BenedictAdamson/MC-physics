@@ -1,4 +1,5 @@
-package uk.badamson.mc.physics;/*
+package uk.badamson.mc.physics.solver;
+/*
                                * © Copyright Benedict Adamson 2018-19.
                                *
                                * This file is part of MC-physics.

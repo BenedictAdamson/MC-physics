@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import uk.badamson.mc.math.ImmutableVectorN;
-import uk.badamson.mc.physics.AbstractTimeStepEnergyErrorFunctionTermTest;
+import uk.badamson.mc.physics.solver.AbstractTimeStepEnergyErrorFunctionTermTest;
 
 /**
  * <p>

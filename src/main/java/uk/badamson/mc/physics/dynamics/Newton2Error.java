@@ -21,9 +21,9 @@ import java.util.Arrays;
 
 import net.jcip.annotations.Immutable;
 import uk.badamson.mc.math.ImmutableVectorN;
-import uk.badamson.mc.physics.AbstractTimeStepEnergyErrorFunctionTerm;
-import uk.badamson.mc.physics.TimeStepEnergyErrorFunction;
-import uk.badamson.mc.physics.TimeStepEnergyErrorFunctionTerm;
+import uk.badamson.mc.physics.solver.AbstractTimeStepEnergyErrorFunctionTerm;
+import uk.badamson.mc.physics.solver.TimeStepEnergyErrorFunction;
+import uk.badamson.mc.physics.solver.TimeStepEnergyErrorFunctionTerm;
 
 /**
  * <p>

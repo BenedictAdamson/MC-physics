@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 import uk.badamson.mc.math.ImmutableVector1;
 import uk.badamson.mc.math.ImmutableVectorN;
 import uk.badamson.mc.math.Vector;
-import uk.badamson.mc.physics.AbstractTimeStepEnergyErrorFunctionTermTest;
+import uk.badamson.mc.physics.solver.AbstractTimeStepEnergyErrorFunctionTermTest;
 import uk.badamson.mc.physics.solver.mapper.ImmutableVector1StateSpaceMapper;
 import uk.badamson.mc.physics.solver.mapper.ImmutableVector3StateSpaceMapper;
 import uk.badamson.mc.physics.solver.mapper.VectorStateSpaceMapper;
