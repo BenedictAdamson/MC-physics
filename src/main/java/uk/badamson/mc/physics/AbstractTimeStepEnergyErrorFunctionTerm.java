@@ -1,7 +1,7 @@
 package uk.badamson.mc.physics;
-/* 
+/*
  * © Copyright Benedict Adamson 2018-19.
- * 
+ *
  * This file is part of MC-physics.
  *
  * MC-physics is free software: you can redistribute it and/or modify
