@@ -82,7 +82,7 @@ public final class TimeStepEnergyErrorFunction implements FunctionNWithGradient 
      * @param terms
      *            The terms that contribute to the
      *            {@linkplain #value(ImmutableVectorN) value} of this function.
-     * 
+     *
      * @throws NullPointerException
      *             <ul>
      *             <li>If {@code x0} is null.</li>
@@ -99,7 +99,8 @@ public final class TimeStepEnergyErrorFunction implements FunctionNWithGradient 
      *             dimension} of {@code x0}.</li>
      *             </ul>
      */
-    public TimeStepEnergyErrorFunction(ImmutableVectorN x0, double dt, List<TimeStepEnergyErrorFunctionTerm> terms) {
+    public TimeStepEnergyErrorFunction(final ImmutableVectorN x0, final double dt,
+            final List<TimeStepEnergyErrorFunctionTerm> terms) {
         Objects.requireNonNull(x0, "x0");
         Objects.requireNonNull(terms, "terms");
         if (dt <= 0.0 || !Double.isFinite(dt)) {
@@ -112,7 +113,7 @@ public final class TimeStepEnergyErrorFunction implements FunctionNWithGradient 
 
         /* Check precondition after construction to avoid race hazards. */
         final int dimension = x0.getDimension();
-        for (TimeStepEnergyErrorFunctionTerm term : this.terms) {
+        for (final TimeStepEnergyErrorFunctionTerm term : this.terms) {
             Objects.requireNonNull(term, "term");
             if (!term.isValidForDimension(dimension)) {
                 throw new IllegalArgumentException("term <" + term + "> not valid for " + dimension + " dimensions");
@@ -130,7 +131,7 @@ public final class TimeStepEnergyErrorFunction implements FunctionNWithGradient 
      * dimension} of the {@linkplain #getX0() state vector of the physical system at
      * the current point in time}.</li>
      * </ul>
-     * 
+     *
      * @return the number of dimensions; positive.
      */
     @Override
@@ -200,7 +201,7 @@ public final class TimeStepEnergyErrorFunction implements FunctionNWithGradient 
      * <li>The {@linkplain Function1WithGradientValue#getX() domain value} of the
      * returned object is the given domain value.</li>
      * </ul>
-     * 
+     *
      * @param state
      *            The state of the physical system at the future point in time
      * @return The error.
@@ -212,10 +213,10 @@ public final class TimeStepEnergyErrorFunction implements FunctionNWithGradient 
      *             dimension} of this functor.
      */
     @Override
-    public final FunctionNWithGradientValue value(ImmutableVectorN state) {
+    public final FunctionNWithGradientValue value(final ImmutableVectorN state) {
         double e = 0.0;
-        double[] dedx = new double[getDimension()];
-        for (TimeStepEnergyErrorFunctionTerm term : terms) {
+        final double[] dedx = new double[getDimension()];
+        for (final TimeStepEnergyErrorFunctionTerm term : terms) {
             e += term.evaluate(dedx, x0, state, dt);
         }
         return new FunctionNWithGradientValue(state, e, ImmutableVectorN.create(dedx));

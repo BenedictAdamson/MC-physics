@@ -27,7 +27,7 @@ public class VelocityErrorTest {
 
     private static final double MASS_2 = 1E24;
 
-    public static <VECTOR extends Vector> void assertInvariants(VelocityError<VECTOR> term) {
+    public static <VECTOR extends Vector> void assertInvariants(final VelocityError<VECTOR> term) {
         AbstractTimeStepEnergyErrorFunctionTermTest.assertInvariants(term);// inherited
 
         final double mass = term.getMass();
@@ -45,22 +45,22 @@ public class VelocityErrorTest {
         final int velocityVectorMapperDimension = velocityVectorMapper.getDimension();
 
         assertTrue(0.0 < mass && Double.isFinite(mass), "Mass <" + mass + "> is positive and  finite");
-        assertThat("spaceDimension", Integer.valueOf(spaceDimension), org.hamcrest.number.OrderingComparison.greaterThanOrEqualTo(Integer.valueOf(1)));
-        assertEquals(velocityVectorMapperDimension, spaceDimension, "The number of dimensions equals the number of dimensions of the velocity vector mapper."
-                );
-        assertEquals(
-                velocityVectorMapperDimension, accelerationVectorMapper.getDimension(), "The dimension of the acceleration vector mapper is equal to the dimension of the velocity vector mapper."
-                );
+        assertThat("spaceDimension", Integer.valueOf(spaceDimension),
+                org.hamcrest.number.OrderingComparison.greaterThanOrEqualTo(Integer.valueOf(1)));
+        assertEquals(velocityVectorMapperDimension, spaceDimension,
+                "The number of dimensions equals the number of dimensions of the velocity vector mapper.");
+        assertEquals(velocityVectorMapperDimension, accelerationVectorMapper.getDimension(),
+                "The dimension of the acceleration vector mapper is equal to the dimension of the velocity vector mapper.");
     }
 
-    public static <VECTOR extends Vector> void assertInvariants(VelocityError<VECTOR> term1,
-            VelocityError<VECTOR> term2) {
+    public static <VECTOR extends Vector> void assertInvariants(final VelocityError<VECTOR> term1,
+            final VelocityError<VECTOR> term2) {
         AbstractTimeStepEnergyErrorFunctionTermTest.assertInvariants(term1, term2);// inherited
     }
 
-    private static <VECTOR extends Vector> VelocityError<VECTOR> constructor(double mass,
-            VectorStateSpaceMapper<VECTOR> velocityVectorMapper,
-            VectorStateSpaceMapper<VECTOR> accelerationVectorMapper) {
+    private static <VECTOR extends Vector> VelocityError<VECTOR> constructor(final double mass,
+            final VectorStateSpaceMapper<VECTOR> velocityVectorMapper,
+            final VectorStateSpaceMapper<VECTOR> accelerationVectorMapper) {
         final VelocityError<VECTOR> term = new VelocityError<>(mass, velocityVectorMapper, accelerationVectorMapper);
 
         assertInvariants(term);
@@ -72,8 +72,8 @@ public class VelocityErrorTest {
         return term;
     }
 
-    private static <VECTOR extends Vector> double evaluate(VelocityError<VECTOR> term, double[] dedx,
-            ImmutableVectorN x0, ImmutableVectorN x, double dt) {
+    private static <VECTOR extends Vector> double evaluate(final VelocityError<VECTOR> term, final double[] dedx,
+            final ImmutableVectorN x0, final ImmutableVectorN x, final double dt) {
         final double e = AbstractTimeStepEnergyErrorFunctionTermTest.evaluate(term, dedx, x0, x, dt);
 
         assertInvariants(term);
@@ -81,8 +81,9 @@ public class VelocityErrorTest {
         return e;
     }
 
-    private static final void evaluate_1(double mass, double dedv0, double deda0, double v0, double a0, double v,
-            double a, double dt, double eExpected, double dEDVExpected, double dEDAExpected, double tolerance) {
+    private static final void evaluate_1(final double mass, final double dedv0, final double deda0, final double v0,
+            final double a0, final double v, final double a, final double dt, final double eExpected,
+            final double dEDVExpected, final double dEDAExpected, final double tolerance) {
         final int velocityTerm = 0;
         final int accelerationTerm = 1;
         final ImmutableVector1StateSpaceMapper velocityVectorMapper = new ImmutableVector1StateSpaceMapper(
@@ -102,8 +103,8 @@ public class VelocityErrorTest {
         assertEquals(dEDAExpected, dedx[accelerationTerm], tolerance, "dedx[accelerationTerm]");
     }
 
-    private static final void evaluate_1Minimum(double mass, double dedv0, double deda0, double v0, double a0, double v,
-            double a, double dt, double tolerance) {
+    private static final void evaluate_1Minimum(final double mass, final double dedv0, final double deda0,
+            final double v0, final double a0, final double v, final double a, final double dt, final double tolerance) {
         final double eExpected = 0.0;
         final double dEDVExpected = dedv0;
         final double dEDAExpected = deda0;
@@ -113,24 +114,24 @@ public class VelocityErrorTest {
 
     @Test
     public void constructor_1A() {
-        ImmutableVector1StateSpaceMapper velocityVectorMapper = new ImmutableVector1StateSpaceMapper(3);
-        ImmutableVector1StateSpaceMapper accelerationVectorMapper = new ImmutableVector1StateSpaceMapper(4);
+        final ImmutableVector1StateSpaceMapper velocityVectorMapper = new ImmutableVector1StateSpaceMapper(3);
+        final ImmutableVector1StateSpaceMapper accelerationVectorMapper = new ImmutableVector1StateSpaceMapper(4);
 
         constructor(MASS_1, velocityVectorMapper, accelerationVectorMapper);
     }
 
     @Test
     public void constructor_1B() {
-        ImmutableVector1StateSpaceMapper velocityVectorMapper = new ImmutableVector1StateSpaceMapper(7);
-        ImmutableVector1StateSpaceMapper accelerationVectorMapper = new ImmutableVector1StateSpaceMapper(11);
+        final ImmutableVector1StateSpaceMapper velocityVectorMapper = new ImmutableVector1StateSpaceMapper(7);
+        final ImmutableVector1StateSpaceMapper accelerationVectorMapper = new ImmutableVector1StateSpaceMapper(11);
 
         constructor(MASS_2, velocityVectorMapper, accelerationVectorMapper);
     }
 
     @Test
     public void constructor_3() {
-        ImmutableVector3StateSpaceMapper velocityVectorMapper = new ImmutableVector3StateSpaceMapper(3);
-        ImmutableVector3StateSpaceMapper accelerationVectorMapper = new ImmutableVector3StateSpaceMapper(4);
+        final ImmutableVector3StateSpaceMapper velocityVectorMapper = new ImmutableVector3StateSpaceMapper(3);
+        final ImmutableVector3StateSpaceMapper accelerationVectorMapper = new ImmutableVector3StateSpaceMapper(4);
 
         constructor(MASS_1, velocityVectorMapper, accelerationVectorMapper);
     }

@@ -15,7 +15,7 @@ public interface VectorStateSpaceMapper<VECTOR extends Vector> extends MatrixSta
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @param state
      *            {@inheritDoc}
      * @param object
@@ -41,7 +41,7 @@ public interface VectorStateSpaceMapper<VECTOR extends Vector> extends MatrixSta
      * <li>This is the inverse operation of the {@link #toObject(ImmutableVectorN)}
      * method.
      * </ul>
-     * 
+     *
      * @param state
      *            The components of the state-space vector.
      * @param vector
@@ -66,7 +66,7 @@ public interface VectorStateSpaceMapper<VECTOR extends Vector> extends MatrixSta
      * The number of {@linkplain Vector#getDimension() dimensions} of the vectors
      * that this maps.
      * </p>
-     * 
+     *
      * @return the number of dimensions; positive.
      */
     public int getDimension();

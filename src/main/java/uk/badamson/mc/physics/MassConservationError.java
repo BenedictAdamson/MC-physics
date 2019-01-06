@@ -16,9 +16,9 @@ import uk.badamson.mc.math.ImmutableVectorN;
 @Immutable
 public final class MassConservationError extends AbstractTimeStepEnergyErrorFunctionTerm {
 
-    private static boolean isValidForTerm(int n, int term[]) {
-        for (int i = 0, tn = term.length; i < tn; ++i) {
-            if (n < term[i] + 1) {
+    private static boolean isValidForTerm(final int n, final int term[]) {
+        for (final int element : term) {
+            if (n < element + 1) {
                 return false;
             }
         }
@@ -44,7 +44,7 @@ public final class MassConservationError extends AbstractTimeStepEnergyErrorFunc
      * <li>The constructed object has the given attribute values.</li>
      * </ul>
      * </section>
-     * 
+     *
      * @param massReference
      *            A reference mass scale.
      * @param specificEnergyReference
@@ -79,8 +79,8 @@ public final class MassConservationError extends AbstractTimeStepEnergyErrorFunc
      *             have different lengths.</li>
      *             </ul>
      */
-    public MassConservationError(double massReference, double specificEnergyReference, int massTerm,
-            boolean[] massTransferInto, int[] advectionMassRateTerm) {
+    public MassConservationError(final double massReference, final double specificEnergyReference, final int massTerm,
+            final boolean[] massTransferInto, final int[] advectionMassRateTerm) {
         this.massReference = requireReferenceScale(massReference, "massReference");
         this.specificEnergyReference = requireReferenceScale(specificEnergyReference, "specificEnergyReference");
         this.massTerm = requireTermIndex(massTerm, "massTerm");
@@ -96,7 +96,7 @@ public final class MassConservationError extends AbstractTimeStepEnergyErrorFunc
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * <ol>
      * <li>The method uses the term index information to extract mass and mass
      * transfer rates from the given current state vector.</li>
@@ -108,7 +108,7 @@ public final class MassConservationError extends AbstractTimeStepEnergyErrorFunc
      * divides by the {@linkplain #getMassReference() mass reference} to calculate
      * an equivalent energy error.. That is the error term it returns.</li>
      * </ol>
-     * 
+     *
      * @param dedx
      *            {@inheritDoc}
      * @param state0
@@ -118,7 +118,7 @@ public final class MassConservationError extends AbstractTimeStepEnergyErrorFunc
      * @param dt
      *            {@inheritDoc}
      * @return the value; not negative
-     * 
+     *
      * @throws NullPointerException
      *             {@inheritDoc}
      * @throws IllegalArgumentException
@@ -129,7 +129,8 @@ public final class MassConservationError extends AbstractTimeStepEnergyErrorFunc
      *             {@code state0}.
      */
     @Override
-    public final double evaluate(double[] dedx, ImmutableVectorN state0, ImmutableVectorN state, double dt) {
+    public final double evaluate(final double[] dedx, final ImmutableVectorN state0, final ImmutableVectorN state,
+            final double dt) {
         super.evaluate(dedx, state0, state, dt);// check preconditions
 
         final int nm = getNumberOfMassTransfers();
@@ -145,7 +146,7 @@ public final class MassConservationError extends AbstractTimeStepEnergyErrorFunc
             massRateMean += 0.5 * sign * (massRate0 + massRate);
         }
 
-        final double me = (m - m0) + dt * massRateMean;
+        final double me = m - m0 + dt * massRateMean;
         final double ce = specificEnergyReference * (me / massReference);
         // ce may be negative
         final double e = ce * me;
@@ -168,12 +169,12 @@ public final class MassConservationError extends AbstractTimeStepEnergyErrorFunc
      * Which term in the solution space vector correspond to the mass transfer rate
      * of an advection (mass transfer process) affecting the body.
      * </p>
-     * 
+     *
      * @param j
      *            The mass transfer process (advection) of interest
      * @return the index of the component of the advection mass transfer rate; not
      *         negative
-     * 
+     *
      * @throws IndexOutOfBoundsException
      *             <ul>
      *             <li>If {@code j} is negative.</li>
@@ -182,7 +183,7 @@ public final class MassConservationError extends AbstractTimeStepEnergyErrorFunc
      *             processes}.</li>
      *             </ul>
      */
-    public final int getAdvectionMassRateTerm(int j) {
+    public final int getAdvectionMassRateTerm(final int j) {
         return advectionMassRateTerm[j];
     }
 
@@ -197,7 +198,7 @@ public final class MassConservationError extends AbstractTimeStepEnergyErrorFunc
      * bodies and they have very different masses; it is better to use the same
      * value for all bodies, with that value equal to the mass of a typical body.
      * </p>
-     * 
+     *
      * @return the mass; positive and {@linkplain Double#isFinite(double) finite}
      */
     public final double getMassReference() {
@@ -208,7 +209,7 @@ public final class MassConservationError extends AbstractTimeStepEnergyErrorFunc
      * <p>
      * Which term in the solution space vector correspond to the mass of the body.
      * </p>
-     * 
+     *
      * @return the index of the mass; not negative
      */
     public final int getMassTerm() {
@@ -220,7 +221,7 @@ public final class MassConservationError extends AbstractTimeStepEnergyErrorFunc
      * The number of separate mass transfer processes (advections) changing the mass
      * and momentum of the body.
      * </p>
-     * 
+     *
      * @return the number of mass transfer processes; not negative.
      */
     public final int getNumberOfMassTransfers() {
@@ -238,7 +239,7 @@ public final class MassConservationError extends AbstractTimeStepEnergyErrorFunc
      * energies; it is better to use a value equal to the typical specific energy of
      * a body.
      * </p>
-     * 
+     *
      * @return the time; positive and {@linkplain Double#isFinite(double) finite}
      */
     public final double getSpecificEnergyReference() {
@@ -259,7 +260,7 @@ public final class MassConservationError extends AbstractTimeStepEnergyErrorFunc
      * @param j
      *            The mass transfer process (advection) of interest
      * @return the sense of the mass transfer process
-     * 
+     *
      * @throws IndexOutOfBoundsException
      *             <ul>
      *             <li>If {@code j} is negative.</li>
@@ -268,7 +269,7 @@ public final class MassConservationError extends AbstractTimeStepEnergyErrorFunc
      *             processes}.</li>
      *             </ul>
      */
-    public final boolean isMassTransferInto(int j) {
+    public final boolean isMassTransferInto(final int j) {
         return massTransferInto[j];
     }
 
@@ -277,17 +278,17 @@ public final class MassConservationError extends AbstractTimeStepEnergyErrorFunc
      * Whether this term can be calculated for a physical state vector that has a
      * given number of variables.
      * </p>
-     * 
+     *
      * @return whether valid.
      * @throws IllegalArgumentException
      *             If {@code n} is not positive.
      */
     @Override
-    public final boolean isValidForDimension(int n) {
+    public final boolean isValidForDimension(final int n) {
         if (n <= 0) {
             throw new IllegalArgumentException("n " + n);
         }
-        return (massTerm + 1 <= n) && isValidForTerm(n, advectionMassRateTerm);
+        return massTerm + 1 <= n && isValidForTerm(n, advectionMassRateTerm);
     }
 
 }

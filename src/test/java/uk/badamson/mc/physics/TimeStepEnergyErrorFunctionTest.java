@@ -29,13 +29,14 @@ public class TimeStepEnergyErrorFunctionTest {
         private final double xMin;
         private final double eMin;
 
-        QuadraticTerm1(double xMin, double eMin) {
+        QuadraticTerm1(final double xMin, final double eMin) {
             this.xMin = xMin;
             this.eMin = eMin;
         }
 
         @Override
-        public final double evaluate(double[] dedx, ImmutableVectorN x0, ImmutableVectorN x, double dt) {
+        public final double evaluate(final double[] dedx, final ImmutableVectorN x0, final ImmutableVectorN x,
+                final double dt) {
             Objects.requireNonNull(dedx, "dsdx");
             Objects.requireNonNull(x0, "x0");
             if (dedx.length != x0.getDimension()) {
@@ -49,7 +50,7 @@ public class TimeStepEnergyErrorFunctionTest {
         }
 
         @Override
-        public final boolean isValidForDimension(int n) {
+        public final boolean isValidForDimension(final int n) {
             return n == 1;
         }
 
@@ -58,7 +59,8 @@ public class TimeStepEnergyErrorFunctionTest {
     private static final class ZeroTerm implements TimeStepEnergyErrorFunctionTerm {
 
         @Override
-        public double evaluate(double[] dedx, ImmutableVectorN x0, ImmutableVectorN x, double dt) {
+        public double evaluate(final double[] dedx, final ImmutableVectorN x0, final ImmutableVectorN x,
+                final double dt) {
             Objects.requireNonNull(dedx, "dsdx");
             Objects.requireNonNull(x0, "x0");
             if (dedx.length != x0.getDimension()) {
@@ -69,7 +71,7 @@ public class TimeStepEnergyErrorFunctionTest {
         }
 
         @Override
-        public final boolean isValidForDimension(int n) {
+        public final boolean isValidForDimension(final int n) {
             return true;
         }
 
@@ -87,7 +89,7 @@ public class TimeStepEnergyErrorFunctionTest {
     private static final ZeroTerm TERM_0A = new ZeroTerm();
     private static final ZeroTerm TERM_0B = new ZeroTerm();
 
-    public static void assertInvariants(TimeStepEnergyErrorFunction f) {
+    public static void assertInvariants(final TimeStepEnergyErrorFunction f) {
         ObjectTest.assertInvariants(f);// inherited
 
         final ImmutableVectorN x0 = f.getX0();
@@ -98,21 +100,20 @@ public class TimeStepEnergyErrorFunctionTest {
         assertNotNull(terms, "Always have a collection of terms.");// guard
 
         assertTrue(0.0 < dt && Double.isFinite(dt), "The time-step <" + dt + "> is positive and finite.");
-        for (TimeStepEnergyErrorFunctionTerm term : terms) {
+        for (final TimeStepEnergyErrorFunctionTerm term : terms) {
             assertNotNull(term, "The collection of terms does not contain any null elements.");// guard
             TimeStepEnergyErrorFunctionTermTest.assertInvariants(term);
         }
-        assertEquals(
-                x0.getDimension(), f.getDimension(), "The dimension equals the dimension of the state vector of the physical system at the current point in time."
-                );
+        assertEquals(x0.getDimension(), f.getDimension(),
+                "The dimension equals the dimension of the state vector of the physical system at the current point in time.");
     }
 
-    public static void assertInvariants(TimeStepEnergyErrorFunction f1, TimeStepEnergyErrorFunction f2) {
+    public static void assertInvariants(final TimeStepEnergyErrorFunction f1, final TimeStepEnergyErrorFunction f2) {
         ObjectTest.assertInvariants(f1, f2);// inherited
     }
 
-    private static TimeStepEnergyErrorFunction constructor(ImmutableVectorN x0, double dt,
-            List<TimeStepEnergyErrorFunctionTerm> terms) {
+    private static TimeStepEnergyErrorFunction constructor(final ImmutableVectorN x0, final double dt,
+            final List<TimeStepEnergyErrorFunctionTerm> terms) {
         final TimeStepEnergyErrorFunction f = new TimeStepEnergyErrorFunction(x0, dt, terms);
 
         assertInvariants(f);
@@ -123,13 +124,13 @@ public class TimeStepEnergyErrorFunctionTest {
         return f;
     }
 
-    private static FunctionNWithGradientValue value(TimeStepEnergyErrorFunction f, ImmutableVectorN x) {
+    private static FunctionNWithGradientValue value(final TimeStepEnergyErrorFunction f, final ImmutableVectorN x) {
         final FunctionNWithGradientValue fx = f.value(x);
 
         return fx;
     }
 
-    private static void value_0(ImmutableVectorN x0, double dt, ImmutableVectorN x) {
+    private static void value_0(final ImmutableVectorN x0, final double dt, final ImmutableVectorN x) {
         final List<TimeStepEnergyErrorFunctionTerm> terms = Collections.emptyList();
         final TimeStepEnergyErrorFunction f = new TimeStepEnergyErrorFunction(x0, dt, terms);
 
@@ -139,8 +140,8 @@ public class TimeStepEnergyErrorFunctionTest {
         assertEquals(fx.getDfDx().magnitude(), 0.0, Double.MIN_NORMAL, "value.dfDx <" + fx.getDfDx() + "> magnitude");
     }
 
-    private static void value_quadraticTerm(double x0, double dt, double x, double xMin, double eMin, double expectedE,
-            double expectedDeDx) {
+    private static void value_quadraticTerm(final double x0, final double dt, final double x, final double xMin,
+            final double eMin, final double expectedE, final double expectedDeDx) {
         final QuadraticTerm1 term = new QuadraticTerm1(xMin, eMin);
         final List<TimeStepEnergyErrorFunctionTerm> terms = Collections.singletonList(term);
         final TimeStepEnergyErrorFunction f = new TimeStepEnergyErrorFunction(ImmutableVectorN.create(x0), dt, terms);

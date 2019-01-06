@@ -11,16 +11,17 @@ import uk.badamson.mc.math.ImmutableVectorN;
  */
 public class TimeStepEnergyErrorFunctionTermTest {
 
-    public static void assertInvariants(TimeStepEnergyErrorFunctionTerm t) {
+    public static void assertInvariants(final TimeStepEnergyErrorFunctionTerm t) {
         ObjectTest.assertInvariants(t);// inherited
     }
 
-    public static void assertInvariants(TimeStepEnergyErrorFunctionTerm t1, TimeStepEnergyErrorFunctionTerm t2) {
+    public static void assertInvariants(final TimeStepEnergyErrorFunctionTerm t1,
+            final TimeStepEnergyErrorFunctionTerm t2) {
         ObjectTest.assertInvariants(t1, t2);// inherited
     }
 
-    public static double evaluate(TimeStepEnergyErrorFunctionTerm term, double[] dedx, ImmutableVectorN x0,
-            ImmutableVectorN x, double dt) {
+    public static double evaluate(final TimeStepEnergyErrorFunctionTerm term, final double[] dedx,
+            final ImmutableVectorN x0, final ImmutableVectorN x, final double dt) {
         final double e = term.evaluate(dedx, x0, x, dt);
 
         assertInvariants(term);

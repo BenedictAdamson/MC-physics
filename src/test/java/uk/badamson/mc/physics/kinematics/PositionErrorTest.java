@@ -27,7 +27,7 @@ public class PositionErrorTest {
 
     private static final double MASS_2 = 1E24;
 
-    public static <VECTOR extends Vector> void assertInvariants(PositionError<VECTOR> term) {
+    public static <VECTOR extends Vector> void assertInvariants(final PositionError<VECTOR> term) {
         AbstractTimeStepEnergyErrorFunctionTermTest.assertInvariants(term);// inherited
 
         final double mass = term.getMass();
@@ -45,21 +45,22 @@ public class PositionErrorTest {
         final int positionVectorMapperDimension = positionVectorMapper.getDimension();
 
         AbstractTimeStepEnergyErrorFunctionTermTest.assertIsReferenceScale("mass", mass);
-        assertThat("spaceDimension", Integer.valueOf(spaceDimension), org.hamcrest.number.OrderingComparison.greaterThanOrEqualTo(Integer.valueOf(1)));
-        assertEquals(positionVectorMapperDimension, spaceDimension, "The number of dimensions equals the number of dimensions of the position vector mapper."
-                );
-        assertEquals(
-                positionVectorMapperDimension, velocityVectorMapper.getDimension(),                 "The dimension of the velocity vector mapper is equal to the dimension of the position vector mapper."
-);
+        assertThat("spaceDimension", Integer.valueOf(spaceDimension),
+                org.hamcrest.number.OrderingComparison.greaterThanOrEqualTo(Integer.valueOf(1)));
+        assertEquals(positionVectorMapperDimension, spaceDimension,
+                "The number of dimensions equals the number of dimensions of the position vector mapper.");
+        assertEquals(positionVectorMapperDimension, velocityVectorMapper.getDimension(),
+                "The dimension of the velocity vector mapper is equal to the dimension of the position vector mapper.");
     }
 
-    public static <VECTOR extends Vector> void assertInvariants(PositionError<VECTOR> term1,
-            PositionError<VECTOR> term2) {
+    public static <VECTOR extends Vector> void assertInvariants(final PositionError<VECTOR> term1,
+            final PositionError<VECTOR> term2) {
         AbstractTimeStepEnergyErrorFunctionTermTest.assertInvariants(term1, term2);// inherited
     }
 
-    private static <VECTOR extends Vector> PositionError<VECTOR> constructor(double mass,
-            VectorStateSpaceMapper<VECTOR> positionVectorMapper, VectorStateSpaceMapper<VECTOR> velocityVectorMapper) {
+    private static <VECTOR extends Vector> PositionError<VECTOR> constructor(final double mass,
+            final VectorStateSpaceMapper<VECTOR> positionVectorMapper,
+            final VectorStateSpaceMapper<VECTOR> velocityVectorMapper) {
         final PositionError<VECTOR> term = new PositionError<>(mass, positionVectorMapper, velocityVectorMapper);
 
         assertInvariants(term);
@@ -71,8 +72,8 @@ public class PositionErrorTest {
         return term;
     }
 
-    private static <VECTOR extends Vector> double evaluate(PositionError<VECTOR> term, double[] dedx,
-            ImmutableVectorN x0, ImmutableVectorN x, double dt) {
+    private static <VECTOR extends Vector> double evaluate(final PositionError<VECTOR> term, final double[] dedx,
+            final ImmutableVectorN x0, final ImmutableVectorN x, final double dt) {
         final double e = AbstractTimeStepEnergyErrorFunctionTermTest.evaluate(term, dedx, x0, x, dt);
 
         assertInvariants(term);
@@ -80,9 +81,10 @@ public class PositionErrorTest {
         return e;
     }
 
-    private static final void evaluate_1(double mass, int positionTerm, int velocityTerm, double dedx0, double dedv0,
-            double x0, double v0, double x, double v, double dt, double eExpected, double dEDXExpected,
-            double dEDVExpected, double tolerance) {
+    private static final void evaluate_1(final double mass, final int positionTerm, final int velocityTerm,
+            final double dedx0, final double dedv0, final double x0, final double v0, final double x, final double v,
+            final double dt, final double eExpected, final double dEDXExpected, final double dEDVExpected,
+            final double tolerance) {
         final ImmutableVector1StateSpaceMapper positionVectorMapper = new ImmutableVector1StateSpaceMapper(
                 positionTerm);
         final ImmutableVector1StateSpaceMapper velocityVectorMapper = new ImmutableVector1StateSpaceMapper(
@@ -111,24 +113,24 @@ public class PositionErrorTest {
 
     @Test
     public void constructor_1A() {
-        ImmutableVector1StateSpaceMapper positionVectorMapper = new ImmutableVector1StateSpaceMapper(3);
-        ImmutableVector1StateSpaceMapper velocityVectorMapper = new ImmutableVector1StateSpaceMapper(4);
+        final ImmutableVector1StateSpaceMapper positionVectorMapper = new ImmutableVector1StateSpaceMapper(3);
+        final ImmutableVector1StateSpaceMapper velocityVectorMapper = new ImmutableVector1StateSpaceMapper(4);
 
         constructor(MASS_1, positionVectorMapper, velocityVectorMapper);
     }
 
     @Test
     public void constructor_1B() {
-        ImmutableVector1StateSpaceMapper positionVectorMapper = new ImmutableVector1StateSpaceMapper(7);
-        ImmutableVector1StateSpaceMapper velocityVectorMapper = new ImmutableVector1StateSpaceMapper(11);
+        final ImmutableVector1StateSpaceMapper positionVectorMapper = new ImmutableVector1StateSpaceMapper(7);
+        final ImmutableVector1StateSpaceMapper velocityVectorMapper = new ImmutableVector1StateSpaceMapper(11);
 
         constructor(MASS_2, positionVectorMapper, velocityVectorMapper);
     }
 
     @Test
     public void constructor_3() {
-        ImmutableVector3StateSpaceMapper positionVectorMapper = new ImmutableVector3StateSpaceMapper(3);
-        ImmutableVector3StateSpaceMapper velocityVectorMapper = new ImmutableVector3StateSpaceMapper(4);
+        final ImmutableVector3StateSpaceMapper positionVectorMapper = new ImmutableVector3StateSpaceMapper(3);
+        final ImmutableVector3StateSpaceMapper velocityVectorMapper = new ImmutableVector3StateSpaceMapper(4);
 
         constructor(MASS_1, positionVectorMapper, velocityVectorMapper);
     }

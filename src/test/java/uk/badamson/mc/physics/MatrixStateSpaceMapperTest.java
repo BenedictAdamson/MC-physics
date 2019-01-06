@@ -12,24 +12,24 @@ import uk.badamson.mc.math.Matrix;
  */
 public class MatrixStateSpaceMapperTest {
 
-    public static <MATRIX extends Matrix> void assertInvariants(MatrixStateSpaceMapper<MATRIX> mapper) {
+    public static <MATRIX extends Matrix> void assertInvariants(final MatrixStateSpaceMapper<MATRIX> mapper) {
         ObjectStateSpaceMapperTest.assertInvariants(mapper);// inherited
     }
 
-    public static <MATRIX extends Matrix> void assertInvariants(MatrixStateSpaceMapper<MATRIX> mapper1,
-            MatrixStateSpaceMapper<MATRIX> mapper2) {
+    public static <MATRIX extends Matrix> void assertInvariants(final MatrixStateSpaceMapper<MATRIX> mapper1,
+            final MatrixStateSpaceMapper<MATRIX> mapper2) {
         ObjectStateSpaceMapperTest.assertInvariants(mapper1, mapper2);// inherited
     }
 
-    public static <MATRIX extends Matrix> void fromObject(MatrixStateSpaceMapper<MATRIX> mapper, double[] state,
-            MATRIX matrix) {
+    public static <MATRIX extends Matrix> void fromObject(final MatrixStateSpaceMapper<MATRIX> mapper,
+            final double[] state, final MATRIX matrix) {
         ObjectStateSpaceMapperTest.fromObject(mapper, state, matrix);
 
         assertInvariants(mapper);// check for side-effects
     }
 
-    public static <MATRIX extends Matrix> void fromToObjectSymmetry(MatrixStateSpaceMapper<MATRIX> mapper,
-            double[] state, MATRIX original) {
+    public static <MATRIX extends Matrix> void fromToObjectSymmetry(final MatrixStateSpaceMapper<MATRIX> mapper,
+            final double[] state, final MATRIX original) {
         mapper.fromObject(state, original);
         final ImmutableVectorN stateVector = ImmutableVectorN.create(state);
 
@@ -38,9 +38,9 @@ public class MatrixStateSpaceMapperTest {
         assertEquals(original, reconstructed, "Symmetric");
     }
 
-    public static <MATRIX extends Matrix> MATRIX toObject(MatrixStateSpaceMapper<MATRIX> mapper,
-            ImmutableVectorN state) {
-        MATRIX matrix = ObjectStateSpaceMapperTest.toObject(mapper, state);
+    public static <MATRIX extends Matrix> MATRIX toObject(final MatrixStateSpaceMapper<MATRIX> mapper,
+            final ImmutableVectorN state) {
+        final MATRIX matrix = ObjectStateSpaceMapperTest.toObject(mapper, state);
 
         assertInvariants(mapper);// check for side-effects
 

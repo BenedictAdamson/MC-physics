@@ -28,7 +28,7 @@ import net.jcip.annotations.Immutable;
  * <p>
  * A skeleton implementation of a functor for a time varying scalar property.
  * </p>
- * 
+ *
  * @see AbstractTimeVaryingVector3
  */
 @Immutable

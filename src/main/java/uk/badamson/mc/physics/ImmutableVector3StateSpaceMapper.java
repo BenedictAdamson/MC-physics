@@ -35,7 +35,7 @@ public final class ImmutableVector3StateSpaceMapper implements VectorStateSpaceM
      * @throws IllegalArgumentException
      *             If {@code index0} is negative
      */
-    public ImmutableVector3StateSpaceMapper(int index0) {
+    public ImmutableVector3StateSpaceMapper(final int index0) {
         if (index0 < 0) {
             throw new IllegalArgumentException("index0 " + index0);
         }
@@ -43,12 +43,12 @@ public final class ImmutableVector3StateSpaceMapper implements VectorStateSpaceM
     }
 
     @Override
-    public final void fromObject(double[] state, ImmutableVector3 object) {
+    public final void fromObject(final double[] state, final ImmutableVector3 object) {
         fromVector(state, object);
     }
 
     @Override
-    public final void fromVector(double[] state, Vector vector) {
+    public final void fromVector(final double[] state, final Vector vector) {
         Objects.requireNonNull(state, "state");
         if (!isValidForDimension(state.length)) {
             throw new IllegalArgumentException("state.length " + state.length + " index0 " + index0);
@@ -71,12 +71,12 @@ public final class ImmutableVector3StateSpaceMapper implements VectorStateSpaceM
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @throws IllegalArgumentException
      *             {@inheritDoc}
      */
     @Override
-    public final boolean isValidForDimension(int n) {
+    public final boolean isValidForDimension(final int n) {
         if (n < 1) {
             throw new IllegalArgumentException("n " + n);
         }
@@ -84,7 +84,7 @@ public final class ImmutableVector3StateSpaceMapper implements VectorStateSpaceM
     }
 
     @Override
-    public final ImmutableVector3 toObject(ImmutableVectorN state) {
+    public final ImmutableVector3 toObject(final ImmutableVectorN state) {
         Objects.requireNonNull(state, "state");
         if (!isValidForDimension(state.getDimension())) {
             throw new IllegalArgumentException("state.dimension " + state.getDimension() + " index " + index0);

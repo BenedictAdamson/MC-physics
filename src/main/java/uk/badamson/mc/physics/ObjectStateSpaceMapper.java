@@ -22,7 +22,7 @@ public interface ObjectStateSpaceMapper<OBJECT> {
      * <li>This is the inverse operation of the {@link #toObject(ImmutableVectorN)}
      * method.
      * </ul>
-     * 
+     *
      * @param state
      *            The components of the state-space vector.
      * @param object
@@ -47,7 +47,7 @@ public interface ObjectStateSpaceMapper<OBJECT> {
      * Whether this mapper can be used for a state-space vector that has a given
      * number of variables.
      * </p>
-     * 
+     *
      * @return whether valid.
      * @throws IllegalArgumentException
      *             If {@code n} is not positive.
@@ -58,7 +58,7 @@ public interface ObjectStateSpaceMapper<OBJECT> {
      * <p>
      * Using this mapping to convert (part of) a state-space vector to an object.
      * </p>
-     * 
+     *
      * @param state
      *            The state-space vector
      * @return The representation of (part of) the state-space; not null.

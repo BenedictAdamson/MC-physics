@@ -31,7 +31,8 @@ public final class Rotation3AxisAngleStateSpaceMapper implements ObjectStateSpac
      * @throws IllegalArgumentException
      *             if {@code rotationIndex} is negative.
      */
-    public Rotation3AxisAngleStateSpaceMapper(int rotationIndex, ImmutableVector3StateSpaceMapper axisMapper) {
+    public Rotation3AxisAngleStateSpaceMapper(final int rotationIndex,
+            final ImmutableVector3StateSpaceMapper axisMapper) {
         if (rotationIndex < 0) {
             throw new IllegalArgumentException("rotationIndex " + rotationIndex);
         }
@@ -41,14 +42,14 @@ public final class Rotation3AxisAngleStateSpaceMapper implements ObjectStateSpac
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @throws NullPointerException
      *             {@inheritDoc}
      * @throws RuntimeException
      *             {@inheritDoc}
      */
     @Override
-    public final void fromObject(double[] state, Rotation3AxisAngle object) {
+    public final void fromObject(final double[] state, final Rotation3AxisAngle object) {
         Objects.requireNonNull(state, "state");
         Objects.requireNonNull(object, "object");
         state[rotationIndex] += object.getAngle();
@@ -56,20 +57,20 @@ public final class Rotation3AxisAngleStateSpaceMapper implements ObjectStateSpac
     }
 
     @Override
-    public final boolean isValidForDimension(int n) {
+    public final boolean isValidForDimension(final int n) {
         return axisMapper.isValidForDimension(n) && rotationIndex < n;
     }
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @throws NullPointerException
      *             {@inheritDoc}
      * @throws RuntimeException
      *             {@inheritDoc}
      */
     @Override
-    public final Rotation3AxisAngle toObject(ImmutableVectorN state) {
+    public final Rotation3AxisAngle toObject(final ImmutableVectorN state) {
         return Rotation3AxisAngle.valueOfAxisAngle(axisMapper.toObject(state), state.get(rotationIndex));
     }
 

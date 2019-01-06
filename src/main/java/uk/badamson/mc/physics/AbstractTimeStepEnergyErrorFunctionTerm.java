@@ -23,7 +23,7 @@ public abstract class AbstractTimeStepEnergyErrorFunctionTerm implements TimeSte
      * The copy is <dfn>safe</dfn> in that it the method throws exceptions rather
      * than copying an invalid term index array.
      * </p>
-     * 
+     *
      * @param index
      *            The array to copy.
      * @param name
@@ -34,7 +34,7 @@ public abstract class AbstractTimeStepEnergyErrorFunctionTerm implements TimeSte
      * @throws IllegalArgumentException
      *             If and value of {@code index} is negative.
      */
-    protected static final int[] copyTermIndex(int[] index, String name)
+    protected static final int[] copyTermIndex(final int[] index, final String name)
             throws NullPointerException, IllegalArgumentException {
         Objects.requireNonNull(index, name);
         final int n = index.length;
@@ -50,7 +50,7 @@ public abstract class AbstractTimeStepEnergyErrorFunctionTerm implements TimeSte
      * <p>
      * Extract some terms from a large state vector into a smaller state vector.
      * </p>
-     * 
+     *
      * @param x
      *            The state vector.
      * @param term
@@ -59,7 +59,7 @@ public abstract class AbstractTimeStepEnergyErrorFunctionTerm implements TimeSte
      *            component <var>i</var>.
      * @return the smaller vector
      */
-    protected static final ImmutableVectorN extract(ImmutableVectorN x, int term[]) {
+    protected static final ImmutableVectorN extract(final ImmutableVectorN x, final int term[]) {
         final int n = term.length;
         final double[] extract = new double[n];
         for (int i = 0; i < n; i++) {
@@ -73,7 +73,7 @@ public abstract class AbstractTimeStepEnergyErrorFunctionTerm implements TimeSte
      * Extract some terms from a large state vector into a smaller state vector for
      * a case in which multiple smaller state vectors could be extracted.
      * </p>
-     * 
+     *
      * @param x
      *            The state vector.
      * @param term
@@ -87,7 +87,8 @@ public abstract class AbstractTimeStepEnergyErrorFunctionTerm implements TimeSte
      *            The number of dimensions of the smaller state vector
      * @return the smaller vector
      */
-    protected static final ImmutableVectorN extract(ImmutableVectorN x, int term[], int i0, int n) {
+    protected static final ImmutableVectorN extract(final ImmutableVectorN x, final int term[], final int i0,
+            final int n) {
         final double[] extract = new double[n];
         for (int i = 0; i < n; i++) {
             extract[i] = x.get(term[i0 + i]);
@@ -100,7 +101,7 @@ public abstract class AbstractTimeStepEnergyErrorFunctionTerm implements TimeSte
      * Throw an {@link IllegalArgumentException} iff two arrays have different
      * lengths.
      * </p>
-     * 
+     *
      * @param array1
      *            The first of the two arrays to compare.
      * @param name1
@@ -112,8 +113,8 @@ public abstract class AbstractTimeStepEnergyErrorFunctionTerm implements TimeSte
      * @throws IllegalArgumentException
      *             If {@code array1} and {@code array2} have different lengths.
      */
-    protected static void requireConsistentLengths(int[] array1, String name1, int[] array2, String name2)
-            throws IllegalArgumentException {
+    protected static void requireConsistentLengths(final int[] array1, final String name1, final int[] array2,
+            final String name2) throws IllegalArgumentException {
         if (array1.length != array2.length) {
             throw new IllegalArgumentException(
                     "Inconsistent " + name1 + ".length " + array1.length + " " + name2 + ".length " + array2.length);
@@ -125,7 +126,7 @@ public abstract class AbstractTimeStepEnergyErrorFunctionTerm implements TimeSte
      * Throw an {@link IllegalArgumentException} if a given value is unsuitable as a
      * reference scale.
      * </p>
-     * 
+     *
      * @param s
      *            The value
      * @param name
@@ -134,7 +135,7 @@ public abstract class AbstractTimeStepEnergyErrorFunctionTerm implements TimeSte
      * @throws IllegalArgumentException
      *             If {@code s} is not positive and finite.
      */
-    protected static double requireReferenceScale(double s, String name) throws IllegalArgumentException {
+    protected static double requireReferenceScale(final double s, final String name) throws IllegalArgumentException {
         if (!(0.0 < s && Double.isFinite(s))) {
             throw new IllegalArgumentException(name + " scale " + s);
         }
@@ -146,7 +147,7 @@ public abstract class AbstractTimeStepEnergyErrorFunctionTerm implements TimeSte
      * Throw an {@link IllegalArgumentException} if a given value is unsuitable as a
      * term index.
      * </p>
-     * 
+     *
      * @param index
      *            The index
      * @param name
@@ -155,7 +156,7 @@ public abstract class AbstractTimeStepEnergyErrorFunctionTerm implements TimeSte
      * @throws IllegalArgumentException
      *             If {@code index} is negative.
      */
-    protected static final int requireTermIndex(int index, String name) throws IllegalArgumentException {
+    protected static final int requireTermIndex(final int index, final String name) throws IllegalArgumentException {
         if (index < 0) {
             throw new IllegalArgumentException("Negative index term " + name + " " + index);
         }
@@ -164,12 +165,12 @@ public abstract class AbstractTimeStepEnergyErrorFunctionTerm implements TimeSte
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * <p>
      * The implementation provided for the
      * {@link AbstractTimeStepEnergyErrorFunctionTerm} type returns 0.
      * </p>
-     * 
+     *
      * @param dedx
      *            {@inheritDoc}
      * @param state0
@@ -179,7 +180,7 @@ public abstract class AbstractTimeStepEnergyErrorFunctionTerm implements TimeSte
      * @param dt
      *            {@inheritDoc}
      * @return the value
-     * 
+     *
      * @throws NullPointerException
      *             {@inheritDoc}
      * @throws IllegalArgumentException
@@ -191,7 +192,8 @@ public abstract class AbstractTimeStepEnergyErrorFunctionTerm implements TimeSte
      *             </ul>
      */
     @Override
-    public double evaluate(double[] dedx, ImmutableVectorN state0, ImmutableVectorN state, double dt) {
+    public double evaluate(final double[] dedx, final ImmutableVectorN state0, final ImmutableVectorN state,
+            final double dt) {
         Objects.requireNonNull(dedx, "dedx");
         Objects.requireNonNull(state0, "x0");
         Objects.requireNonNull(state, "x");

@@ -36,7 +36,7 @@ public final class QuaternionStateSpaceMapper implements ObjectStateSpaceMapper<
      * @throws IllegalArgumentException
      *             If {@code index0} is negative
      */
-    public QuaternionStateSpaceMapper(int index0) {
+    public QuaternionStateSpaceMapper(final int index0) {
         if (index0 < 0) {
             throw new IllegalArgumentException("index0 " + index0);
         }
@@ -45,14 +45,14 @@ public final class QuaternionStateSpaceMapper implements ObjectStateSpaceMapper<
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @throws NullPointerException
      *             {@inheritDoc}
      * @throws RuntimeException
      *             {@inheritDoc}
      */
     @Override
-    public final void fromObject(double[] state, Quaternion object) {
+    public final void fromObject(final double[] state, final Quaternion object) {
         Objects.requireNonNull(state, "state");
         Objects.requireNonNull(object, "object");
         state[index0] += object.getA();
@@ -63,12 +63,12 @@ public final class QuaternionStateSpaceMapper implements ObjectStateSpaceMapper<
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @throws IllegalArgumentException
      *             {@inheritDoc}
      */
     @Override
-    public final boolean isValidForDimension(int n) {
+    public final boolean isValidForDimension(final int n) {
         if (n < 1) {
             throw new IllegalArgumentException("n " + n);
         }
@@ -77,14 +77,14 @@ public final class QuaternionStateSpaceMapper implements ObjectStateSpaceMapper<
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @throws NullPointerException
      *             {@inheritDoc}
      * @throws RuntimeException
      *             {@inheritDoc}
      */
     @Override
-    public final Quaternion toObject(ImmutableVectorN state) {
+    public final Quaternion toObject(final ImmutableVectorN state) {
         Objects.requireNonNull(state, "state");
         return Quaternion.create(state.get(index0), state.get(index0 + 1), state.get(index0 + 2),
                 state.get(index0 + 3));

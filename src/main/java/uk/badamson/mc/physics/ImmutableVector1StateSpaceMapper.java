@@ -33,7 +33,7 @@ public final class ImmutableVector1StateSpaceMapper implements VectorStateSpaceM
      * @throws IllegalArgumentException
      *             If {@code index} is negative
      */
-    public ImmutableVector1StateSpaceMapper(int index) {
+    public ImmutableVector1StateSpaceMapper(final int index) {
         if (index < 0) {
             throw new IllegalArgumentException("index " + index);
         }
@@ -41,12 +41,12 @@ public final class ImmutableVector1StateSpaceMapper implements VectorStateSpaceM
     }
 
     @Override
-    public final void fromObject(double[] state, ImmutableVector1 object) {
+    public final void fromObject(final double[] state, final ImmutableVector1 object) {
         fromVector(state, object);
     }
 
     @Override
-    public final void fromVector(double[] state, Vector vector) {
+    public final void fromVector(final double[] state, final Vector vector) {
         Objects.requireNonNull(state, "state");
         if (!isValidForDimension(state.length)) {
             throw new IllegalArgumentException("state.length " + state.length + " index " + index);
@@ -70,12 +70,12 @@ public final class ImmutableVector1StateSpaceMapper implements VectorStateSpaceM
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @throws IllegalArgumentException
      *             {@inheritDoc}
      */
     @Override
-    public final boolean isValidForDimension(int n) {
+    public final boolean isValidForDimension(final int n) {
         if (n < 1) {
             throw new IllegalArgumentException("n " + n);
         }
@@ -83,7 +83,7 @@ public final class ImmutableVector1StateSpaceMapper implements VectorStateSpaceM
     }
 
     @Override
-    public final ImmutableVector1 toObject(ImmutableVectorN state) {
+    public final ImmutableVector1 toObject(final ImmutableVectorN state) {
         Objects.requireNonNull(state, "state");
         if (!isValidForDimension(state.getDimension())) {
             throw new IllegalArgumentException("state.dimension " + state.getDimension() + " index " + index);

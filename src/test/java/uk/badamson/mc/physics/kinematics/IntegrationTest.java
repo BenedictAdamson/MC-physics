@@ -1,6 +1,5 @@
 package uk.badamson.mc.physics.kinematics;
 
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -32,12 +31,13 @@ public class IntegrationTest {
 
         private final double mass;
 
-        public ConstantVelocityError(double mass) {
+        public ConstantVelocityError(final double mass) {
             this.mass = mass;
         }
 
         @Override
-        public final double evaluate(double[] dedx, ImmutableVectorN state0, ImmutableVectorN state, double dt) {
+        public final double evaluate(final double[] dedx, final ImmutableVectorN state0, final ImmutableVectorN state,
+                final double dt) {
             final double v0 = state0.get(1);
             final double v = state.get(1);
             final double vError = v - v0;
@@ -48,21 +48,19 @@ public class IntegrationTest {
         }
 
         @Override
-        public final boolean isValidForDimension(int n) {
+        public final boolean isValidForDimension(final int n) {
             return 2 <= n;
         }
 
     }// class
 
-
-    private static int sign(final double x) {
-        if (x < -Double.MIN_NORMAL) {
-            return -1;
-        } else if (Double.MIN_NORMAL < x) {
-            return 1;
-        } else {
-            return 0;
-        }
+    private static void assertConstantVelocityErrorFunctionConsitentWithGradientAlongLine(final double x0,
+            final double v0, final double dt, final double dx, final double dv, final double da, final double mass,
+            final double tolerance, final double w1, final double w2, final int n) {
+        final TimeStepEnergyErrorFunction errorFunction = create1DconstantVelocityErrorFunction(x0, v0, dt, mass);
+        final ImmutableVectorN s0 = create1DStateVector(x0, v0, 0.0);
+        final ImmutableVectorN ds = create1DStateVector(dx, dv, da);
+        assertValueConsistentWithGradientAlongLine(errorFunction, w1, w2, n, s0, ds);
     }
 
     private static void assertValueConsistentWithGradient(final Function1WithGradient f, final double x1,
@@ -83,23 +81,15 @@ public class IntegrationTest {
                     "Consistent gradient <" + fl + "," + fi + "," + fr + ">");
         }
     }
-    
-    
+
     private static void assertValueConsistentWithGradientAlongLine(final FunctionNWithGradient f, final double w1,
             final double w2, final int n, final ImmutableVectorN x0, final ImmutableVectorN dx) {
         final Function1WithGradient fLine = MinN.createLineFunction(f, x0, dx);
         assertValueConsistentWithGradient(fLine, w1, w2, n);
     }
-    
-    private static void assertConstantVelocityErrorFunctionConsitentWithGradientAlongLine(double x0, double v0,
-            double dt, double dx, double dv, double da, double mass, double tolerance, double w1, double w2, int n) {
-        final TimeStepEnergyErrorFunction errorFunction = create1DconstantVelocityErrorFunction(x0, v0, dt, mass);
-        final ImmutableVectorN s0 = create1DStateVector(x0, v0, 0.0);
-        final ImmutableVectorN ds = create1DStateVector(dx, dv, da);
-        assertValueConsistentWithGradientAlongLine(errorFunction, w1, w2, n, s0, ds);
-    }
 
-    private static void constantVelocitySolution(double x0, double v0, double dt, double mass, double tolerance) {
+    private static void constantVelocitySolution(final double x0, final double v0, final double dt, final double mass,
+            final double tolerance) {
         final TimeStepEnergyErrorFunction errorFunction = create1DconstantVelocityErrorFunction(x0, v0, dt, mass);
         final ImmutableVectorN state0 = create1DStateVector(x0, v0, 0.0);
 
@@ -116,8 +106,8 @@ public class IntegrationTest {
         assertEquals(0, a, tolerance, "a");
     }
 
-    private static TimeStepEnergyErrorFunction create1DconstantVelocityErrorFunction(double x0, double v0, double dt,
-            double mass) {
+    private static TimeStepEnergyErrorFunction create1DconstantVelocityErrorFunction(final double x0, final double v0,
+            final double dt, final double mass) {
         final ImmutableVector1StateSpaceMapper positionVectorMapper = new ImmutableVector1StateSpaceMapper(0);
         final ImmutableVector1StateSpaceMapper velocityVectorMapper = new ImmutableVector1StateSpaceMapper(1);
         final ImmutableVector1StateSpaceMapper accelerationVectorMapper = new ImmutableVector1StateSpaceMapper(2);
@@ -131,8 +121,18 @@ public class IntegrationTest {
         return errorFunction;
     }
 
-    private static ImmutableVectorN create1DStateVector(double x, double v, double a) {
+    private static ImmutableVectorN create1DStateVector(final double x, final double v, final double a) {
         return ImmutableVectorN.create(x, v, a);
+    }
+
+    private static int sign(final double x) {
+        if (x < -Double.MIN_NORMAL) {
+            return -1;
+        } else if (Double.MIN_NORMAL < x) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
     @Test

@@ -23,7 +23,7 @@ public class Newton2ErrorTest {
 
     private static final double TIME_REFERNCE_2 = 1.0E3;
 
-    public static void assertInvariants(Newton2Error term) {
+    public static void assertInvariants(final Newton2Error term) {
         AbstractTimeStepEnergyErrorFunctionTermTest.assertInvariants(term);// inherited
 
         final int spaceDimension = term.getSpaceDimension();
@@ -55,13 +55,14 @@ public class Newton2ErrorTest {
         }
     }
 
-    public static void assertInvariants(Newton2Error term1, Newton2Error term2) {
+    public static void assertInvariants(final Newton2Error term1, final Newton2Error term2) {
         AbstractTimeStepEnergyErrorFunctionTermTest.assertInvariants(term1, term2);// inherited
     }
 
-    private static Newton2Error constructor(double massReference, double timeReference, int massTerm,
-            int[] velocityTerm, int[] accelerationTerm, boolean[] massTransferInto, int[] advectionMassRateTerm,
-            int[] advectionVelocityTerm, boolean[] forceOn, int[] forceTerm) {
+    private static Newton2Error constructor(final double massReference, final double timeReference, final int massTerm,
+            final int[] velocityTerm, final int[] accelerationTerm, final boolean[] massTransferInto,
+            final int[] advectionMassRateTerm, final int[] advectionVelocityTerm, final boolean[] forceOn,
+            final int[] forceTerm) {
         final Newton2Error term = new Newton2Error(massReference, timeReference, massTerm, velocityTerm,
                 accelerationTerm, massTransferInto, advectionMassRateTerm, advectionVelocityTerm, forceOn, forceTerm);
 
@@ -81,26 +82,26 @@ public class Newton2ErrorTest {
         }
         for (int j = 0; j < massTransferInto.length; ++j) {
             assertEquals(massTransferInto[j], term.isMassTransferInto(j), "massTransferInto[" + j + "]");
-            assertEquals(advectionMassRateTerm[j],
-                    term.getAdvectionMassRateTerm(j), "advectionMassRateTerm[" + j + "]");
+            assertEquals(advectionMassRateTerm[j], term.getAdvectionMassRateTerm(j),
+                    "advectionMassRateTerm[" + j + "]");
             for (int i = 0; i < velocityTerm.length; ++i) {
-                assertEquals(
-                        advectionVelocityTerm[j * velocityTerm.length + i], term.getAdvectionVelocityTerm(j, i), "advectionVelocityTerm[" + j + "," + i + "]");
+                assertEquals(advectionVelocityTerm[j * velocityTerm.length + i], term.getAdvectionVelocityTerm(j, i),
+                        "advectionVelocityTerm[" + j + "," + i + "]");
             }
         }
         for (int k = 0; k < forceOn.length; ++k) {
             assertEquals(forceOn[k], term.isForceOn(k), "forceOn[" + k + "]");
             for (int i = 0; i < velocityTerm.length; ++i) {
-                assertEquals(forceTerm[k * velocityTerm.length + i],
-                        term.getForceTerm(k, i), "forceTerm[" + k + "," + i + "]");
+                assertEquals(forceTerm[k * velocityTerm.length + i], term.getForceTerm(k, i),
+                        "forceTerm[" + k + "," + i + "]");
             }
         }
 
         return term;
     }
 
-    private static double evaluate(Newton2Error term, double[] dedx, ImmutableVectorN state0, ImmutableVectorN state,
-            double dt) {
+    private static double evaluate(final Newton2Error term, final double[] dedx, final ImmutableVectorN state0,
+            final ImmutableVectorN state, final double dt) {
         final double e = AbstractTimeStepEnergyErrorFunctionTermTest.evaluate(term, dedx, state0, state, dt);// inherited
 
         assertInvariants(term);
@@ -109,10 +110,12 @@ public class Newton2ErrorTest {
         return e;
     }
 
-    private static void evaluate_1Advection(double massReference, double timeReference, boolean massTransferInto,
-            double m0, double v0, double mrate0, double u0, double a0, double m, double v, double a, double mrate,
-            double u, double dt, double dedmrate0, double dedu0, double expectedE, double expectedDedm,
-            double expectedDedv, double expectedDeda, double expectedDedmrate, double expectedDedu) {
+    private static void evaluate_1Advection(final double massReference, final double timeReference,
+            final boolean massTransferInto, final double m0, final double v0, final double mrate0, final double u0,
+            final double a0, final double m, final double v, final double a, final double mrate, final double u,
+            final double dt, final double dedmrate0, final double dedu0, final double expectedE,
+            final double expectedDedm, final double expectedDedv, final double expectedDeda,
+            final double expectedDedmrate, final double expectedDedu) {
         final int massTerm = 0;
         final int[] velocityTerm = { 1 };
         final int[] accelerationTerm = { 2 };
@@ -139,9 +142,10 @@ public class Newton2ErrorTest {
         assertEquals(expectedDedu, dedx[4], 1E-8, "dedu");
     }
 
-    private static void evaluate_1Closed(double massReference, double timeReference, double dedm0, double dedv0,
-            double deda0, double m0, double v0, double a0, double m, double v, double a, double dt, double expectedE,
-            double expectedDedm, double expectedDedv, double expectedDeda) {
+    private static void evaluate_1Closed(final double massReference, final double timeReference, final double dedm0,
+            final double dedv0, final double deda0, final double m0, final double v0, final double a0, final double m,
+            final double v, final double a, final double dt, final double expectedE, final double expectedDedm,
+            final double expectedDedv, final double expectedDeda) {
         final int massTerm = 0;
         final int[] velocityTerm = { 1 };
         final int[] accelerationTerm = { 2 };
@@ -166,9 +170,11 @@ public class Newton2ErrorTest {
         assertEquals(expectedDeda, dedx[2], 1E-8, "deda");
     }
 
-    private static void evaluate_1Force(double massReference, double timeReference, boolean forceOn, double m0,
-            double v0, double a0, double f0, double m, double v, double a, double f, double dt, double dedf0,
-            double expectedE, double expectedDedm, double expectedDedv, double expectedDeda, double expectedDedf) {
+    private static void evaluate_1Force(final double massReference, final double timeReference, final boolean forceOn,
+            final double m0, final double v0, final double a0, final double f0, final double m, final double v,
+            final double a, final double f, final double dt, final double dedf0, final double expectedE,
+            final double expectedDedm, final double expectedDedv, final double expectedDeda,
+            final double expectedDedf) {
         final int massTerm = 0;
         final int[] velocityTerm = { 1 };
         final int[] accelerationTerm = { 2 };

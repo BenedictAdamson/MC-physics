@@ -29,7 +29,7 @@ public class VersorErrorTest {
     private static final double DT_1 = 1.0;
     private static final double DT_2 = 1E-3;
 
-    public static void assertInvariants(VersorError term) {
+    public static void assertInvariants(final VersorError term) {
         AbstractTimeStepEnergyErrorFunctionTermTest.assertInvariants(term);// inherited
 
         final double mass = term.getMass();
@@ -42,11 +42,12 @@ public class VersorErrorTest {
         AbstractTimeStepEnergyErrorFunctionTermTest.assertIsReferenceScale("length", length);
     }
 
-    public static void assertInvariants(VersorError term1, VersorError term2) {
+    public static void assertInvariants(final VersorError term1, final VersorError term2) {
         AbstractTimeStepEnergyErrorFunctionTermTest.assertInvariants(term1, term2);// inherited
     }
 
-    private static VersorError constructor(double length, double mass, QuaternionStateSpaceMapper quaternionMapper) {
+    private static VersorError constructor(final double length, final double mass,
+            final QuaternionStateSpaceMapper quaternionMapper) {
         final VersorError term = new VersorError(length, mass, quaternionMapper);
 
         assertInvariants(term);
@@ -58,8 +59,8 @@ public class VersorErrorTest {
         return term;
     }
 
-    private static double evaluate(VersorError term, double[] dedx, ImmutableVectorN x0, ImmutableVectorN x,
-            double dt) {
+    private static double evaluate(final VersorError term, final double[] dedx, final ImmutableVectorN x0,
+            final ImmutableVectorN x, final double dt) {
         final double e = AbstractTimeStepEnergyErrorFunctionTermTest.evaluate(term, dedx, x0, x, dt);
 
         assertInvariants(term);
@@ -67,7 +68,8 @@ public class VersorErrorTest {
         return e;
     }
 
-    private static void evaluate_smallError(double length, double mass, Quaternion versor, Quaternion dq, double dt) {
+    private static void evaluate_smallError(final double length, final double mass, final Quaternion versor,
+            final Quaternion dq, final double dt) {
         final Quaternion q = versor.plus(dq);
         final double qe = q.norm() - 1.0;
         final double le = qe * length;
@@ -94,7 +96,8 @@ public class VersorErrorTest {
         assertThat("dedex[3]", Double.valueOf(dedx[3]), closeTo(deda2 * versor.getD(), dedxTolerance));
     }
 
-    private static void evaluate_versor(double length, double mass, Quaternion versor, double dt) {
+    private static void evaluate_versor(final double length, final double mass, final Quaternion versor,
+            final double dt) {
         final QuaternionStateSpaceMapper quaternionMapper = new QuaternionStateSpaceMapper(0);
         final VersorError term = new VersorError(length, mass, quaternionMapper);
         final double[] dedx = new double[4];
@@ -112,7 +115,7 @@ public class VersorErrorTest {
         assertThat("dedex[3]", Double.valueOf(dedx[3]), closeTo(0, Double.MIN_NORMAL));
     }
 
-    private static final double tolerance(double expected) {
+    private static final double tolerance(final double expected) {
         final double a = Math.max(1.0, Math.abs(expected));
         return Math.nextAfter(a, Double.POSITIVE_INFINITY) - a;
     }

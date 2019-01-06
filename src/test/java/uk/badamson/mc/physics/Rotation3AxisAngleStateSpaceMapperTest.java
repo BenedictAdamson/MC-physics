@@ -1,6 +1,5 @@
 package uk.badamson.mc.physics;
 
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -22,51 +21,6 @@ import uk.badamson.mc.math.Rotation3AxisAngle;
  * </p>
  */
 public class Rotation3AxisAngleStateSpaceMapperTest {
-
-    private static final double SMALL_ANGLE = Math.PI * 0.003;
-
-    public static void assertInvariants(Rotation3AxisAngleStateSpaceMapper mapper) {
-        ObjectStateSpaceMapperTest.assertInvariants(mapper);// inherited
-    }
-
-    public static void assertInvariants(Rotation3AxisAngleStateSpaceMapper mapper1,
-            Rotation3AxisAngleStateSpaceMapper mapper2) {
-        ObjectStateSpaceMapperTest.assertInvariants(mapper1, mapper2);// inherited
-    }
-
-    private static void fromObject(int index0, int stateSize, final Rotation3AxisAngle r1,
-            final Rotation3AxisAngle r2) {
-        final double tolerance = 2 * (Math.nextAfter(1.0, 2.0) - 1.0);
-        final ImmutableVector3StateSpaceMapper axisMapper = new ImmutableVector3StateSpaceMapper(index0 + 1);
-        final Rotation3AxisAngleStateSpaceMapper rotationMapper = new Rotation3AxisAngleStateSpaceMapper(index0,
-                axisMapper);
-        final double[] state = new double[stateSize];
-        rotationMapper.fromObject(state, r1);
-        final double[] state0 = Arrays.copyOf(state, stateSize);
-
-        fromObject(rotationMapper, state, r2);
-
-        assertEquals(state0[index0] + r2.getAngle(), state[index0], tolerance, "state[index0]");
-        assertEquals(state0[index0 + 1] + r2.getAxis().get(0), state[index0 + 1], tolerance, "state[index0+1]");
-        assertEquals(state0[index0 + 2] + r2.getAxis().get(1), state[index0 + 2], tolerance, "state[index0+2]");
-        assertEquals(state0[index0 + 3] + r2.getAxis().get(2), state[index0 + 3], tolerance, "state[index0+3]");
-    }
-
-    public static void fromObject(Rotation3AxisAngleStateSpaceMapper mapper, double[] state,
-            Rotation3AxisAngle quaternion) {
-        ObjectStateSpaceMapperTest.fromObject(mapper, state, quaternion);
-
-        assertInvariants(mapper);// check for side-effects
-    }
-
-    private static void fromToObjectSymmetry(int index0, int stateSize, Rotation3AxisAngle original) {
-        final ImmutableVector3StateSpaceMapper axisMapper = new ImmutableVector3StateSpaceMapper(index0 + 1);
-        final Rotation3AxisAngleStateSpaceMapper rotationMapper = new Rotation3AxisAngleStateSpaceMapper(index0,
-                axisMapper);
-        final double[] state = new double[stateSize];
-
-        fromToObjectSymmetry(rotationMapper, state, original);
-    }
 
     private static class IsCloseTo extends TypeSafeMatcher<Rotation3> {
         private final double tolerance;
@@ -98,9 +52,20 @@ public class Rotation3AxisAngleStateSpaceMapperTest {
             return distance(item) <= tolerance;
         }
     }// class
-    
+
+    private static final double SMALL_ANGLE = Math.PI * 0.003;
 
     private static final double TOLERANCE = 4.0 * (Math.nextUp(1.0) - 1.0);
+
+    public static void assertInvariants(final Rotation3AxisAngleStateSpaceMapper mapper) {
+        ObjectStateSpaceMapperTest.assertInvariants(mapper);// inherited
+    }
+
+    public static void assertInvariants(final Rotation3AxisAngleStateSpaceMapper mapper1,
+            final Rotation3AxisAngleStateSpaceMapper mapper2) {
+        ObjectStateSpaceMapperTest.assertInvariants(mapper1, mapper2);// inherited
+    }
+
     public static Matcher<Rotation3> closeToRotation3(final Rotation3 operand) {
         return new IsCloseTo(operand, TOLERANCE);
     }
@@ -108,8 +73,43 @@ public class Rotation3AxisAngleStateSpaceMapperTest {
     public static Matcher<Rotation3> closeToRotation3(final Rotation3 operand, final double tolerance) {
         return new IsCloseTo(operand, tolerance);
     }
-    private static void fromToObjectSymmetry(Rotation3AxisAngleStateSpaceMapper mapper, double[] state,
-            Rotation3AxisAngle original) {
+
+    private static void fromObject(final int index0, final int stateSize, final Rotation3AxisAngle r1,
+            final Rotation3AxisAngle r2) {
+        final double tolerance = 2 * (Math.nextAfter(1.0, 2.0) - 1.0);
+        final ImmutableVector3StateSpaceMapper axisMapper = new ImmutableVector3StateSpaceMapper(index0 + 1);
+        final Rotation3AxisAngleStateSpaceMapper rotationMapper = new Rotation3AxisAngleStateSpaceMapper(index0,
+                axisMapper);
+        final double[] state = new double[stateSize];
+        rotationMapper.fromObject(state, r1);
+        final double[] state0 = Arrays.copyOf(state, stateSize);
+
+        fromObject(rotationMapper, state, r2);
+
+        assertEquals(state0[index0] + r2.getAngle(), state[index0], tolerance, "state[index0]");
+        assertEquals(state0[index0 + 1] + r2.getAxis().get(0), state[index0 + 1], tolerance, "state[index0+1]");
+        assertEquals(state0[index0 + 2] + r2.getAxis().get(1), state[index0 + 2], tolerance, "state[index0+2]");
+        assertEquals(state0[index0 + 3] + r2.getAxis().get(2), state[index0 + 3], tolerance, "state[index0+3]");
+    }
+
+    public static void fromObject(final Rotation3AxisAngleStateSpaceMapper mapper, final double[] state,
+            final Rotation3AxisAngle quaternion) {
+        ObjectStateSpaceMapperTest.fromObject(mapper, state, quaternion);
+
+        assertInvariants(mapper);// check for side-effects
+    }
+
+    private static void fromToObjectSymmetry(final int index0, final int stateSize, final Rotation3AxisAngle original) {
+        final ImmutableVector3StateSpaceMapper axisMapper = new ImmutableVector3StateSpaceMapper(index0 + 1);
+        final Rotation3AxisAngleStateSpaceMapper rotationMapper = new Rotation3AxisAngleStateSpaceMapper(index0,
+                axisMapper);
+        final double[] state = new double[stateSize];
+
+        fromToObjectSymmetry(rotationMapper, state, original);
+    }
+
+    private static void fromToObjectSymmetry(final Rotation3AxisAngleStateSpaceMapper mapper, final double[] state,
+            final Rotation3AxisAngle original) {
         mapper.fromObject(state, original);
         final ImmutableVectorN stateVector = ImmutableVectorN.create(state);
 
@@ -118,8 +118,9 @@ public class Rotation3AxisAngleStateSpaceMapperTest {
         assertThat("symmetric", reconstructed, closeToRotation3(original));
     }
 
-    public static Rotation3AxisAngle toObject(Rotation3AxisAngleStateSpaceMapper mapper, ImmutableVectorN state) {
-        Rotation3AxisAngle vector = ObjectStateSpaceMapperTest.toObject(mapper, state);
+    public static Rotation3AxisAngle toObject(final Rotation3AxisAngleStateSpaceMapper mapper,
+            final ImmutableVectorN state) {
+        final Rotation3AxisAngle vector = ObjectStateSpaceMapperTest.toObject(mapper, state);
 
         assertInvariants(mapper);// check for side-effects
 

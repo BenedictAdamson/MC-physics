@@ -19,9 +19,9 @@ import uk.badamson.mc.physics.TimeStepEnergyErrorFunctionTerm;
 @Immutable
 public final class Newton2Error extends AbstractTimeStepEnergyErrorFunctionTerm {
 
-    private static boolean isValidForTerm(int n, int term[]) {
-        for (int i = 0, tn = term.length; i < tn; ++i) {
-            if (n < term[i] + 1) {
+    private static boolean isValidForTerm(final int n, final int term[]) {
+        for (final int element : term) {
+            if (n < element + 1) {
                 return false;
             }
         }
@@ -129,9 +129,10 @@ public final class Newton2Error extends AbstractTimeStepEnergyErrorFunctionTerm 
      *             {@code velocityTerm}.</li>
      *             </ul>
      */
-    public Newton2Error(double massReference, double timeReference, int massTerm, int[] velocityTerm,
-            int[] accelerationTerm, boolean[] massTransferInto, int[] advectionMassRateTerm,
-            int[] advectionVelocityTerm, boolean[] forceOn, int[] forceTerm) {
+    public Newton2Error(final double massReference, final double timeReference, final int massTerm,
+            final int[] velocityTerm, final int[] accelerationTerm, final boolean[] massTransferInto,
+            final int[] advectionMassRateTerm, final int[] advectionVelocityTerm, final boolean[] forceOn,
+            final int[] forceTerm) {
         this.massReference = requireReferenceScale(massReference, "massReference");
         this.timeReference = requireReferenceScale(timeReference, "timeReference");
         this.massTerm = requireTermIndex(massTerm, "massTerm");
@@ -164,7 +165,7 @@ public final class Newton2Error extends AbstractTimeStepEnergyErrorFunctionTerm 
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * <ol>
      * <li>The method uses the term index information to extract force, velocity and
      * acceleration vectors and mass transfer rates from the given current state
@@ -176,7 +177,7 @@ public final class Newton2Error extends AbstractTimeStepEnergyErrorFunctionTerm 
      * {@linkplain #getMassReference() characteristic time value}. That is the error
      * term it returns.</li>
      * </ol>
-     * 
+     *
      * @param dedx
      *            {@inheritDoc}
      * @param state0
@@ -186,7 +187,7 @@ public final class Newton2Error extends AbstractTimeStepEnergyErrorFunctionTerm 
      * @param dt
      *            {@inheritDoc}
      * @return the value; not negative
-     * 
+     *
      * @throws NullPointerException
      *             {@inheritDoc}
      * @throws IllegalArgumentException
@@ -197,7 +198,8 @@ public final class Newton2Error extends AbstractTimeStepEnergyErrorFunctionTerm 
      *             {@code state0}.
      */
     @Override
-    public final double evaluate(double[] dedx, ImmutableVectorN state0, ImmutableVectorN state, double dt) {
+    public final double evaluate(final double[] dedx, final ImmutableVectorN state0, final ImmutableVectorN state,
+            final double dt) {
         super.evaluate(dedx, state0, state, dt);// check preconditions
 
         final int ns = getSpaceDimension();
@@ -272,11 +274,11 @@ public final class Newton2Error extends AbstractTimeStepEnergyErrorFunctionTerm 
      * Which terms in the solution space vector correspond to the components of the
      * acceleration vector of the body.
      * </p>
-     * 
+     *
      * @param i
      *            The component of interest.
      * @return the index of the component of the acceleration vector; not negative
-     * 
+     *
      * @throws IndexOutOfBoundsException
      *             <ul>
      *             <li>If {@code i} is negative.</li>
@@ -284,7 +286,7 @@ public final class Newton2Error extends AbstractTimeStepEnergyErrorFunctionTerm 
      *             {@linkplain #getSpaceDimension() space dimension}.</li>
      *             </ul>
      */
-    public final int getAccelerationTerm(int i) {
+    public final int getAccelerationTerm(final int i) {
         return accelerationTerm[i];
     }
 
@@ -293,12 +295,12 @@ public final class Newton2Error extends AbstractTimeStepEnergyErrorFunctionTerm 
      * Which term in the solution space vector correspond to the mass transfer rate
      * of an advection (mass transfer process) affecting the body.
      * </p>
-     * 
+     *
      * @param j
      *            The mass transfer process (advection) of interest
      * @return the index of the component of the advection mass transfer rate; not
      *         negative
-     * 
+     *
      * @throws IndexOutOfBoundsException
      *             <ul>
      *             <li>If {@code j} is negative.</li>
@@ -307,7 +309,7 @@ public final class Newton2Error extends AbstractTimeStepEnergyErrorFunctionTerm 
      *             processes}.</li>
      *             </ul>
      */
-    public final int getAdvectionMassRateTerm(int j) {
+    public final int getAdvectionMassRateTerm(final int j) {
         return advectionMassRateTerm[j];
     }
 
@@ -316,14 +318,14 @@ public final class Newton2Error extends AbstractTimeStepEnergyErrorFunctionTerm 
      * Which terms in the solution space vector correspond to the components of the
      * velocity vector of an advection (mass transfer process) affecting the body.
      * </p>
-     * 
+     *
      * @param j
      *            The mass transfer process (advection) of interest
      * @param i
      *            The component of interest.
      * @return the index of the component of the advection velocity vector; not
      *         negative
-     * 
+     *
      * @throws IndexOutOfBoundsException
      *             <ul>
      *             <li>If {@code j} is negative.</li>
@@ -335,7 +337,7 @@ public final class Newton2Error extends AbstractTimeStepEnergyErrorFunctionTerm 
      *             {@linkplain #getSpaceDimension() space dimension}.</li>
      *             </ul>
      */
-    public final int getAdvectionVelocityTerm(int j, int i) {
+    public final int getAdvectionVelocityTerm(final int j, final int i) {
         return advectionVelocityTerm[requireAdvectionProcess(j) * getSpaceDimension() + requireVectorComponent(i)];
     }
 
@@ -344,13 +346,13 @@ public final class Newton2Error extends AbstractTimeStepEnergyErrorFunctionTerm 
      * Which terms in the solution space vector correspond to the components of the
      * force vector of a force affecting the body.
      * </p>
-     * 
+     *
      * @param k
      *            The force of interest
      * @param i
      *            The component of interest.
      * @return the index of the component of the force vector; not negative
-     * 
+     *
      * @throws IndexOutOfBoundsException
      *             <ul>
      *             <li>If {@code k} is negative.</li>
@@ -362,7 +364,7 @@ public final class Newton2Error extends AbstractTimeStepEnergyErrorFunctionTerm 
      *             {@linkplain #getSpaceDimension() space dimension}.</li>
      *             </ul>
      */
-    public final int getForceTerm(int k, int i) {
+    public final int getForceTerm(final int k, final int i) {
         return forceTerm[requireForce(k) * getSpaceDimension() + requireVectorComponent(i)];
     }
 
@@ -377,7 +379,7 @@ public final class Newton2Error extends AbstractTimeStepEnergyErrorFunctionTerm 
      * bodies and they have very different masses; it is better to use the same
      * value for all bodies, with that value equal to the mass of a typical body.
      * </p>
-     * 
+     *
      * @return the mass; positive and {@linkplain Double#isFinite(double) finite}
      */
     public final double getMassReference() {
@@ -388,7 +390,7 @@ public final class Newton2Error extends AbstractTimeStepEnergyErrorFunctionTerm 
      * <p>
      * Which term in the solution space vector correspond to the mass of the body.
      * </p>
-     * 
+     *
      * @return the index of the mass; not negative
      */
     public final int getMassTerm() {
@@ -399,7 +401,7 @@ public final class Newton2Error extends AbstractTimeStepEnergyErrorFunctionTerm 
      * <p>
      * The number of forces acting on the body.
      * </p>
-     * 
+     *
      * @return the number of forces; not negative.
      */
     public final int getNumberOfForces() {
@@ -411,7 +413,7 @@ public final class Newton2Error extends AbstractTimeStepEnergyErrorFunctionTerm 
      * The number of separate mass transfer processes (advections) changing the mass
      * and momentum of the body.
      * </p>
-     * 
+     *
      * @return the number of mass transfer processes; not negative.
      */
     public final int getNumberOfMassTransfers() {
@@ -422,7 +424,7 @@ public final class Newton2Error extends AbstractTimeStepEnergyErrorFunctionTerm 
      * <p>
      * The number of space dimensions for which this calculates a velocity error.
      * </p>
-     * 
+     *
      * @return the number of dimensions; positive.
      */
     public final int getSpaceDimension() {
@@ -439,7 +441,7 @@ public final class Newton2Error extends AbstractTimeStepEnergyErrorFunctionTerm 
      * the time-step is small; it is better to use a value equal to the duration of
      * a typical mass transfer process or of an impulse.
      * </p>
-     * 
+     *
      * @return the time; positive and {@linkplain Double#isFinite(double) finite}
      */
     public final double getTimeReference() {
@@ -451,11 +453,11 @@ public final class Newton2Error extends AbstractTimeStepEnergyErrorFunctionTerm 
      * Which terms in the solution space vector correspond to the components of the
      * velocity vector of the body.
      * </p>
-     * 
+     *
      * @param i
      *            The component of interest.
      * @return the index of the component of the velocity vector; not negative
-     * 
+     *
      * @throws IndexOutOfBoundsException
      *             <ul>
      *             <li>If {@code i} is negative.</li>
@@ -463,7 +465,7 @@ public final class Newton2Error extends AbstractTimeStepEnergyErrorFunctionTerm 
      *             {@linkplain #getSpaceDimension() space dimension}.</li>
      *             </ul>
      */
-    public final int getVelocityTerm(int i) {
+    public final int getVelocityTerm(final int i) {
         return velocityTerm[i];
     }
 
@@ -478,11 +480,11 @@ public final class Newton2Error extends AbstractTimeStepEnergyErrorFunctionTerm 
      * acting on one body and the equal and opposite force acting on another, by
      * having opposite senses for the term used for those two bodies.
      * </p>
-     * 
+     *
      * @param k
      *            The force of interest
      * @return the sense of the force
-     * 
+     *
      * @throws IndexOutOfBoundsException
      *             <ul>
      *             <li>If {@code k} is negative.</li>
@@ -491,7 +493,7 @@ public final class Newton2Error extends AbstractTimeStepEnergyErrorFunctionTerm 
      *             body}.</li>
      *             </ul>
      */
-    public final boolean isForceOn(int k) {
+    public final boolean isForceOn(final int k) {
         return forceOn[k];
     }
 
@@ -509,7 +511,7 @@ public final class Newton2Error extends AbstractTimeStepEnergyErrorFunctionTerm 
      * @param j
      *            The mass transfer process (advection) of interest
      * @return the sense of the mass transfer process
-     * 
+     *
      * @throws IndexOutOfBoundsException
      *             <ul>
      *             <li>If {@code j} is negative.</li>
@@ -518,7 +520,7 @@ public final class Newton2Error extends AbstractTimeStepEnergyErrorFunctionTerm 
      *             processes}.</li>
      *             </ul>
      */
-    public final boolean isMassTransferInto(int j) {
+    public final boolean isMassTransferInto(final int j) {
         return massTransferInto[j];
     }
 
@@ -527,36 +529,36 @@ public final class Newton2Error extends AbstractTimeStepEnergyErrorFunctionTerm 
      * Whether this term can be calculated for a physical state vector that has a
      * given number of variables.
      * </p>
-     * 
+     *
      * @return whether valid.
      * @throws IllegalArgumentException
      *             If {@code n} is not positive.
      */
     @Override
-    public final boolean isValidForDimension(int n) {
+    public final boolean isValidForDimension(final int n) {
         if (n <= 0) {
             throw new IllegalArgumentException("n " + n);
         }
-        return (massTerm + 1 <= n) && isValidForTerm(n, accelerationTerm) && isValidForTerm(n, velocityTerm)
+        return massTerm + 1 <= n && isValidForTerm(n, accelerationTerm) && isValidForTerm(n, velocityTerm)
                 && isValidForTerm(n, advectionVelocityTerm) && isValidForTerm(n, advectionMassRateTerm)
                 && isValidForTerm(n, forceTerm);
     }
 
-    private int requireAdvectionProcess(int j) {
+    private int requireAdvectionProcess(final int j) {
         if (j < 0 || getNumberOfMassTransfers() <= j) {
             throw new IndexOutOfBoundsException("Not an advection component " + j);
         }
         return j;
     }
 
-    private int requireForce(int k) {
+    private int requireForce(final int k) {
         if (k < 0 || getNumberOfForces() <= k) {
             throw new IndexOutOfBoundsException("Not a force " + k);
         }
         return k;
     }
 
-    private int requireVectorComponent(int i) {
+    private int requireVectorComponent(final int i) {
         if (i < 0 || getSpaceDimension() <= i) {
             throw new IndexOutOfBoundsException("Not a space vector component " + i);
         }

@@ -39,7 +39,7 @@ public final class VelocityError<VECTOR extends Vector> extends AbstractTimeStep
      * object is equal to the length of the arrays of position terms.</li>
      * </ul>
      * </section>
-     * 
+     *
      * @param mass
      *            A reference mass scale.
      * @param velocityVectorMapper
@@ -67,8 +67,8 @@ public final class VelocityError<VECTOR extends Vector> extends AbstractTimeStep
      *             {@code accelerationVectorMapper}.</li>
      *             </ul>
      */
-    public VelocityError(double mass, VectorStateSpaceMapper<VECTOR> velocityVectorMapper,
-            VectorStateSpaceMapper<VECTOR> accelerationVectorMapper) {
+    public VelocityError(final double mass, final VectorStateSpaceMapper<VECTOR> velocityVectorMapper,
+            final VectorStateSpaceMapper<VECTOR> accelerationVectorMapper) {
         this.mass = requireReferenceScale(mass, "mass");
         this.velocityVectorMapper = Objects.requireNonNull(velocityVectorMapper, "velocityVectorMapper");
         this.accelerationVectorMapper = Objects.requireNonNull(accelerationVectorMapper, "accelerationVectorMapper");
@@ -81,7 +81,7 @@ public final class VelocityError<VECTOR extends Vector> extends AbstractTimeStep
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * <ol>
      * <li>The method uses the {@linkplain #getVelocityVectorMapper() velocity} and
      * {@linkplain #getAccelerationVectorMapper() acceleration} mappers to extract
@@ -96,7 +96,7 @@ public final class VelocityError<VECTOR extends Vector> extends AbstractTimeStep
      * {@linkplain #getMass() characteristic mass value}. That is the error term it
      * returns.</li>
      * </ol>
-     * 
+     *
      * @param dedx
      *            {@inheritDoc}
      * @param state0
@@ -106,7 +106,7 @@ public final class VelocityError<VECTOR extends Vector> extends AbstractTimeStep
      * @param dt
      *            {@inheritDoc}
      * @return the value
-     * 
+     *
      * @throws NullPointerException
      *             {@inheritDoc}
      * @throws IllegalArgumentException
@@ -117,7 +117,8 @@ public final class VelocityError<VECTOR extends Vector> extends AbstractTimeStep
      *             {@code state0}.
      */
     @Override
-    public final double evaluate(double[] dedx, ImmutableVectorN state0, ImmutableVectorN state, double dt) {
+    public final double evaluate(final double[] dedx, final ImmutableVectorN state0, final ImmutableVectorN state,
+            final double dt) {
         super.evaluate(dedx, state0, state, dt);
 
         final Vector v0 = velocityVectorMapper.toObject(state0);
@@ -152,7 +153,7 @@ public final class VelocityError<VECTOR extends Vector> extends AbstractTimeStep
      * dimensions of the {@linkplain #getVelocityVectorMapper() velocity vector
      * mapper}.</li>
      * </ul>
-     * 
+     *
      * @return the strategy
      */
     public final VectorStateSpaceMapper<VECTOR> getAccelerationVectorMapper() {
@@ -171,7 +172,7 @@ public final class VelocityError<VECTOR extends Vector> extends AbstractTimeStep
      * same value for all bodies, with that value equal to the mass of a typical
      * body.
      * </p>
-     * 
+     *
      * @return the mass; positive and {@linkplain Double#isFinite(double) finite}
      */
     public final double getMass() {
@@ -182,7 +183,7 @@ public final class VelocityError<VECTOR extends Vector> extends AbstractTimeStep
      * <p>
      * The number of space dimensions for which this calculates a position error.
      * </p>
-     * 
+     *
      * @return the number of dimensions; equal to the
      *         {@linkplain VectorStateSpaceMapper#getDimension() number of
      *         dimensions} of the {@linkplain #getVelocityVectorMapper() velocity
@@ -198,7 +199,7 @@ public final class VelocityError<VECTOR extends Vector> extends AbstractTimeStep
      * {@linkplain Vector vector} to (part of) a state-space representation, and
      * vice versa.
      * </p>
-     * 
+     *
      * @return the strategy; not null
      */
     public final VectorStateSpaceMapper<VECTOR> getVelocityVectorMapper() {
@@ -213,13 +214,13 @@ public final class VelocityError<VECTOR extends Vector> extends AbstractTimeStep
      * {@linkplain #getAccelerationVectorMapper() acceleration vector mapper} is
      * valid for the given number of variables.</li>
      * </ul>
-     * 
+     *
      * @return {@inheritDoc}
      * @throws IllegalArgumentException
      *             {@inheritDoc}
      */
     @Override
-    public boolean isValidForDimension(int n) {
+    public boolean isValidForDimension(final int n) {
         return velocityVectorMapper.isValidForDimension(n) && accelerationVectorMapper.isValidForDimension(n);
     }
 

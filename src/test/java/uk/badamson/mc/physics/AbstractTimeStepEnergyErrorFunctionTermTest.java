@@ -21,40 +21,40 @@ public class AbstractTimeStepEnergyErrorFunctionTermTest {
     private static class IsFinite extends TypeSafeMatcher<Double> {
 
         @Override
-        public void describeMismatchSafely(Double item, Description mismatchDescription) {
+        public void describeMismatchSafely(final Double item, final Description mismatchDescription) {
             mismatchDescription.appendValue(item).appendText(" is not finite");
         }
 
         @Override
-        public void describeTo(Description description) {
+        public void describeTo(final Description description) {
             description.appendText("a finite value");
         }
 
         @Override
-        public boolean matchesSafely(Double item) {
+        public boolean matchesSafely(final Double item) {
             return item != null && Double.isFinite(item.doubleValue());
         }
     }// class
 
     private static final IsFinite IS_FINITE = new IsFinite();
 
-    public static void assertInvariants(AbstractTimeStepEnergyErrorFunctionTerm term) {
+    public static void assertInvariants(final AbstractTimeStepEnergyErrorFunctionTerm term) {
         ObjectTest.assertInvariants(term);// inherited
         TimeStepEnergyErrorFunctionTermTest.assertInvariants(term);// inherited
     }
 
-    public static void assertInvariants(AbstractTimeStepEnergyErrorFunctionTerm term1,
-            AbstractTimeStepEnergyErrorFunctionTerm term2) {
+    public static void assertInvariants(final AbstractTimeStepEnergyErrorFunctionTerm term1,
+            final AbstractTimeStepEnergyErrorFunctionTerm term2) {
         ObjectTest.assertInvariants(term1, term2);// inherited
         TimeStepEnergyErrorFunctionTermTest.assertInvariants(term1, term2);// inherited
     }
 
-    public static void assertIsReferenceScale(String name, double scale) {
+    public static void assertIsReferenceScale(final String name, final double scale) {
         assertThat(name, Double.valueOf(scale), allOf(greaterThan(Double.valueOf(0.0)), IS_FINITE));
     }
 
-    public static double evaluate(AbstractTimeStepEnergyErrorFunctionTerm term, double[] dedx, ImmutableVectorN state0,
-            ImmutableVectorN state, double dt) {
+    public static double evaluate(final AbstractTimeStepEnergyErrorFunctionTerm term, final double[] dedx,
+            final ImmutableVectorN state0, final ImmutableVectorN state, final double dt) {
         final double e = TimeStepEnergyErrorFunctionTermTest.evaluate(term, dedx, state0, state, dt);
 
         assertInvariants(term);

@@ -13,24 +13,25 @@ import uk.badamson.mc.math.ImmutableVectorN;
  */
 public class ObjectStateSpaceMapperTest {
 
-    public static <OBJECT> void assertInvariants(ObjectStateSpaceMapper<OBJECT> mapper) {
+    public static <OBJECT> void assertInvariants(final ObjectStateSpaceMapper<OBJECT> mapper) {
         // Do nothing
     }
 
-    public static <OBJECT> void assertInvariants(ObjectStateSpaceMapper<OBJECT> mapper1,
-            ObjectStateSpaceMapper<OBJECT> mapper2) {
+    public static <OBJECT> void assertInvariants(final ObjectStateSpaceMapper<OBJECT> mapper1,
+            final ObjectStateSpaceMapper<OBJECT> mapper2) {
         // Do nothing
     }
 
-    public static <OBJECT> void fromObject(ObjectStateSpaceMapper<OBJECT> mapper, double[] state, OBJECT object) {
+    public static <OBJECT> void fromObject(final ObjectStateSpaceMapper<OBJECT> mapper, final double[] state,
+            final OBJECT object) {
         mapper.fromObject(state, object);
 
         assertInvariants(mapper);// check for side-effects
         ObjectTest.assertInvariants(object);// check for side-effects
     }
 
-    public static <OBJECT> void fromToObjectSymmetry(ObjectStateSpaceMapper<OBJECT> mapper, double[] state,
-            OBJECT original) {
+    public static <OBJECT> void fromToObjectSymmetry(final ObjectStateSpaceMapper<OBJECT> mapper, final double[] state,
+            final OBJECT original) {
         mapper.fromObject(state, original);
         final ImmutableVectorN stateVector = ImmutableVectorN.create(state);
 
@@ -39,8 +40,8 @@ public class ObjectStateSpaceMapperTest {
         assertEquals(original, reconstructed, "Symmetric");
     }
 
-    public static <OBJECT> OBJECT toObject(ObjectStateSpaceMapper<OBJECT> mapper, ImmutableVectorN state) {
-        OBJECT object = mapper.toObject(state);
+    public static <OBJECT> OBJECT toObject(final ObjectStateSpaceMapper<OBJECT> mapper, final ImmutableVectorN state) {
+        final OBJECT object = mapper.toObject(state);
 
         assertInvariants(mapper);// check for side-effects
         assertNotNull(object, "result");

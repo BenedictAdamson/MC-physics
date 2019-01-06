@@ -19,7 +19,7 @@ public class MassConservationErrorTest {
     private static final double SPECIFIC_ENERGY_REFERNCE_1 = 1.0;
     private static final double SPECIFIC_ENERGY_REFERNCE_2 = 1.0E3;
 
-    public static void assertInvariants(MassConservationError term) {
+    public static void assertInvariants(final MassConservationError term) {
         AbstractTimeStepEnergyErrorFunctionTermTest.assertInvariants(term);// inherited
 
         final int numberOfMassTransfers = term.getNumberOfMassTransfers();
@@ -35,35 +35,36 @@ public class MassConservationErrorTest {
         }
     }
 
-    public static void assertInvariants(MassConservationError term1, MassConservationError term2) {
+    public static void assertInvariants(final MassConservationError term1, final MassConservationError term2) {
         AbstractTimeStepEnergyErrorFunctionTermTest.assertInvariants(term1, term2);// inherited
     }
 
-    private static MassConservationError constructor(double massReference, double specificEnergyReference, int massTerm,
-            boolean[] massTransferInto, int[] advectionMassRateTerm) {
+    private static MassConservationError constructor(final double massReference, final double specificEnergyReference,
+            final int massTerm, final boolean[] massTransferInto, final int[] advectionMassRateTerm) {
         final MassConservationError term = new MassConservationError(massReference, specificEnergyReference, massTerm,
                 massTransferInto, advectionMassRateTerm);
 
         assertInvariants(term);
 
         assertEquals(massReference, term.getMassReference(), Double.MIN_NORMAL, "massReference");
-        assertEquals(specificEnergyReference, term.getSpecificEnergyReference(),
-                Double.MIN_NORMAL, "specificEnergyReference");
+        assertEquals(specificEnergyReference, term.getSpecificEnergyReference(), Double.MIN_NORMAL,
+                "specificEnergyReference");
 
         assertEquals(massTransferInto.length, term.getNumberOfMassTransfers(), "numberOfMassTransfers");
 
         assertEquals(massTerm, term.getMassTerm(), "massTerm");
         for (int j = 0; j < massTransferInto.length; ++j) {
-            assertEquals(Boolean.valueOf(massTransferInto[j]), Boolean.valueOf(term.isMassTransferInto(j)), "massTransferInto[" + j + "]");
-            assertEquals(advectionMassRateTerm[j],
-                    term.getAdvectionMassRateTerm(j), "advectionMassRateTerm[" + j + "]");
+            assertEquals(Boolean.valueOf(massTransferInto[j]), Boolean.valueOf(term.isMassTransferInto(j)),
+                    "massTransferInto[" + j + "]");
+            assertEquals(advectionMassRateTerm[j], term.getAdvectionMassRateTerm(j),
+                    "advectionMassRateTerm[" + j + "]");
         }
 
         return term;
     }
 
-    private static double evaluate(MassConservationError term, double[] dedx, ImmutableVectorN state0,
-            ImmutableVectorN state, double dt) {
+    private static double evaluate(final MassConservationError term, final double[] dedx, final ImmutableVectorN state0,
+            final ImmutableVectorN state, final double dt) {
         final double e = AbstractTimeStepEnergyErrorFunctionTermTest.evaluate(term, dedx, state0, state, dt);// inherited
 
         assertInvariants(term);
@@ -72,8 +73,9 @@ public class MassConservationErrorTest {
         return e;
     }
 
-    private static void evaluate_closed(double massReference, double specificEnergyReference, double m0, double m,
-            double dedm0, double dt, double eExpected, double dedmExpected) {
+    private static void evaluate_closed(final double massReference, final double specificEnergyReference,
+            final double m0, final double m, final double dedm0, final double dt, final double eExpected,
+            final double dedmExpected) {
         final int massTerm = 0;
         final boolean[] massTransferInto = {};
         final int[] advectionMassRateTerm = {};
@@ -90,9 +92,10 @@ public class MassConservationErrorTest {
         assertEquals(dedmExpected, dedx[0], 1E-6, "dedm");
     }
 
-    private static void evaluate_open(double massReference, double specificEnergyReference, boolean massTransferInto,
-            double m0, double mrate0, double m, double mrate, double dedmrate0, double dt, double eExpected,
-            double dedmExpected, double dedmrateExpected) {
+    private static void evaluate_open(final double massReference, final double specificEnergyReference,
+            final boolean massTransferInto, final double m0, final double mrate0, final double m, final double mrate,
+            final double dedmrate0, final double dt, final double eExpected, final double dedmExpected,
+            final double dedmrateExpected) {
         final int massTerm = 0;
         final int[] advectionMassRateTerm = { 1 };
         final MassConservationError term = new MassConservationError(massReference, specificEnergyReference, massTerm,

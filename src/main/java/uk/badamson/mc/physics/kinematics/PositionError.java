@@ -33,7 +33,7 @@ public final class PositionError<VECTOR extends Vector> extends AbstractTimeStep
      * <li>The constructed object has attribute values equal to the given
      * values.</li>
      * </ul>
-     * 
+     *
      * @param mass
      *            A reference mass scale.
      * @param positionVectorMapper
@@ -60,8 +60,8 @@ public final class PositionError<VECTOR extends Vector> extends AbstractTimeStep
      *             {@code velocityVectorMapper}.</li>
      *             </ul>
      */
-    public PositionError(double mass, VectorStateSpaceMapper<VECTOR> positionVectorMapper,
-            VectorStateSpaceMapper<VECTOR> velocityVectorMapper) {
+    public PositionError(final double mass, final VectorStateSpaceMapper<VECTOR> positionVectorMapper,
+            final VectorStateSpaceMapper<VECTOR> velocityVectorMapper) {
         this.mass = requireReferenceScale(mass, "mass");
         this.positionVectorMapper = Objects.requireNonNull(positionVectorMapper, "positionVectorMapper");
         this.velocityVectorMapper = Objects.requireNonNull(velocityVectorMapper, "velocityVectorMapper");
@@ -74,7 +74,7 @@ public final class PositionError<VECTOR extends Vector> extends AbstractTimeStep
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * <ol>
      * <li>The method uses the {@linkplain #getPositionVectorMapper() position} and
      * {@linkplain #getVelocityVectorMapper() velocity} mappers to extract position
@@ -91,7 +91,7 @@ public final class PositionError<VECTOR extends Vector> extends AbstractTimeStep
      * {@linkplain #getMass() characteristic mass value}. That is the error term it
      * returns.</li>
      * </ol>
-     * 
+     *
      * @param dedState
      *            {@inheritDoc}
      * @param state0
@@ -101,7 +101,7 @@ public final class PositionError<VECTOR extends Vector> extends AbstractTimeStep
      * @param dt
      *            {@inheritDoc}
      * @return the value
-     * 
+     *
      * @throws NullPointerException
      *             {@inheritDoc}
      * @throws IllegalArgumentException
@@ -112,7 +112,8 @@ public final class PositionError<VECTOR extends Vector> extends AbstractTimeStep
      *             {@code state0}.
      */
     @Override
-    public final double evaluate(double[] dedState, ImmutableVectorN state0, ImmutableVectorN state, double dt) {
+    public final double evaluate(final double[] dedState, final ImmutableVectorN state0, final ImmutableVectorN state,
+            final double dt) {
         super.evaluate(dedState, state0, state, dt);
 
         final double rate = 1.0 / dt;
@@ -148,7 +149,7 @@ public final class PositionError<VECTOR extends Vector> extends AbstractTimeStep
      * same value for all bodies, with that value equal to the mass of a typical
      * body.
      * </p>
-     * 
+     *
      * @return the mass; positive and {@linkplain Double#isFinite(double) finite}
      */
     public final double getMass() {
@@ -161,7 +162,7 @@ public final class PositionError<VECTOR extends Vector> extends AbstractTimeStep
      * {@linkplain Vector vector} to (part of) a state-space representation, and
      * vice versa.
      * </p>
-     * 
+     *
      * @return the strategy; not null
      */
     public final VectorStateSpaceMapper<VECTOR> getPositionVectorMapper() {
@@ -172,7 +173,7 @@ public final class PositionError<VECTOR extends Vector> extends AbstractTimeStep
      * <p>
      * The number of space dimensions for which this calculates a position error.
      * </p>
-     * 
+     *
      * @return the number of dimensions; equal to the
      *         {@linkplain VectorStateSpaceMapper#getDimension() number of
      *         dimensions} of the {@linkplain #getPositionVectorMapper() position
@@ -195,7 +196,7 @@ public final class PositionError<VECTOR extends Vector> extends AbstractTimeStep
      * dimensions of the {@linkplain #getPositionVectorMapper() position vector
      * mapper}.</li>
      * </ul>
-     * 
+     *
      * @return the strategy; not null
      */
     public final VectorStateSpaceMapper<VECTOR> getVelocityVectorMapper() {
@@ -210,13 +211,13 @@ public final class PositionError<VECTOR extends Vector> extends AbstractTimeStep
      * {@linkplain #getVelocityVectorMapper() velocity vector mapper} is valid for
      * the given number of variables.</li>
      * </ul>
-     * 
+     *
      * @return {@inheritDoc}
      * @throws IllegalArgumentException
      *             {@inheritDoc}
      */
     @Override
-    public boolean isValidForDimension(int n) {
+    public boolean isValidForDimension(final int n) {
         return positionVectorMapper.isValidForDimension(n) && velocityVectorMapper.isValidForDimension(n);
     }
 

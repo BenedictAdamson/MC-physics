@@ -32,40 +32,40 @@ public final class Rotation3QuaternionStateSpaceMapper implements ObjectStateSpa
      * @throws NullPointerException
      *             If {@code quaternionMapper} is null
      */
-    public Rotation3QuaternionStateSpaceMapper(QuaternionStateSpaceMapper quaternionMapper) {
+    public Rotation3QuaternionStateSpaceMapper(final QuaternionStateSpaceMapper quaternionMapper) {
         this.quaternionMapper = Objects.requireNonNull(quaternionMapper, "quaternionMapper");
     }
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @throws NullPointerException
      *             {@inheritDoc}
      * @throws RuntimeException
      *             {@inheritDoc}
      */
     @Override
-    public final void fromObject(double[] state, Rotation3Quaternion object) {
+    public final void fromObject(final double[] state, final Rotation3Quaternion object) {
         Objects.requireNonNull(state, "state");
         Objects.requireNonNull(object, "object");
         quaternionMapper.fromObject(state, object.getVersor());
     }
 
     @Override
-    public final boolean isValidForDimension(int n) {
+    public final boolean isValidForDimension(final int n) {
         return quaternionMapper.isValidForDimension(n);
     }
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @throws NullPointerException
      *             {@inheritDoc}
      * @throws RuntimeException
      *             {@inheritDoc}
      */
     @Override
-    public final Rotation3Quaternion toObject(ImmutableVectorN state) {
+    public final Rotation3Quaternion toObject(final ImmutableVectorN state) {
         return Rotation3Quaternion.valueOf(quaternionMapper.toObject(state));
     }
 

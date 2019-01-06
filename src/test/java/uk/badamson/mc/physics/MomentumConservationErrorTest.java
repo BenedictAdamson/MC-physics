@@ -14,7 +14,7 @@ import uk.badamson.mc.math.ImmutableVectorN;
  */
 public class MomentumConservationErrorTest {
 
-    public static void assertInvariants(MomentumConservationError term) {
+    public static void assertInvariants(final MomentumConservationError term) {
         AbstractTimeStepEnergyErrorFunctionTermTest.assertInvariants(term);// inherited
 
         final int spaceDimension = term.getSpaceDimension();
@@ -40,12 +40,13 @@ public class MomentumConservationErrorTest {
         }
     }
 
-    public static void assertInvariants(MomentumConservationError term1, MomentumConservationError term2) {
+    public static void assertInvariants(final MomentumConservationError term1, final MomentumConservationError term2) {
         AbstractTimeStepEnergyErrorFunctionTermTest.assertInvariants(term1, term2);// inherited
     }
 
-    private static MomentumConservationError constructor(int massTerm, int[] velocityTerm, boolean[] massTransferInto,
-            int[] advectionMassRateTerm, int[] advectionVelocityTerm, boolean[] forceOn, int[] forceTerm) {
+    private static MomentumConservationError constructor(final int massTerm, final int[] velocityTerm,
+            final boolean[] massTransferInto, final int[] advectionMassRateTerm, final int[] advectionVelocityTerm,
+            final boolean[] forceOn, final int[] forceTerm) {
         final MomentumConservationError term = new MomentumConservationError(massTerm, velocityTerm, massTransferInto,
                 advectionMassRateTerm, advectionVelocityTerm, forceOn, forceTerm);
 
@@ -60,27 +61,28 @@ public class MomentumConservationErrorTest {
             assertEquals(velocityTerm[i], term.getVelocityTerm(i), "velocityTerm[" + i + "]");
         }
         for (int j = 0; j < massTransferInto.length; ++j) {
-            assertEquals(Boolean.valueOf(massTransferInto[j]), Boolean.valueOf(term.isMassTransferInto(j)), "massTransferInto[" + j + "]");
-            assertEquals(advectionMassRateTerm[j],
-                    term.getAdvectionMassRateTerm(j), "advectionMassRateTerm[" + j + "]");
+            assertEquals(Boolean.valueOf(massTransferInto[j]), Boolean.valueOf(term.isMassTransferInto(j)),
+                    "massTransferInto[" + j + "]");
+            assertEquals(advectionMassRateTerm[j], term.getAdvectionMassRateTerm(j),
+                    "advectionMassRateTerm[" + j + "]");
             for (int i = 0; i < velocityTerm.length; ++i) {
-                assertEquals(
-                        advectionVelocityTerm[j * velocityTerm.length + i], term.getAdvectionVelocityTerm(j, i), "advectionVelocityTerm[" + j + "," + i + "]");
+                assertEquals(advectionVelocityTerm[j * velocityTerm.length + i], term.getAdvectionVelocityTerm(j, i),
+                        "advectionVelocityTerm[" + j + "," + i + "]");
             }
         }
         for (int k = 0; k < forceOn.length; ++k) {
             assertEquals(Boolean.valueOf(forceOn[k]), Boolean.valueOf(term.isForceOn(k)), "forceOn[" + k + "]");
             for (int i = 0; i < velocityTerm.length; ++i) {
-                assertEquals(forceTerm[k * velocityTerm.length + i],
-                        term.getForceTerm(k, i), "forceTerm[" + k + "," + i + "]");
+                assertEquals(forceTerm[k * velocityTerm.length + i], term.getForceTerm(k, i),
+                        "forceTerm[" + k + "," + i + "]");
             }
         }
 
         return term;
     }
 
-    private static double evaluate(MomentumConservationError term, double[] dedx, ImmutableVectorN state0,
-            ImmutableVectorN state, double dt) {
+    private static double evaluate(final MomentumConservationError term, final double[] dedx,
+            final ImmutableVectorN state0, final ImmutableVectorN state, final double dt) {
         final double e = AbstractTimeStepEnergyErrorFunctionTermTest.evaluate(term, dedx, state0, state, dt);// inherited
 
         assertInvariants(term);
@@ -89,9 +91,11 @@ public class MomentumConservationErrorTest {
         return e;
     }
 
-    private static void evaluate_1Advection(boolean massTransferInto, double m0, double v0, double mrate0, double u0,
-            double m, double v, double mrate, double u, double dt, double dedmrate0, double dedu0, double expectedE,
-            double expectedDedm, double expectedDedv, double expectedDedmrate, double expectedDedu) {
+    private static void evaluate_1Advection(final boolean massTransferInto, final double m0, final double v0,
+            final double mrate0, final double u0, final double m, final double v, final double mrate, final double u,
+            final double dt, final double dedmrate0, final double dedu0, final double expectedE,
+            final double expectedDedm, final double expectedDedv, final double expectedDedmrate,
+            final double expectedDedu) {
         final int massTerm = 0;
         final int[] velocityTerm = { 1 };
         final int[] advectionMassRateTerm = { 2 };
@@ -115,8 +119,9 @@ public class MomentumConservationErrorTest {
         assertEquals(expectedDedu, dedx[3], 1E-8, "dedu");
     }
 
-    private static void evaluate_1Closed(double dedm0, double dedv0, double m0, double v0, double m, double v,
-            double dt, double expectedE, double expectedDedm, double expectedDedv) {
+    private static void evaluate_1Closed(final double dedm0, final double dedv0, final double m0, final double v0,
+            final double m, final double v, final double dt, final double expectedE, final double expectedDedm,
+            final double expectedDedv) {
         final int massTerm = 0;
         final int[] velocityTerm = { 1 };
         final boolean[] massTransferInto = {};
@@ -139,8 +144,9 @@ public class MomentumConservationErrorTest {
         assertEquals(expectedDedv, dedx[1], 1E-8, "dedv");
     }
 
-    private static void evaluate_1Force(boolean forceOn, double m0, double v0, double f0, double m, double v, double f,
-            double dt, double dedf0, double expectedE, double expectedDedm, double expectedDedv, double expectedDedf) {
+    private static void evaluate_1Force(final boolean forceOn, final double m0, final double v0, final double f0,
+            final double m, final double v, final double f, final double dt, final double dedf0, final double expectedE,
+            final double expectedDedm, final double expectedDedv, final double expectedDedf) {
         final int massTerm = 0;
         final int[] velocityTerm = { 1 };
         final boolean[] massTransferInto = {};

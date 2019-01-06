@@ -32,12 +32,13 @@ public class IntegrationTest {
 
         private final boolean forceOn;
 
-        public ConstantForceError(boolean forceOn) {
+        public ConstantForceError(final boolean forceOn) {
             this.forceOn = forceOn;
         }
 
         @Override
-        public final double evaluate(double[] dedx, ImmutableVectorN state0, ImmutableVectorN state, double dt) {
+        public final double evaluate(final double[] dedx, final ImmutableVectorN state0, final ImmutableVectorN state,
+                final double dt) {
             final double sign = forceOn ? 1.0 : -1.0;
             final double m0 = state0.get(massTerm);
             final double f0 = state0.get(forceTerm[0]) * sign;
@@ -59,7 +60,7 @@ public class IntegrationTest {
         }
 
         @Override
-        public final boolean isValidForDimension(int n) {
+        public final boolean isValidForDimension(final int n) {
             return 2 <= n;
         }
 
@@ -80,14 +81,16 @@ public class IntegrationTest {
 
     private static final int[] advectionVelocityTerm = {};
 
-    private static int sign(final double x) {
-        if (x < -Double.MIN_NORMAL) {
-            return -1;
-        } else if (Double.MIN_NORMAL < x) {
-            return 1;
-        } else {
-            return 0;
-        }
+    private static void assert1DConstantForceErrorFunctionConsitentWithGradientAlongLine(final boolean forceOn,
+            final double massReference, final double timeReference, final double specificEnergyReference,
+            final double m0, final double x0, final double v0, final double a0, final double dt, final double dm,
+            final double dx, final double dv, final double da, final double df, final double tolerance, final double w1,
+            final double w2, final int n) {
+        final TimeStepEnergyErrorFunction errorFunction = create1DConstantForceErrorFunction(forceOn, massReference,
+                timeReference, specificEnergyReference, m0, x0, v0, a0, dt);
+        final ImmutableVectorN s0 = create1DStateVector(m0, x0, v0, a0, m0 * a0);
+        final ImmutableVectorN ds = create1DStateVector(dm, dx, dv, da, df);
+        assertValueConsistentWithGradientAlongLine(errorFunction, w1, w2, n, s0, ds);
     }
 
     private static void assertValueConsistentWithGradient(final Function1WithGradient f, final double x1,
@@ -115,20 +118,9 @@ public class IntegrationTest {
         assertValueConsistentWithGradient(fLine, w1, w2, n);
     }
 
-    
-    private static void assert1DConstantForceErrorFunctionConsitentWithGradientAlongLine(boolean forceOn,
-            double massReference, double timeReference, double specificEnergyReference, double m0, double x0, double v0,
-            double a0, double dt, double dm, double dx, double dv, double da, double df, double tolerance, double w1,
-            double w2, int n) {
-        final TimeStepEnergyErrorFunction errorFunction = create1DConstantForceErrorFunction(forceOn, massReference,
-                timeReference, specificEnergyReference, m0, x0, v0, a0, dt);
-        final ImmutableVectorN s0 = create1DStateVector(m0, x0, v0, a0, m0 * a0);
-        final ImmutableVectorN ds = create1DStateVector(dm, dx, dv, da, df);
-        assertValueConsistentWithGradientAlongLine(errorFunction, w1, w2, n, s0, ds);
-    }
-
-    private static void constantForceSolution(boolean forceOn, double massReference, double timeReference,
-            double specificEnergyReference, double m0, double x0, double v0, double a0, double dt, double tolerance) {
+    private static void constantForceSolution(final boolean forceOn, final double massReference,
+            final double timeReference, final double specificEnergyReference, final double m0, final double x0,
+            final double v0, final double a0, final double dt, final double tolerance) {
         final TimeStepEnergyErrorFunction errorFunction = create1DConstantForceErrorFunction(forceOn, massReference,
                 timeReference, specificEnergyReference, m0, x0, v0, a0, dt);
         final double f0 = m0 * a0;
@@ -151,9 +143,9 @@ public class IntegrationTest {
         assertEquals(f0, f, tolerance, "f");
     }
 
-    private static TimeStepEnergyErrorFunction create1DConstantForceErrorFunction(boolean forceOn, double massReference,
-            double timeReference, double specificEnergyReference, double m0, double x0, double v0, double a0,
-            double dt) {
+    private static TimeStepEnergyErrorFunction create1DConstantForceErrorFunction(final boolean forceOn,
+            final double massReference, final double timeReference, final double specificEnergyReference,
+            final double m0, final double x0, final double v0, final double a0, final double dt) {
         final double f0 = m0 * a0;
         final List<TimeStepEnergyErrorFunctionTerm> terms = Arrays.asList(
                 new PositionError<>(massReference, positionVectorMapper, velocityVectorMapper),
@@ -170,8 +162,19 @@ public class IntegrationTest {
         return errorFunction;
     }
 
-    private static ImmutableVectorN create1DStateVector(double m, double x, double v, double a, double f) {
+    private static ImmutableVectorN create1DStateVector(final double m, final double x, final double v, final double a,
+            final double f) {
         return ImmutableVectorN.create(m, x, v, a, f);
+    }
+
+    private static int sign(final double x) {
+        if (x < -Double.MIN_NORMAL) {
+            return -1;
+        } else if (Double.MIN_NORMAL < x) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
     @Test

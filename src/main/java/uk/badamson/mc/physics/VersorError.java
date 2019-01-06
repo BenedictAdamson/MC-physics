@@ -41,7 +41,7 @@ public final class VersorError extends AbstractTimeStepEnergyErrorFunctionTerm {
      *             <li>
      *             </ul>
      */
-    public VersorError(double length, double mass, QuaternionStateSpaceMapper quaternionMapper) {
+    public VersorError(final double length, final double mass, final QuaternionStateSpaceMapper quaternionMapper) {
         this.length = requireReferenceScale(length, "length");
         this.mass = requireReferenceScale(mass, "mass");
         this.quaternionMapper = Objects.requireNonNull(quaternionMapper, "quaternionMapper");
@@ -49,7 +49,7 @@ public final class VersorError extends AbstractTimeStepEnergyErrorFunctionTerm {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * <ol>
      * <li>The method uses the {@linkplain #getQuaternionMapper() quaternion mapper}
      * to extract from the given state vector the quaternion that ought to be a
@@ -66,7 +66,7 @@ public final class VersorError extends AbstractTimeStepEnergyErrorFunctionTerm {
      * {@linkplain #getMass() characteristic mass value}. That is the error term it
      * returns.</li>
      * </ol>
-     * 
+     *
      * @param dedState
      *            {@inheritDoc}
      * @param state0
@@ -76,7 +76,7 @@ public final class VersorError extends AbstractTimeStepEnergyErrorFunctionTerm {
      * @param dt
      *            {@inheritDoc}
      * @return the value
-     * 
+     *
      * @throws NullPointerException
      *             {@inheritDoc}
      * @throws IllegalArgumentException
@@ -87,7 +87,8 @@ public final class VersorError extends AbstractTimeStepEnergyErrorFunctionTerm {
      *             {@code state}.
      */
     @Override
-    public final double evaluate(double[] dedx, ImmutableVectorN state0, ImmutableVectorN state, double dt) {
+    public final double evaluate(final double[] dedx, final ImmutableVectorN state0, final ImmutableVectorN state,
+            final double dt) {
         super.evaluate(dedx, state0, state, dt);// check preconditions
 
         final Quaternion q = quaternionMapper.toObject(state);
@@ -115,7 +116,7 @@ public final class VersorError extends AbstractTimeStepEnergyErrorFunctionTerm {
      * very different sizes; it is better to use the same value for all quaternions,
      * with that value equal to the size of a typical body.
      * </p>
-     * 
+     *
      * @return the length; positive and {@linkplain Double#isFinite(double) finite}
      */
     public final double getLength() {
@@ -133,7 +134,7 @@ public final class VersorError extends AbstractTimeStepEnergyErrorFunctionTerm {
      * and they have very different masses; it is better to use the same value for
      * all quaternions, with that value equal to the mass of a typical body.
      * </p>
-     * 
+     *
      * @return the mass; positive and {@linkplain Double#isFinite(double) finite}
      */
     public final double getMass() {
@@ -146,7 +147,7 @@ public final class VersorError extends AbstractTimeStepEnergyErrorFunctionTerm {
      * {@linkplain Quaternion quaternion} to (part of) a state-space representation,
      * and vice versa.
      * </p>
-     * 
+     *
      * @return the strategy; not null
      */
     public final QuaternionStateSpaceMapper getQuaternionMapper() {
@@ -158,7 +159,7 @@ public final class VersorError extends AbstractTimeStepEnergyErrorFunctionTerm {
      * @return
      */
     @Override
-    public boolean isValidForDimension(int n) {
+    public boolean isValidForDimension(final int n) {
         // TODO Auto-generated method stub
         return false;
     }

@@ -1,6 +1,5 @@
 package uk.badamson.mc.physics;
 
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
@@ -16,24 +15,25 @@ import uk.badamson.mc.math.Vector;
  */
 public class ImmutableVector1StateSpaceMapperTest {
 
-    public static void assertInvariants(ImmutableVector1StateSpaceMapper mapper) {
+    public static void assertInvariants(final ImmutableVector1StateSpaceMapper mapper) {
         VectorStateSpaceMapperTest.assertInvariants(mapper);// inherited
 
         assertEquals(mapper.getDimension(), 1, "Number of dimensions");
     }
 
-    public static void assertInvariants(ImmutableVector1StateSpaceMapper mapper1,
-            ImmutableVector1StateSpaceMapper mapper2) {
+    public static void assertInvariants(final ImmutableVector1StateSpaceMapper mapper1,
+            final ImmutableVector1StateSpaceMapper mapper2) {
         VectorStateSpaceMapperTest.assertInvariants(mapper1, mapper2);// inherited
     }
 
-    public static void fromObject(ImmutableVector1StateSpaceMapper mapper, double[] state, ImmutableVector1 vector) {
+    public static void fromObject(final ImmutableVector1StateSpaceMapper mapper, final double[] state,
+            final ImmutableVector1 vector) {
         VectorStateSpaceMapperTest.fromObject(mapper, state, vector);
 
         assertInvariants(mapper);// check for side-effects
     }
 
-    private static void fromObject(int index, int stateSize, double state0, double x) {
+    private static void fromObject(final int index, final int stateSize, final double state0, final double x) {
         final double tolerance = (Math.abs(state0) + Math.abs(x)) * (Math.nextAfter(1.0, 2.0) - 1.0);
         final ImmutableVector1StateSpaceMapper mapper = new ImmutableVector1StateSpaceMapper(index);
         final double[] state = new double[stateSize];
@@ -45,8 +45,8 @@ public class ImmutableVector1StateSpaceMapperTest {
         assertEquals(state0 + x, state[index], tolerance, "state[index]");
     }
 
-    private static void fromToObjectSymmetry(ImmutableVector1StateSpaceMapper mapper, double[] state,
-            ImmutableVector1 original) {
+    private static void fromToObjectSymmetry(final ImmutableVector1StateSpaceMapper mapper, final double[] state,
+            final ImmutableVector1 original) {
         mapper.fromObject(state, original);
         final ImmutableVectorN stateVector = ImmutableVectorN.create(state);
 
@@ -55,15 +55,15 @@ public class ImmutableVector1StateSpaceMapperTest {
         assertEquals(original, reconstructed, "Symmetric");
     }
 
-    private static void fromToObjectSymmetry(int index, int stateSize, ImmutableVector1 original) {
+    private static void fromToObjectSymmetry(final int index, final int stateSize, final ImmutableVector1 original) {
         final ImmutableVector1StateSpaceMapper mapper = new ImmutableVector1StateSpaceMapper(index);
         final double[] state = new double[stateSize];
 
         fromToObjectSymmetry(mapper, state, original);
     }
 
-    private static void fromToVectorSymmetry(ImmutableVector1StateSpaceMapper mapper, double[] state,
-            ImmutableVector1 original) {
+    private static void fromToVectorSymmetry(final ImmutableVector1StateSpaceMapper mapper, final double[] state,
+            final ImmutableVector1 original) {
         mapper.fromVector(state, original);
         final ImmutableVectorN stateVector = ImmutableVectorN.create(state);
 
@@ -72,21 +72,23 @@ public class ImmutableVector1StateSpaceMapperTest {
         assertEquals(original, reconstructed, "Symmetric");
     }
 
-    private static void fromToVectorSymmetry(int index, int stateSize, ImmutableVector1 original) {
+    private static void fromToVectorSymmetry(final int index, final int stateSize, final ImmutableVector1 original) {
         final ImmutableVector1StateSpaceMapper mapper = new ImmutableVector1StateSpaceMapper(index);
         final double[] state = new double[stateSize];
 
         fromToVectorSymmetry(mapper, state, original);
     }
 
-    public static void fromVector(ImmutableVector1StateSpaceMapper mapper, double[] state, Vector vector) {
+    public static void fromVector(final ImmutableVector1StateSpaceMapper mapper, final double[] state,
+            final Vector vector) {
         VectorStateSpaceMapperTest.fromVector(mapper, state, vector);
 
         assertInvariants(mapper);// check for side-effects
     }
 
-    public static ImmutableVector1 toObject(ImmutableVector1StateSpaceMapper mapper, ImmutableVectorN state) {
-        ImmutableVector1 vector = VectorStateSpaceMapperTest.toObject(mapper, state);
+    public static ImmutableVector1 toObject(final ImmutableVector1StateSpaceMapper mapper,
+            final ImmutableVectorN state) {
+        final ImmutableVector1 vector = VectorStateSpaceMapperTest.toObject(mapper, state);
 
         assertInvariants(mapper);// check for side-effects
 

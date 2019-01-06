@@ -23,7 +23,7 @@ public interface TimeStepEnergyErrorFunctionTerm {
      * The method returns the value for this error term, and adds the components of
      * the gradient of the error value to the given array of components.
      * </p>
-     * 
+     *
      * @param dedx
      *            An array for accumulating the components of the gradient of the
      *            error value.
@@ -37,7 +37,7 @@ public interface TimeStepEnergyErrorFunctionTerm {
      *            The size of the time-step; the difference between the future point
      *            in time and the current point in time.
      * @return the value, which has dimensions of energy.
-     * 
+     *
      * @throws NullPointerException
      *             <ul>
      *             <li>If {@code dedx} is null.</li>
@@ -67,7 +67,7 @@ public interface TimeStepEnergyErrorFunctionTerm {
      * Whether this term can be calculated for a state vector that has a given
      * number of variables.
      * </p>
-     * 
+     *
      * @return whether valid.
      * @throws IllegalArgumentException
      *             If {@code n} is not positive.
