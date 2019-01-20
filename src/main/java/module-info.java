@@ -28,5 +28,5 @@ module uk.badamson.mc.physics {
     requires transitive uk.badamson.mc.math;
 
     // Automatic modules:
-    requires jcip.annotations;
+    requires static jcip.annotations;
 }
