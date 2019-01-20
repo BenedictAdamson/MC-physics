@@ -164,91 +164,6 @@ public class HarmonicVector3Test {
         }// class
 
         @Nested
-        public class Cubic {
-
-            @Test
-            public void a() {
-                final Duration t0 = Duration.ofSeconds(1);
-                final ImmutableVector3 f3 = ImmutableVector3.I;
-                final double we = 1.0;
-                final Duration t = Duration.ofSeconds(2);
-                final ImmutableVector3 expected = f3;
-
-                testCubic(t0, f3, we, t, expected);
-            }
-
-            @Test
-            public void b() {
-                final Duration t0 = Duration.ofSeconds(2);
-                final ImmutableVector3 f3 = ImmutableVector3.I;
-                final double we = 1.0;
-                final Duration t = t0;
-                final ImmutableVector3 expected = ImmutableVector3.ZERO;
-
-                testCubic(t0, f3, we, t, expected);
-            }
-
-            @Test
-            public void c() {
-                final Duration t0 = Duration.ofSeconds(1);
-                final ImmutableVector3 f3 = ImmutableVector3.I.scale(2.0);
-                final double we = 1.0;
-                final Duration t = Duration.ofSeconds(2);
-                final ImmutableVector3 expected = f3;
-
-                testCubic(t0, f3, we, t, expected);
-            }
-
-            @Test
-            public void d() {
-                final Duration t0 = Duration.ofSeconds(1);
-                final ImmutableVector3 f3 = ImmutableVector3.I;
-                final double we = 2.0;
-                final Duration t = Duration.ofSeconds(2);
-                final ImmutableVector3 expected = f3.scale(8.0);
-
-                testCubic(t0, f3, we, t, expected);
-            }
-
-            @Test
-            public void e() {
-                final Duration t0 = Duration.ofSeconds(1);
-                final ImmutableVector3 f3 = ImmutableVector3.I;
-                final double we = 1.0;
-                final Duration t = Duration.ofSeconds(3);
-                final ImmutableVector3 expected = f3.scale(8.0);
-
-                testCubic(t0, f3, we, t, expected);
-            }
-
-            @Test
-            public void f() {
-                final Duration t0 = Duration.ofSeconds(1);
-                final ImmutableVector3 f3 = ImmutableVector3.I;
-                final double we = 1.0;
-                final Duration t = Duration.ofNanos(2000000001);
-                final double dt = 1.000000001;
-                final ImmutableVector3 expected = f3.scale(dt * dt * dt);
-
-                testCubic(t0, f3, we, t, expected);
-            }
-
-            private void testCubic(@NonNull final Duration t0, final ImmutableVector3 f3, final double we,
-                    final Duration t, final ImmutableVector3 expected) {
-                final ImmutableVector3 fc = ImmutableVector3.ZERO;
-                final ImmutableVector3 fs = ImmutableVector3.ZERO;
-                final ImmutableVector3 f0 = ImmutableVector3.ZERO;
-                final ImmutableVector3 f1 = ImmutableVector3.ZERO;
-                final ImmutableVector3 f2 = ImmutableVector3.ZERO;
-                final double wh = 0.0;
-
-                final double precision = precisionFor(expected);
-
-                test(t0, f0, f1, f2, f3, fc, fs, we, wh, t, expected, precision);
-            }
-        }// class
-
-        @Nested
         public class Exp {
 
             @Test
@@ -592,7 +507,7 @@ public class HarmonicVector3Test {
                 final ImmutableVector3 f2, final ImmutableVector3 f3, final ImmutableVector3 fc,
                 final ImmutableVector3 fs, final double we, final double wh, final Duration t,
                 final ImmutableVector3 expected, final double precision) {
-            final HarmonicVector3 v = new HarmonicVector3(t0, f0, f1, f2, f3, fc, fs, we, wh);
+            final HarmonicVector3 v = new HarmonicVector3(t0, f0, f1, f2, fc, fs, we, wh);
 
             final ImmutableVector3 value = at(v, t);
 
@@ -613,17 +528,16 @@ public class HarmonicVector3Test {
             test(T_2, V_6, V_5, V_4, V_3, V_2, V_1, 2, 1);
         }
 
-        private HarmonicVector3 test(@NonNull final Duration t0, final ImmutableVector3 f0,
-                final ImmutableVector3 fc, final ImmutableVector3 fs, final ImmutableVector3 f1,
-                final ImmutableVector3 f2, final ImmutableVector3 f3, final double we, final double wh) {
-            final HarmonicVector3 v = new HarmonicVector3(t0, f0, f1, f2, f3, fc, fs, we, wh);
+        private HarmonicVector3 test(@NonNull final Duration t0, final ImmutableVector3 f0, final ImmutableVector3 fc,
+                final ImmutableVector3 fs, final ImmutableVector3 f1, final ImmutableVector3 f2,
+                final ImmutableVector3 f3, final double we, final double wh) {
+            final HarmonicVector3 v = new HarmonicVector3(t0, f0, f1, f2, fc, fs, we, wh);
 
             assertInvariants(v);
             assertSame(t0, v.getT0(), "t0");
             assertSame(f0, v.getF0(), "f0");
             assertSame(f1, v.getF1(), "f1");
             assertSame(f2, v.getF2(), "f2");
-            assertSame(f3, v.getF3(), "f3");
             assertSame(fc, v.getFc(), "fc");
             assertSame(fs, v.getFs(), "fs");
             assertEquals(we, v.getWe(), "we");

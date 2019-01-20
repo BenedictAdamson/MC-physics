@@ -31,9 +31,16 @@ import uk.badamson.mc.math.ImmutableVector3;
  * property} that can have <i>jerk</i> and <i>damped harmonic</i> variation.
  * </p>
  * <p>
- * The class allows for a linear <dfn>jerk</dfn>; that is, a linear variation of
- * its acceleration (second derivative), and thus a cubic variation in its
- * value.
+ * The class allows for a constant acceleration (second derivative), and thus a
+ * quadratic variation in its value.
+ * </p>
+ * <p>
+ * It is tempting to allow for a linear variation of the acceleration (constant
+ * <dfn>jerk</dfn>), and thus a cubic variation in its value. However, as for
+ * all higher order polynomials, that would produce a variation that can become
+ * infinitely large with time. That would be unrealistic, because in practice
+ * all forces (accelerations) are self limiting. So the variation deliberately
+ * does not allow for a cubic variation.
  * </p>
  * <p>
  * The class allows for <dfn>damped harmonic</dfn> variation; that is, a
@@ -46,8 +53,7 @@ import uk.badamson.mc.math.ImmutableVector3;
  * </p>
  * <p>
  * f(t) = f<sub>0</sub> + f<sub>1</sub>&tau; + f<sub>2</sub>&tau;<sup>2</sup> +
- * f<sub>3</sub>&tau;<sup>3</sup> + e<sup>&tau;</sup>(f<sub>c</sub>cos &alpha; +
- * f<sub>s</sub>sin &alpha;)
+ * e<sup>&tau;</sup>(f<sub>c</sub>cos &alpha; + f<sub>s</sub>sin &alpha;)
  * </p>
  * <p>
  * where &tau; = &omega;<sub>e</sub>(t - t<sub>0</sub>), and &alpha; =
@@ -82,9 +88,6 @@ public final class HarmonicVector3 extends AbstractTimeVaryingVector3 {
      * @param f2
      *            The f<sub>2</sub> parameter; the quadratic or acceleration term.
      *            This has the same units as the function value.
-     * @param f3
-     *            The f<sub>3</sub> parameter; the cubic or jerk term. This has the
-     *            same units as the function value.
      * @param fc
      *            The f<sub>c</sub> parameter; the cosine term. This has the same
      *            units as the function value.
@@ -103,24 +106,22 @@ public final class HarmonicVector3 extends AbstractTimeVaryingVector3 {
      *             <li>If {@code f0} is null.</li>
      *             <li>If {@code f1} is null.</li>
      *             <li>If {@code f2} is null.</li>
-     *             <li>If {@code f3} is null.</li>
      *             <li>If {@code fc} is null.</li>
      *             <li>If {@code fs} is null.</li>
      *             </ul>
      */
     public HarmonicVector3(@NonNull final Duration t0, final ImmutableVector3 f0, final ImmutableVector3 f1,
-            final ImmutableVector3 f2, final ImmutableVector3 f3, final ImmutableVector3 fc, final ImmutableVector3 fs,
-            final double we, final double wh) {
+            final ImmutableVector3 f2, final ImmutableVector3 fc, final ImmutableVector3 fs, final double we,
+            final double wh) {
         this.t0 = Objects.requireNonNull(t0, "t0");
         Objects.requireNonNull(f0, "f0");
         Objects.requireNonNull(fc, "fc");
         Objects.requireNonNull(fs, "fs");
         Objects.requireNonNull(f1, "f1");
         Objects.requireNonNull(f2, "f2");
-        Objects.requireNonNull(f3, "f3");
         this.we = we;
         this.wh = wh;
-        termsArray = new ImmutableVector3[] { f0, f1, f2, f3, fc, fs };
+        termsArray = new ImmutableVector3[] { f0, f1, f2, fc, fs };
     }
 
     @Override
@@ -132,7 +133,7 @@ public final class HarmonicVector3 extends AbstractTimeVaryingVector3 {
         final double alpha = wh * ts;
         final double exp = Math.exp(tau);
         final double tau2 = tau * tau;
-        final double weights[] = { 1.0, tau, tau2, tau2 * tau, exp * Math.cos(alpha), exp * Math.sin(alpha) };
+        final double weights[] = { 1.0, tau, tau2, exp * Math.cos(alpha), exp * Math.sin(alpha) };
         return ImmutableVector3.weightedSum(weights, termsArray);
     }
 
@@ -180,20 +181,6 @@ public final class HarmonicVector3 extends AbstractTimeVaryingVector3 {
 
     /**
      * <p>
-     * The f<sub>3</sub> parameter; the cubic or jerk term.
-     * </p>
-     * <p>
-     * This has the same units as the function value.
-     * </p>
-     *
-     * @return the jerk term; not null.
-     */
-    public final ImmutableVector3 getF3() {
-        return termsArray[3];
-    }
-
-    /**
-     * <p>
      * The f<sub>c</sub> parameter; the cosine term.
      * </p>
      * <p>
@@ -203,7 +190,7 @@ public final class HarmonicVector3 extends AbstractTimeVaryingVector3 {
      * @return the cosine term; not null.
      */
     public final ImmutableVector3 getFc() {
-        return termsArray[4];
+        return termsArray[3];
     }
 
     /**
@@ -217,7 +204,7 @@ public final class HarmonicVector3 extends AbstractTimeVaryingVector3 {
      * @return the sine term; not null.
      */
     public final ImmutableVector3 getFs() {
-        return termsArray[5];
+        return termsArray[4];
     }
 
     /**

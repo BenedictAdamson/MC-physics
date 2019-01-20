@@ -160,91 +160,6 @@ public class HarmonicScalarTest {
         }// class
 
         @Nested
-        public class Cubic {
-
-            @Test
-            public void a() {
-                final Duration t0 = Duration.ofSeconds(1);
-                final double f3 = 1.0;
-                final double we = 1.0;
-                final Duration t = Duration.ofSeconds(2);
-                final double expected = 1.0;
-
-                testCubic(t0, f3, we, t, expected);
-            }
-
-            @Test
-            public void b() {
-                final Duration t0 = Duration.ofSeconds(2);
-                final double f3 = 1.0;
-                final double we = 1.0;
-                final Duration t = t0;
-                final double expected = 0.0;
-
-                testCubic(t0, f3, we, t, expected);
-            }
-
-            @Test
-            public void c() {
-                final Duration t0 = Duration.ofSeconds(1);
-                final double f3 = 2.0;
-                final double we = 1.0;
-                final Duration t = Duration.ofSeconds(2);
-                final double expected = 2.0;
-
-                testCubic(t0, f3, we, t, expected);
-            }
-
-            @Test
-            public void d() {
-                final Duration t0 = Duration.ofSeconds(1);
-                final double f3 = 1.0;
-                final double we = 2.0;
-                final Duration t = Duration.ofSeconds(2);
-                final double expected = 8.0;
-
-                testCubic(t0, f3, we, t, expected);
-            }
-
-            @Test
-            public void e() {
-                final Duration t0 = Duration.ofSeconds(1);
-                final double f3 = 1.0;
-                final double we = 1.0;
-                final Duration t = Duration.ofSeconds(3);
-                final double expected = 8.0;
-
-                testCubic(t0, f3, we, t, expected);
-            }
-
-            @Test
-            public void f() {
-                final Duration t0 = Duration.ofSeconds(1);
-                final double f3 = 1.0;
-                final double we = 1.0;
-                final Duration t = Duration.ofNanos(2000000001);
-                final double dt = 1.000000001;
-                final double expected = dt * dt * dt;
-
-                testCubic(t0, f3, we, t, expected);
-            }
-
-            private void testCubic(@NonNull final Duration t0, final double f3, final double we, final Duration t,
-                    final double expected) {
-                final double fc = 0.0;
-                final double fs = 0.0;
-                final double f0 = 0.0;
-                final double f1 = 0.0;
-                final double f2 = 0.0;
-                final double wh = 0.0;
-
-                final double precision = Math.nextUp(expected) - expected;
-
-                test(t0, f0, f1, f2, f3, fc, fs, we, wh, t, expected, precision);
-            }
-        }// class
-
-        @Nested
         public class Exp {
 
             @Test
@@ -587,7 +502,7 @@ public class HarmonicScalarTest {
         private void test(@NonNull final Duration t0, final double f0, final double f1, final double f2,
                 final double f3, final double fc, final double fs, final double we, final double wh, final Duration t,
                 final double expected, final double precision) {
-            final HarmonicScalar s = new HarmonicScalar(t0, f0, f1, f2, f3, fc, fs, we, wh);
+            final HarmonicScalar s = new HarmonicScalar(t0, f0, f1, f2, fc, fs, we, wh);
 
             final double value = at(s, t);
 
@@ -600,24 +515,23 @@ public class HarmonicScalarTest {
 
         @Test
         public void a() {
-            test(T_1, 1, 2, 3, 4, 5, 6, 7, 8);
+            test(T_1, 1, 2, 3, 4, 5, 7, 8);
         }
 
         @Test
         public void t0_2() {
-            test(T_2, 8, 7, 6, 5, 4, 3, 2, 1);
+            test(T_2, 8, 7, 6, 5, 4, 2, 1);
         }
 
-        private HarmonicScalar test(@NonNull final Duration t0, final double f0, final double fc,
-                final double fs, final double f1, final double f2, final double f3, final double we, final double wh) {
-            final HarmonicScalar s = new HarmonicScalar(t0, f0, f1, f2, f3, fc, fs, we, wh);
+        private HarmonicScalar test(@NonNull final Duration t0, final double f0, final double fc, final double fs,
+                final double f1, final double f2, final double we, final double wh) {
+            final HarmonicScalar s = new HarmonicScalar(t0, f0, f1, f2, fc, fs, we, wh);
 
             assertInvariants(s);
             assertEquals(t0, s.getT0(), "t0");
             assertEquals(f0, s.getF0(), "f0");
             assertEquals(f1, s.getF1(), "f1");
             assertEquals(f2, s.getF2(), "f2");
-            assertEquals(f3, s.getF3(), "f3");
             assertEquals(fc, s.getFc(), "fc");
             assertEquals(fs, s.getFs(), "fs");
             assertEquals(we, s.getWe(), "we");
