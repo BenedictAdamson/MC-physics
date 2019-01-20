@@ -30,10 +30,10 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 
 /**
  * <p>
- * Unit tests for the {@link JerkingHarmonicScalar} class.
+ * Unit tests for the {@link HarmonicScalar} class.
  * </p>
  */
-public class JerkingHarmonicScalarTest {
+public class HarmonicScalarTest {
 
     @Nested
     public class At {
@@ -587,7 +587,7 @@ public class JerkingHarmonicScalarTest {
         private void test(@NonNull final Duration t0, final double f0, final double f1, final double f2,
                 final double f3, final double fc, final double fs, final double we, final double wh, final Duration t,
                 final double expected, final double precision) {
-            final JerkingHarmonicScalar s = new JerkingHarmonicScalar(t0, f0, f1, f2, f3, fc, fs, we, wh);
+            final HarmonicScalar s = new HarmonicScalar(t0, f0, f1, f2, f3, fc, fs, we, wh);
 
             final double value = at(s, t);
 
@@ -608,9 +608,9 @@ public class JerkingHarmonicScalarTest {
             test(T_2, 8, 7, 6, 5, 4, 3, 2, 1);
         }
 
-        private JerkingHarmonicScalar test(@NonNull final Duration t0, final double f0, final double fc,
+        private HarmonicScalar test(@NonNull final Duration t0, final double f0, final double fc,
                 final double fs, final double f1, final double f2, final double f3, final double we, final double wh) {
-            final JerkingHarmonicScalar s = new JerkingHarmonicScalar(t0, f0, f1, f2, f3, fc, fs, we, wh);
+            final HarmonicScalar s = new HarmonicScalar(t0, f0, f1, f2, f3, fc, fs, we, wh);
 
             assertInvariants(s);
             assertEquals(t0, s.getT0(), "t0");
@@ -634,7 +634,7 @@ public class JerkingHarmonicScalarTest {
 
     private static final Duration T_3 = TimeVaryingScalarTest.T_3;
 
-    public static double applyAsDouble(final JerkingHarmonicScalar s, final Duration value) {
+    public static double applyAsDouble(final HarmonicScalar s, final Duration value) {
         final double result = AbstractTimeVaryingScalarTest.applyAsDouble(s, value);
 
         assertInvariants(s);
@@ -642,21 +642,21 @@ public class JerkingHarmonicScalarTest {
         return result;
     }
 
-    public static void assertInvariants(final JerkingHarmonicScalar s) {
+    public static void assertInvariants(final HarmonicScalar s) {
         AbstractTimeVaryingScalarTest.assertInvariants(s);// inherited
 
         assertNotNull(s.getT0(), "Not null, t0");
     }
 
-    public static void assertInvariants(final JerkingHarmonicScalar s, final Duration t) {
+    public static void assertInvariants(final HarmonicScalar s, final Duration t) {
         AbstractTimeVaryingScalarTest.assertInvariants(s, t);// inherited
     }
 
-    public static void assertInvariants(final JerkingHarmonicScalar s1, final JerkingHarmonicScalar s2) {
+    public static void assertInvariants(final HarmonicScalar s1, final HarmonicScalar s2) {
         AbstractTimeVaryingScalarTest.assertInvariants(s1, s2);// inherited
     }
 
-    public static double at(final JerkingHarmonicScalar s, final Duration t) {
+    public static double at(final HarmonicScalar s, final Duration t) {
         final double result = AbstractTimeVaryingScalarTest.at(s, t);// inherited
 
         assertInvariants(s);

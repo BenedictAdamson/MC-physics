@@ -33,10 +33,10 @@ import uk.badamson.mc.math.ImmutableVector3;
 
 /**
  * <p>
- * Unit tests for the {@link JerkingHarmonicVector3} class.
+ * Unit tests for the {@link HarmonicVector3} class.
  * </p>
  */
-public class JerkingHarmonicVector3Test {
+public class HarmonicVector3Test {
 
     @Nested
     public class At {
@@ -592,7 +592,7 @@ public class JerkingHarmonicVector3Test {
                 final ImmutableVector3 f2, final ImmutableVector3 f3, final ImmutableVector3 fc,
                 final ImmutableVector3 fs, final double we, final double wh, final Duration t,
                 final ImmutableVector3 expected, final double precision) {
-            final JerkingHarmonicVector3 v = new JerkingHarmonicVector3(t0, f0, f1, f2, f3, fc, fs, we, wh);
+            final HarmonicVector3 v = new HarmonicVector3(t0, f0, f1, f2, f3, fc, fs, we, wh);
 
             final ImmutableVector3 value = at(v, t);
 
@@ -613,10 +613,10 @@ public class JerkingHarmonicVector3Test {
             test(T_2, V_6, V_5, V_4, V_3, V_2, V_1, 2, 1);
         }
 
-        private JerkingHarmonicVector3 test(@NonNull final Duration t0, final ImmutableVector3 f0,
+        private HarmonicVector3 test(@NonNull final Duration t0, final ImmutableVector3 f0,
                 final ImmutableVector3 fc, final ImmutableVector3 fs, final ImmutableVector3 f1,
                 final ImmutableVector3 f2, final ImmutableVector3 f3, final double we, final double wh) {
-            final JerkingHarmonicVector3 v = new JerkingHarmonicVector3(t0, f0, f1, f2, f3, fc, fs, we, wh);
+            final HarmonicVector3 v = new HarmonicVector3(t0, f0, f1, f2, f3, fc, fs, we, wh);
 
             assertInvariants(v);
             assertSame(t0, v.getT0(), "t0");
@@ -652,7 +652,7 @@ public class JerkingHarmonicVector3Test {
 
     private static final ImmutableVector3 V_6 = ImmutableVector3.create(3, 4, 5);
 
-    public static ImmutableVector3 apply(final JerkingHarmonicVector3 s, final Duration value) {
+    public static ImmutableVector3 apply(final HarmonicVector3 s, final Duration value) {
         final ImmutableVector3 result = AbstractTimeVaryingVector3Test.apply(s, value);
 
         assertInvariants(s);
@@ -660,21 +660,21 @@ public class JerkingHarmonicVector3Test {
         return result;
     }
 
-    public static void assertInvariants(final JerkingHarmonicVector3 s) {
+    public static void assertInvariants(final HarmonicVector3 s) {
         AbstractTimeVaryingVector3Test.assertInvariants(s);// inherited
 
         assertNotNull(s.getT0(), "Not null, t0");
     }
 
-    public static void assertInvariants(final JerkingHarmonicVector3 s, final Duration t) {
+    public static void assertInvariants(final HarmonicVector3 s, final Duration t) {
         AbstractTimeVaryingVector3Test.assertInvariants(s, t);// inherited
     }
 
-    public static void assertInvariants(final JerkingHarmonicVector3 s1, final JerkingHarmonicVector3 s2) {
+    public static void assertInvariants(final HarmonicVector3 s1, final HarmonicVector3 s2) {
         AbstractTimeVaryingVector3Test.assertInvariants(s1, s2);// inherited
     }
 
-    public static ImmutableVector3 at(final JerkingHarmonicVector3 s, final Duration t) {
+    public static ImmutableVector3 at(final HarmonicVector3 s, final Duration t) {
         final ImmutableVector3 result = AbstractTimeVaryingVector3Test.at(s, t);// inherited
 
         assertInvariants(s);

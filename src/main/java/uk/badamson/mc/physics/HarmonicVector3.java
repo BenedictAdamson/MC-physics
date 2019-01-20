@@ -59,7 +59,7 @@ import uk.badamson.mc.math.ImmutableVector3;
  * @see JerkingHarmonicScalar
  */
 @Immutable
-public final class JerkingHarmonicVector3 extends AbstractTimeVaryingVector3 {
+public final class HarmonicVector3 extends AbstractTimeVaryingVector3 {
 
     private final Duration t0;
     private final ImmutableVector3[] termsArray;
@@ -108,7 +108,7 @@ public final class JerkingHarmonicVector3 extends AbstractTimeVaryingVector3 {
      *             <li>If {@code fs} is null.</li>
      *             </ul>
      */
-    public JerkingHarmonicVector3(@NonNull final Duration t0, final ImmutableVector3 f0, final ImmutableVector3 f1,
+    public HarmonicVector3(@NonNull final Duration t0, final ImmutableVector3 f0, final ImmutableVector3 f1,
             final ImmutableVector3 f2, final ImmutableVector3 f3, final ImmutableVector3 fc, final ImmutableVector3 fs,
             final double we, final double wh) {
         this.t0 = Objects.requireNonNull(t0, "t0");

@@ -58,7 +58,7 @@ import net.jcip.annotations.Immutable;
  * @see JerkingHarmonicVector3
  */
 @Immutable
-public final class JerkingHarmonicScalar extends AbstractTimeVaryingScalar {
+public final class HarmonicScalar extends AbstractTimeVaryingScalar {
 
     private final Duration t0;
     private final double f0;
@@ -104,7 +104,7 @@ public final class JerkingHarmonicScalar extends AbstractTimeVaryingScalar {
      * @throws NullPointerException
      *             If {@code t0} is null.
      */
-    public JerkingHarmonicScalar(@NonNull final Duration t0, final double f0, final double f1, final double f2,
+    public HarmonicScalar(@NonNull final Duration t0, final double f0, final double f1, final double f2,
             final double f3, final double fc, final double fs, final double we, final double wh) {
         this.t0 = Objects.requireNonNull(t0, "t0");
         this.f0 = f0;
