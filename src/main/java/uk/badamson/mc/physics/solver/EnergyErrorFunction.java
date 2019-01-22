@@ -1,22 +1,22 @@
 package uk.badamson.mc.physics.solver;
 /*
-                               * © Copyright Benedict Adamson 2018-19.
-                               *
-                               * This file is part of MC-physics.
-                               *
-                               * MC-physics is free software: you can redistribute it and/or modify
-                               * it under the terms of the GNU General Public License as published by
-                               * the Free Software Foundation, either version 3 of the License, or
-                               * (at your option) any later version.
-                               *
-                               * MC-physics is distributed in the hope that it will be useful,
-                               * but WITHOUT ANY WARRANTY; without even the implied warranty of
-                               * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-                               * GNU General Public License for more details.
-                               *
-                               * You should have received a copy of the GNU General Public License
-                               * along with MC-physics.  If not, see <https://www.gnu.org/licenses/>.
-                               */
+ * © Copyright Benedict Adamson 2018-19.
+ *
+ * This file is part of MC-physics.
+ *
+ * MC-physics is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MC-physics is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with MC-physics.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -65,17 +65,17 @@ import uk.badamson.mc.math.MinN;
  * <p>
  * The function is {@linkplain #value(ImmutableVectorN) calculated} by summing
  * the contributions of a {@linkplain #getTerms() collection of}
- * {@linkplain TimeStepEnergyErrorFunctionTerm terms}. Multiple physical
- * processes and multiple objects can be modelled by including terms for each of
- * the processes and objects.
+ * {@linkplain EnergyErrorFunctionTerm terms}. Multiple physical processes and
+ * multiple objects can be modelled by including terms for each of the processes
+ * and objects.
  * </p>
  */
 @Immutable
-public final class TimeStepEnergyErrorFunction implements FunctionNWithGradient {
+public final class EnergyErrorFunction implements FunctionNWithGradient {
 
     private final ImmutableVectorN x0;
     private final double dt;
-    private final List<TimeStepEnergyErrorFunctionTerm> terms;
+    private final List<EnergyErrorFunctionTerm> terms;
 
     /**
      * <p>
@@ -112,13 +112,12 @@ public final class TimeStepEnergyErrorFunction implements FunctionNWithGradient 
      *             <li>If {@code dt} is not positive and
      *             {@linkplain Double#isInfinite() finite}.</li>
      *             <li>If and of the {@code terms} is not
-     *             {@linkplain TimeStepEnergyErrorFunctionTerm#isValidForDimension(int)
+     *             {@linkplain EnergyErrorFunctionTerm#isValidForDimension(int)
      *             valid} for the {@linkplain ImmutableVectorN#getDimension()
      *             dimension} of {@code x0}.</li>
      *             </ul>
      */
-    public TimeStepEnergyErrorFunction(final ImmutableVectorN x0, final double dt,
-            final List<TimeStepEnergyErrorFunctionTerm> terms) {
+    public EnergyErrorFunction(final ImmutableVectorN x0, final double dt, final List<EnergyErrorFunctionTerm> terms) {
         Objects.requireNonNull(x0, "x0");
         Objects.requireNonNull(terms, "terms");
         if (dt <= 0.0 || !Double.isFinite(dt)) {
@@ -131,7 +130,7 @@ public final class TimeStepEnergyErrorFunction implements FunctionNWithGradient 
 
         /* Check precondition after construction to avoid race hazards. */
         final int dimension = x0.getDimension();
-        for (final TimeStepEnergyErrorFunctionTerm term : this.terms) {
+        for (final EnergyErrorFunctionTerm term : this.terms) {
             Objects.requireNonNull(term, "term");
             if (!term.isValidForDimension(dimension)) {
                 throw new IllegalArgumentException("term <" + term + "> not valid for " + dimension + " dimensions");
@@ -190,7 +189,7 @@ public final class TimeStepEnergyErrorFunction implements FunctionNWithGradient 
      *
      * @return the terms
      */
-    public final List<TimeStepEnergyErrorFunctionTerm> getTerms() {
+    public final List<EnergyErrorFunctionTerm> getTerms() {
         return terms;
     }
 
@@ -234,7 +233,7 @@ public final class TimeStepEnergyErrorFunction implements FunctionNWithGradient 
     public final FunctionNWithGradientValue value(final ImmutableVectorN state) {
         double e = 0.0;
         final double[] dedx = new double[getDimension()];
-        for (final TimeStepEnergyErrorFunctionTerm term : terms) {
+        for (final EnergyErrorFunctionTerm term : terms) {
             e += term.evaluate(dedx, x0, state, dt);
         }
         return new FunctionNWithGradientValue(state, e, ImmutableVectorN.create(dedx));
