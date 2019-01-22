@@ -33,8 +33,8 @@ import uk.badamson.mc.math.Vector;
  * representation, and vice versa.
  * </p>
  * <p>
- * The mapper maps 3 contiguous components of the state-space vector to the
- * components of the 3D vector.
+ * The mapper maps 3 contiguous components of the state-space vector to
+ * represent the components of the 3D vector.
  * </p>
  */
 @Immutable
