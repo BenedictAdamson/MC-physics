@@ -20,8 +20,6 @@ package uk.badamson.mc.physics.solver;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -53,14 +51,8 @@ public class EnergyErrorFunctionTest {
         }
 
         @Override
-        public final double evaluate(final double[] dedx, final ImmutableVectorN x0, final ImmutableVectorN x,
-                final double dt) {
+        public final double evaluate(final double[] dedx, final ImmutableVectorN x) {
             Objects.requireNonNull(dedx, "dsdx");
-            Objects.requireNonNull(x0, "x0");
-            if (dedx.length != x0.getDimension()) {
-                throw new IllegalArgumentException(
-                        "Inconsistent length " + dedx.length + " for dimension " + x0.getDimension());
-            }
 
             final double xr = x.get(0) - xMin;
             dedx[0] += 2.0 * xr;
@@ -77,14 +69,8 @@ public class EnergyErrorFunctionTest {
     private static final class ZeroTerm implements EnergyErrorFunctionTerm {
 
         @Override
-        public double evaluate(final double[] dedx, final ImmutableVectorN x0, final ImmutableVectorN x,
-                final double dt) {
+        public double evaluate(final double[] dedx, final ImmutableVectorN x) {
             Objects.requireNonNull(dedx, "dsdx");
-            Objects.requireNonNull(x0, "x0");
-            if (dedx.length != x0.getDimension()) {
-                throw new IllegalArgumentException(
-                        "Inconsistent length " + dedx.length + " for dimension " + x0.getDimension());
-            }
             return 0;
         }
 
@@ -96,10 +82,8 @@ public class EnergyErrorFunctionTest {
     }// class
 
     private static final double DT_A = 1.0;
-
     private static final double DT_B = 1E-3;
     private static final ImmutableVectorN X_1A = ImmutableVectorN.create(1.0);
-
     private static final ImmutableVectorN X_1B = ImmutableVectorN.create(2.0);
     private static final ImmutableVectorN X_2A = ImmutableVectorN.create(1.0, 2.0);
     private static final ImmutableVectorN X_2B = ImmutableVectorN.create(3.0, 5.0);
@@ -110,33 +94,24 @@ public class EnergyErrorFunctionTest {
     public static void assertInvariants(final EnergyErrorFunction f) {
         ObjectTest.assertInvariants(f);// inherited
 
-        final ImmutableVectorN x0 = f.getX0();
-        final double dt = f.getDt();
         final Collection<EnergyErrorFunctionTerm> terms = f.getTerms();
 
-        assertNotNull(x0, "Always have a state vector of the physical system at the current point in time.");// guard
         assertNotNull(terms, "Always have a collection of terms.");// guard
 
-        assertTrue(0.0 < dt && Double.isFinite(dt), "The time-step <" + dt + "> is positive and finite.");
         for (final EnergyErrorFunctionTerm term : terms) {
             assertNotNull(term, "The collection of terms does not contain any null elements.");// guard
             EnergyErrorFunctionTermTest.assertInvariants(term);
         }
-        assertEquals(x0.getDimension(), f.getDimension(),
-                "The dimension equals the dimension of the state vector of the physical system at the current point in time.");
     }
 
     public static void assertInvariants(final EnergyErrorFunction f1, final EnergyErrorFunction f2) {
         ObjectTest.assertInvariants(f1, f2);// inherited
     }
 
-    private static EnergyErrorFunction constructor(final ImmutableVectorN x0, final double dt,
-            final List<EnergyErrorFunctionTerm> terms) {
-        final EnergyErrorFunction f = new EnergyErrorFunction(x0, dt, terms);
+    private static EnergyErrorFunction constructor(final int dimension, final List<EnergyErrorFunctionTerm> terms) {
+        final EnergyErrorFunction f = new EnergyErrorFunction(dimension, terms);
 
         assertInvariants(f);
-        assertSame(x0, f.getX0(), "x0");
-        assertEquals(dt, f.getDt(), Double.MIN_NORMAL, "dt");
         assertEquals(terms, f.getTerms(), "terms");
 
         return f;
@@ -149,8 +124,9 @@ public class EnergyErrorFunctionTest {
     }
 
     private static void value_0(final ImmutableVectorN x0, final double dt, final ImmutableVectorN x) {
+        final int dimension = x.getDimension();
         final List<EnergyErrorFunctionTerm> terms = Collections.emptyList();
-        final EnergyErrorFunction f = new EnergyErrorFunction(x0, dt, terms);
+        final EnergyErrorFunction f = new EnergyErrorFunction(dimension, terms);
 
         final FunctionNWithGradientValue fx = f.value(x);
 
@@ -160,9 +136,10 @@ public class EnergyErrorFunctionTest {
 
     private static void value_quadraticTerm(final double x0, final double dt, final double x, final double xMin,
             final double eMin, final double expectedE, final double expectedDeDx) {
+        final int dimension = 1;
         final QuadraticTerm1 term = new QuadraticTerm1(xMin, eMin);
         final List<EnergyErrorFunctionTerm> terms = Collections.singletonList(term);
-        final EnergyErrorFunction f = new EnergyErrorFunction(ImmutableVectorN.create(x0), dt, terms);
+        final EnergyErrorFunction f = new EnergyErrorFunction(dimension, terms);
 
         final FunctionNWithGradientValue fx = value(f, ImmutableVectorN.create(x));// inherited
 
@@ -173,25 +150,25 @@ public class EnergyErrorFunctionTest {
     @Test
     public void constructor_A() {
         final List<EnergyErrorFunctionTerm> terms = Collections.emptyList();
-        constructor(X_1A, DT_A, terms);
+        constructor(1, terms);
     }
 
     @Test
     public void constructor_B() {
         final List<EnergyErrorFunctionTerm> terms = Collections.singletonList(TERM_0A);
-        constructor(X_1A, DT_A, terms);
+        constructor(1, terms);
     }
 
     @Test
     public void constructor_C() {
         final List<EnergyErrorFunctionTerm> terms = Arrays.asList(TERM_0A, TERM_0B);
-        constructor(X_1A, DT_B, terms);
+        constructor(1, terms);
     }
 
     @Test
     public void constructor_D() {
         final List<EnergyErrorFunctionTerm> terms = Arrays.asList(TERM_0A);
-        constructor(X_2A, DT_B, terms);
+        constructor(2, terms);
     }
 
     @Test
@@ -284,8 +261,6 @@ public class EnergyErrorFunctionTest {
 
     @Test
     public void value_quadraticTerms() {
-        final double x0 = 0;
-        final double dt = 1.0;
         final double x = 1.0;
         final double xMin = 0.0;
         final double eMin = 0.0;
@@ -294,7 +269,7 @@ public class EnergyErrorFunctionTest {
 
         final QuadraticTerm1 term = new QuadraticTerm1(xMin, eMin);
         final List<EnergyErrorFunctionTerm> terms = Arrays.asList(term, term);
-        final EnergyErrorFunction f = new EnergyErrorFunction(ImmutableVectorN.create(x0), dt, terms);
+        final EnergyErrorFunction f = new EnergyErrorFunction(1, terms);
 
         final FunctionNWithGradientValue fx = value(f, ImmutableVectorN.create(x));// inherited
 

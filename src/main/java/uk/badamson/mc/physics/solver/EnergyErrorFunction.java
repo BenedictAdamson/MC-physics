@@ -34,14 +34,14 @@ import uk.badamson.mc.math.MinN;
 /**
  * <p>
  * A {@linkplain FunctionNWithGradient functor} that calculates the physical
- * modelling error of a system at a future point in time.</p
+ * modelling error of a system.</p
  * <p>
  * The function can be {@linkplain MinN minimised} to calculate the state of the
- * physical system at that future point in time. By solving for a
- * {@linkplain ImmutableVectorN multi-dimensional state vector}, that
- * simultaneously solves for all the physical parameters of the system. By using
- * minimisation to calculate the state, it is straightforward to include
- * non-linear coupling of parameters of the physical system.
+ * physical system. By solving for a {@linkplain ImmutableVectorN
+ * multi-dimensional state vector}, that simultaneously solves for all the
+ * physical parameters of the system. By using minimisation to calculate the
+ * state, it is straightforward to include non-linear coupling of parameters of
+ * the physical system.
  * </p>
  * <p>
  * The function also calculates the
@@ -49,12 +49,7 @@ import uk.badamson.mc.math.MinN;
  * with respect to changes in the state vector. That enables the minimisation to
  * be performed using a
  * {@linkplain MinN#findFletcherReevesPolakRibere(FunctionNWithGradient, ImmutableVectorN, double)
- * conjugate-gradient method}. The conjugate-gradient method is likely to be
- * efficient because the number of large eigen vectors of the state vector is
- * likely to be far fewer than the number of physical parameters: if the system
- * consists of loosely coupled objects, there is only one large eigen vector per
- * object; if the system has some strongly coupled objects there will be one
- * large eigen vector per vibration mode of the coupled objects.
+ * conjugate-gradient method}.
  * </p>
  * <p>
  * The function calculates an error value that has dimensions of energy. It is
@@ -73,63 +68,47 @@ import uk.badamson.mc.math.MinN;
 @Immutable
 public final class EnergyErrorFunction implements FunctionNWithGradient {
 
-    private final ImmutableVectorN x0;
-    private final double dt;
+    private final int dimension;
     private final List<EnergyErrorFunctionTerm> terms;
 
     /**
      * <p>
-     * Construct a functor that calculates the physical modelling error of a system
-     * at a future point in time.
+     * Construct a functor that calculates the physical modelling error of a system.
      * </p>
      *
-     * <section>
-     * <h1>Post Conditions</h1>
      * <ul>
      * <li>The constructed object has attribute and aggregate values equal to the
      * given values.</li>
      * </ul>
      * </section>
      *
-     * @param x0
-     *            The state vector of the physical system at the current point in
-     *            time.
-     * @param dt
-     *            The size of the time-step; the difference between the future point
-     *            in time and the current point in time.
      * @param terms
      *            The terms that contribute to the
      *            {@linkplain #value(ImmutableVectorN) value} of this function.
      *
      * @throws NullPointerException
      *             <ul>
-     *             <li>If {@code x0} is null.</li>
      *             <li>If {@code terms} is null.</li>
      *             <li>If {@code terms} contains any null references.</li>
      *             </ul>
      * @throws IllegalArgumentException
      *             <ul>
-     *             <li>If {@code dt} is not positive and
-     *             {@linkplain Double#isInfinite() finite}.</li>
+     *             <li>If {@code dimension} is not positive.</li>
      *             <li>If and of the {@code terms} is not
      *             {@linkplain EnergyErrorFunctionTerm#isValidForDimension(int)
-     *             valid} for the {@linkplain ImmutableVectorN#getDimension()
-     *             dimension} of {@code x0}.</li>
+     *             valid for dimension} {@code dimension}.</li>
      *             </ul>
      */
-    public EnergyErrorFunction(final ImmutableVectorN x0, final double dt, final List<EnergyErrorFunctionTerm> terms) {
-        Objects.requireNonNull(x0, "x0");
+    public EnergyErrorFunction(final int dimension, final List<EnergyErrorFunctionTerm> terms) {
         Objects.requireNonNull(terms, "terms");
-        if (dt <= 0.0 || !Double.isFinite(dt)) {
-            throw new IllegalArgumentException("dt " + dt);
+        if (dimension <= 0) {
+            throw new IllegalArgumentException("dimension " + dimension);
         }
 
-        this.x0 = x0;
-        this.dt = dt;
+        this.dimension = dimension;
         this.terms = Collections.unmodifiableList(new ArrayList<>(terms));
 
         /* Check precondition after construction to avoid race hazards. */
-        final int dimension = x0.getDimension();
         for (final EnergyErrorFunctionTerm term : this.terms) {
             Objects.requireNonNull(term, "term");
             if (!term.isValidForDimension(dimension)) {
@@ -143,33 +122,12 @@ public final class EnergyErrorFunction implements FunctionNWithGradient {
      * The number of independent variables of this function; the number of variables
      * of the physical model.
      * </p>
-     * <ul>
-     * <li>The dimension equals the {@linkplain ImmutableVectorN#getDimension()
-     * dimension} of the {@linkplain #getX0() state vector of the physical system at
-     * the current point in time}.</li>
-     * </ul>
      *
      * @return the number of dimensions; positive.
      */
     @Override
     public final int getDimension() {
-        return x0.getDimension();
-    }
-
-    /**
-     * <p>
-     * The size of the time-step; the difference between the future point in time
-     * and the current point in time.
-     * </p>
-     * <ul>
-     * <li>The time-step is positive and {@linkplain Double#isInfinite()
-     * finite}.</li>
-     * </ul>
-     *
-     * @return the dt
-     */
-    public final double getDt() {
-        return dt;
+        return dimension;
     }
 
     /**
@@ -195,32 +153,16 @@ public final class EnergyErrorFunction implements FunctionNWithGradient {
 
     /**
      * <p>
-     * The state vector of the physical system at the current point in time.
-     * </p>
-     * <ul>
-     * <li>Always have a (non null) state vector of the physical system at the
-     * current point in time.</li>
-     * </ul>
-     *
-     * @return the state vector; not null.
-     */
-    public final ImmutableVectorN getX0() {
-        return x0;
-    }
-
-    /**
-     * <p>
-     * Calculate the physical modelling error of the system at the
-     * {@linkplain #getDt() future point in time}.
+     * Calculate the physical modelling error of the system.
      * </p>
      * <ul>
      * <li>Always returns a (non null) value.</li>
      * <li>The {@linkplain Function1WithGradientValue#getX() domain value} of the
-     * returned object is the given domain value.</li>
+     * returned object is the given state vector.</li>
      * </ul>
      *
      * @param state
-     *            The state of the physical system at the future point in time
+     *            The state of the physical system, expressed as a state vector.
      * @return The error.
      * @throws NullPointerException
      *             If {@code state} is null.
@@ -234,7 +176,7 @@ public final class EnergyErrorFunction implements FunctionNWithGradient {
         double e = 0.0;
         final double[] dedx = new double[getDimension()];
         for (final EnergyErrorFunctionTerm term : terms) {
-            e += term.evaluate(dedx, x0, state, dt);
+            e += term.evaluate(dedx, state);
         }
         return new FunctionNWithGradientValue(state, e, ImmutableVectorN.create(dedx));
     }

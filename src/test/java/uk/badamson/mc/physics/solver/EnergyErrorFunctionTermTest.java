@@ -37,9 +37,8 @@ public class EnergyErrorFunctionTermTest {
         ObjectTest.assertInvariants(t1, t2);// inherited
     }
 
-    public static double evaluate(final EnergyErrorFunctionTerm term, final double[] dedx, final ImmutableVectorN x0,
-            final ImmutableVectorN x, final double dt) {
-        final double e = term.evaluate(dedx, x0, x, dt);
+    public static double evaluate(final EnergyErrorFunctionTerm term, final double[] dedx, final ImmutableVectorN x) {
+        final double e = term.evaluate(dedx, x);
 
         assertInvariants(term);
 
