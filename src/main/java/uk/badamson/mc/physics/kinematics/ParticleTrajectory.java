@@ -1,5 +1,6 @@
 package uk.badamson.mc.physics.kinematics;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import uk.badamson.mc.physics.TimeVaryingVector3;
 
 /*
@@ -41,6 +42,7 @@ public interface ParticleTrajectory {
      *
      * @return the acceleration; not null.
      */
+    @NonNull
     public TimeVaryingVector3 getAcceleration();
 
     /**
@@ -50,6 +52,7 @@ public interface ParticleTrajectory {
      *
      * @return the position; not null.
      */
+    @NonNull
     public TimeVaryingVector3 getPosition();
 
     /**
@@ -63,5 +66,6 @@ public interface ParticleTrajectory {
      *
      * @return the velocity; not null.
      */
+    @NonNull
     public TimeVaryingVector3 getVelocity();
 }
