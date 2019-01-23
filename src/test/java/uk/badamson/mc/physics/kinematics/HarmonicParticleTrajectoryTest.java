@@ -18,6 +18,7 @@ package uk.badamson.mc.physics.kinematics;
  * along with MC-physics.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.time.Duration;
@@ -41,6 +42,34 @@ public class HarmonicParticleTrajectoryTest {
     public class Constructor {
 
         @Nested
+        public class ConstantVelocity {
+
+            @Test
+            public void a() {
+                test(T_1, V_1, V_2, 13, 17);
+            }
+
+            @Test
+            public void b() {
+                test(T_2, V_2, V_3, 17, 19);
+            }
+
+            private HarmonicParticleTrajectory test(final Duration t0, final ImmutableVector3 f0,
+                    final ImmutableVector3 f1, final double we, final double wh) {
+                final HarmonicVector3 position = new HarmonicVector3(t0, f0, f1, ImmutableVector3.ZERO,
+                        ImmutableVector3.ZERO, ImmutableVector3.ZERO, we, wh);
+                final HarmonicVector3 velocity = new HarmonicVector3(t0, f1, ImmutableVector3.ZERO,
+                        ImmutableVector3.ZERO, ImmutableVector3.ZERO, ImmutableVector3.ZERO, we, wh);
+
+                final HarmonicParticleTrajectory trajectory = Constructor.this.test(position);
+
+                assertEquals(velocity, trajectory.getVelocity(), "velocity");
+
+                return trajectory;
+            }
+        }// class
+
+        @Nested
         public class Stationary {
 
             @Test
@@ -61,8 +90,12 @@ public class HarmonicParticleTrajectoryTest {
                     final double wh) {
                 final HarmonicVector3 position = new HarmonicVector3(t0, x, ImmutableVector3.ZERO,
                         ImmutableVector3.ZERO, ImmutableVector3.ZERO, ImmutableVector3.ZERO, we, wh);
+                final HarmonicVector3 zero = new HarmonicVector3(t0, ImmutableVector3.ZERO, ImmutableVector3.ZERO,
+                        ImmutableVector3.ZERO, ImmutableVector3.ZERO, ImmutableVector3.ZERO, we, wh);
 
                 final HarmonicParticleTrajectory trajectory = Constructor.this.test(position);
+
+                assertEquals(zero, trajectory.getVelocity(), "velocity");
 
                 return trajectory;
             }
@@ -79,12 +112,10 @@ public class HarmonicParticleTrajectoryTest {
     }// class
 
     private static final Duration T_1 = Duration.ofSeconds(1);
-
     private static final Duration T_2 = Duration.ofSeconds(1);
     private static final ImmutableVector3 V_1 = ImmutableVector3.I;
-    private static final ImmutableVector3 V_2 = ImmutableVector3.I.scale(2);
-
-    private static final ImmutableVector3 V_3 = ImmutableVector3.I.scale(3);
+    private static final ImmutableVector3 V_2 = ImmutableVector3.J.scale(2);
+    private static final ImmutableVector3 V_3 = ImmutableVector3.K.scale(3);
 
     public static void assertInvariants(final HarmonicParticleTrajectory trajectory) {
         ObjectTest.assertInvariants(trajectory);// inherited
