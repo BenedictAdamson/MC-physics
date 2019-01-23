@@ -18,7 +18,6 @@ package uk.badamson.mc.physics;
  * along with MC-physics.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -27,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.Duration;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -657,8 +657,8 @@ public class HarmonicVector3Test {
             assertSame(f2, v.getF2(), "f2");
             assertSame(fc, v.getFc(), "fc");
             assertSame(fs, v.getFs(), "fs");
-            assertEquals(we, v.getWe(), "we");
-            assertEquals(wh, v.getWh(), "wh");
+            Assertions.assertEquals(we, v.getWe(), "we");
+            Assertions.assertEquals(wh, v.getWh(), "wh");
 
             return v;
         }
@@ -688,6 +688,18 @@ public class HarmonicVector3Test {
         assertInvariants(s);
 
         return result;
+    }
+
+    public static void assertEquals(final HarmonicVector3 v1, final HarmonicVector3 v2, final String message) {
+        Assertions.assertEquals(v1.getF0(), v2.getF0(), message + ",f0");
+        Assertions.assertEquals(v1.getF1(), v2.getF1(), message + ",f1");
+        Assertions.assertEquals(v1.getF2(), v2.getF2(), message + ",f2");
+        Assertions.assertEquals(v1.getFc(), v2.getFc(), message + ",fc");
+        Assertions.assertEquals(v1.getFs(), v2.getFs(), message + ",fs");
+        Assertions.assertEquals(v1.getT0(), v2.getT0(), message + ",t0");
+        Assertions.assertEquals(v1.getWe(), v2.getWe(), message + ",we");
+        Assertions.assertEquals(v1.getWh(), v2.getWh(), message + ",wh");
+        Assertions.assertEquals(v1, v2, "equals");
     }
 
     public static void assertInvariants(final HarmonicVector3 s) {
