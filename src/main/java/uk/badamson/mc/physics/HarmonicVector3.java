@@ -1,6 +1,6 @@
 package uk.badamson.mc.physics;
 /*
- * © Copyright Benedict Adamson 2018.
+ * © Copyright Benedict Adamson 2018-19.
  *
  * This file is part of MC-physics.
  *
@@ -19,6 +19,7 @@ package uk.badamson.mc.physics;
  */
 
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.Objects;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
@@ -139,6 +140,37 @@ public final class HarmonicVector3 extends AbstractTimeVaryingVector3 {
 
     /**
      * <p>
+     * Whether this is <dfn>equivalent</dfn> to another object.
+     * </p>
+     * <p>
+     * The {@link HarmonicVector3} class has <i>value semantics</i>: this object is
+     * equivalent to another if, only only if, the other object is also a
+     * {@code HarmonicVector3}, and the two have equivaletn attributes.
+     * </p>
+     *
+     * @param obj
+     *            The other object
+     * @return Whether equivalent.
+     */
+    @Override
+    public final boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof HarmonicVector3)) {
+            return false;
+        }
+        final HarmonicVector3 other = (HarmonicVector3) obj;
+        return Double.doubleToLongBits(we) == Double.doubleToLongBits(other.we)
+                && Double.doubleToLongBits(wh) == Double.doubleToLongBits(other.wh) && t0.equals(other.t0)
+                && Arrays.equals(termsArray, other.termsArray);
+    }
+
+    /**
+     * <p>
      * The f<sub>0</sub> parameter; the constant term.
      * </p>
      * <p>
@@ -244,6 +276,20 @@ public final class HarmonicVector3 extends AbstractTimeVaryingVector3 {
      */
     public final double getWh() {
         return wh;
+    }
+
+    @Override
+    public final int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + t0.hashCode();
+        result = prime * result + Arrays.hashCode(termsArray);
+        long temp;
+        temp = Double.doubleToLongBits(we);
+        result = prime * result + (int) (temp ^ temp >>> 32);
+        temp = Double.doubleToLongBits(wh);
+        result = prime * result + (int) (temp ^ temp >>> 32);
+        return result;
     }
 
 }

@@ -1,6 +1,6 @@
 package uk.badamson.mc.physics;
 /*
- * © Copyright Benedict Adamson 2018.
+ * © Copyright Benedict Adamson 2018-19.
  *
  * This file is part of MC-physics.
  *
@@ -19,6 +19,8 @@ package uk.badamson.mc.physics;
  */
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -518,6 +520,121 @@ public class HarmonicVector3Test {
     @Nested
     public class Constructor {
 
+        @Nested
+        public class Different {
+
+            @Test
+            public void f0() {
+                final double we = 13;
+                final double wh = 17;
+                final HarmonicVector3 v1 = new HarmonicVector3(T_1, V_1, V_2, V_3, V_4, V_5, we, wh);
+                final HarmonicVector3 v2 = new HarmonicVector3(T_1, V_6, V_2, V_3, V_4, V_5, we, wh);
+
+                assertInvariants(v1, v2);
+                assertNotEquals(v1, v2, "Not equivalent");
+            }
+
+            @Test
+            public void f1() {
+                final double we = 13;
+                final double wh = 17;
+                final HarmonicVector3 v1 = new HarmonicVector3(T_1, V_1, V_2, V_3, V_4, V_5, we, wh);
+                final HarmonicVector3 v2 = new HarmonicVector3(T_1, V_1, V_6, V_3, V_4, V_5, we, wh);
+
+                assertInvariants(v1, v2);
+                assertNotEquals(v1, v2, "Not equivalent");
+            }
+
+            @Test
+            public void f2() {
+                final double we = 13;
+                final double wh = 17;
+                final HarmonicVector3 v1 = new HarmonicVector3(T_1, V_1, V_2, V_3, V_4, V_5, we, wh);
+                final HarmonicVector3 v2 = new HarmonicVector3(T_1, V_1, V_3, V_6, V_4, V_5, we, wh);
+
+                assertInvariants(v1, v2);
+                assertNotEquals(v1, v2, "Not equivalent");
+            }
+
+            @Test
+            public void fc() {
+                final double we = 13;
+                final double wh = 17;
+                final HarmonicVector3 v1 = new HarmonicVector3(T_1, V_1, V_2, V_3, V_4, V_5, we, wh);
+                final HarmonicVector3 v2 = new HarmonicVector3(T_1, V_1, V_3, V_3, V_6, V_5, we, wh);
+
+                assertInvariants(v1, v2);
+                assertNotEquals(v1, v2, "Not equivalent");
+            }
+
+            @Test
+            public void fs() {
+                final double we = 13;
+                final double wh = 17;
+                final HarmonicVector3 v1 = new HarmonicVector3(T_1, V_1, V_2, V_3, V_4, V_5, we, wh);
+                final HarmonicVector3 v2 = new HarmonicVector3(T_1, V_1, V_3, V_3, V_4, V_6, we, wh);
+
+                assertInvariants(v1, v2);
+                assertNotEquals(v1, v2, "Not equivalent");
+            }
+
+            @Test
+            public void t0() {
+                final double we = 13;
+                final double wh = 17;
+                final HarmonicVector3 v1 = new HarmonicVector3(T_1, V_1, V_2, V_3, V_4, V_5, we, wh);
+                final HarmonicVector3 v2 = new HarmonicVector3(T_2, V_1, V_2, V_3, V_4, V_5, we, wh);
+
+                assertInvariants(v1, v2);
+                assertNotEquals(v1, v2, "Not equivalent");
+            }
+
+            @Test
+            public void we() {
+                final double wh = 17;
+                final HarmonicVector3 v1 = new HarmonicVector3(T_1, V_1, V_2, V_3, V_4, V_5, 13, wh);
+                final HarmonicVector3 v2 = new HarmonicVector3(T_1, V_1, V_3, V_3, V_4, V_5, 15, wh);
+
+                assertInvariants(v1, v2);
+                assertNotEquals(v1, v2, "Not equivalent");
+            }
+
+            @Test
+            public void wh() {
+                final double we = 13;
+                final HarmonicVector3 v1 = new HarmonicVector3(T_1, V_1, V_2, V_3, V_4, V_5, we, 17);
+                final HarmonicVector3 v2 = new HarmonicVector3(T_1, V_1, V_3, V_3, V_4, V_5, we, 19);
+
+                assertInvariants(v1, v2);
+                assertNotEquals(v1, v2, "Not equivalent");
+            }
+        }// class
+
+        @Nested
+        public class Equivalent {
+
+            @Test
+            public void a() {
+                test(T_1, V_1, V_2, V_3, V_4, V_5, V_6, 7, 8);
+            }
+
+            @Test
+            public void t0_2() {
+                test(T_2, V_6, V_5, V_4, V_3, V_2, V_1, 2, 1);
+            }
+
+            private void test(@NonNull final Duration t0, final ImmutableVector3 f0, final ImmutableVector3 fc,
+                    final ImmutableVector3 fs, final ImmutableVector3 f1, final ImmutableVector3 f2,
+                    final ImmutableVector3 f3, final double we, final double wh) {
+                final HarmonicVector3 v1 = new HarmonicVector3(t0, f0, f1, f2, fc, fs, we, wh);
+                final HarmonicVector3 v2 = new HarmonicVector3(t0, f0, f1, f2, fc, fs, we, wh);
+
+                assertInvariants(v1, v2);
+                assertEquals(v1, v2, "equivalent");
+            }
+
+        }// class
+
         @Test
         public void a() {
             test(T_1, V_1, V_2, V_3, V_4, V_5, V_6, 7, 8);
@@ -545,7 +662,6 @@ public class HarmonicVector3Test {
 
             return v;
         }
-
     }// class
 
     private static final Duration T_1 = TimeVaryingScalarTest.T_1;
@@ -584,8 +700,20 @@ public class HarmonicVector3Test {
         AbstractTimeVaryingVector3Test.assertInvariants(s, t);// inherited
     }
 
-    public static void assertInvariants(final HarmonicVector3 s1, final HarmonicVector3 s2) {
-        AbstractTimeVaryingVector3Test.assertInvariants(s1, s2);// inherited
+    public static void assertInvariants(final HarmonicVector3 v1, final HarmonicVector3 v2) {
+        AbstractTimeVaryingVector3Test.assertInvariants(v1, v2);// inherited
+
+        final boolean equal = v1.equals(v2);
+        assertFalse(equal && !v1.getF0().equals(v2.getF0()), "Equality requires equivalent attributes (f0)");
+        assertFalse(equal && !v1.getF1().equals(v2.getF1()), "Equality requires equivalent attributes (f1)");
+        assertFalse(equal && !v1.getF2().equals(v2.getF2()), "Equality requires equivalent attributes (f2)");
+        assertFalse(equal && !v1.getFc().equals(v2.getFc()), "Equality requires equivalent attributes (fc)");
+        assertFalse(equal && !v1.getFs().equals(v2.getFs()), "Equality requires equivalent attributes (fs)");
+
+        assertFalse(equal && !v1.getT0().equals(v2.getT0()), "Equality requires equivalent attributes (t0)");
+
+        assertFalse(equal && v1.getWe() != v2.getWe(), "Equality requires equivalent attributes (we)");
+        assertFalse(equal && v1.getWh() != v2.getWh(), "Equality requires equivalent attributes (wh)");
     }
 
     public static ImmutableVector3 at(final HarmonicVector3 s, final Duration t) {
