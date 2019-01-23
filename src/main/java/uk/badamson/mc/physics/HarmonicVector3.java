@@ -28,7 +28,7 @@ import uk.badamson.mc.math.ImmutableVector3;
 /**
  * <p>
  * A {@linkplain TimeVaryingVector3 functor for a time varying 3D vector
- * property} that can have <i>jerk</i> and <i>damped harmonic</i> variation.
+ * property} that can have <i>damped harmonic</i> variation.
  * </p>
  * <p>
  * The class allows for a constant acceleration (second derivative), and thus a
@@ -62,7 +62,7 @@ import uk.badamson.mc.math.ImmutableVector3;
  * &omega;<sub>e</sub> and &omega;<sub>h</sub> being constant parameters.
  * </p>
  *
- * @see JerkingHarmonicScalar
+ * @see HarmonicScalar
  */
 @Immutable
 public final class HarmonicVector3 extends AbstractTimeVaryingVector3 {
