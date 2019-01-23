@@ -33,4 +33,8 @@ public class ParticleTrajectoryTest {
         assertNotNull(trajectory.getVelocity(), "Not null, velocity");
         assertNotNull(trajectory.getAcceleration(), "Not null, acceleration");
     }
+
+    public static void assertInvariants(final ParticleTrajectory trajectory1, final ParticleTrajectory trajectory2) {
+        // Do nothing
+    }
 }
