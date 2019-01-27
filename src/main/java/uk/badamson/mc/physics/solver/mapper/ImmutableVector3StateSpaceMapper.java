@@ -43,11 +43,21 @@ public final class ImmutableVector3StateSpaceMapper implements VectorStateSpaceM
     private final int index0;
 
     /**
+     * <p>
+     * Construct a mapper object that maps a {@link ImmutableVector3} to a
+     * contiguous sequence of state vector components.
+     * </p>
+     * <ul>
+     * <li>This mapper {@linkplain #isValidForDimension(int) is valid for a state
+     * space dimension vector} if, and only if, the dimension is at least 2 more
+     * than the given index position origin.</li>
+     * </ul>
+     *
      * @param index0
-     *            The position in the state-space vector of the components that map
-     *            to the components of the 3D vector. If the state-space is
-     *            {@linkplain ImmutableVectorN vector} <var>v</var>,
-     *            {@linkplain ImmutableVectorN#get(int) component}
+     *            The index position origin: the position in the state-space vector
+     *            of the components that map to the components of the 3D vector. If
+     *            the state-space is {@linkplain ImmutableVectorN vector}
+     *            <var>v</var>, {@linkplain ImmutableVectorN#get(int) component}
      *            <var>v</var><sub>index0</sub> is the x component of the 3D vector,
      *            <var>v</var><sub>index0+1</sub> is the y component, and
      *            <var>v</var><sub>index0+2</sub> is the z component.
@@ -70,9 +80,10 @@ public final class ImmutableVector3StateSpaceMapper implements VectorStateSpaceM
     public final void fromVector(@NonNull final double[] state, @NonNull final Vector vector) {
         Objects.requireNonNull(state, "state");
         Objects.requireNonNull(vector, "vector");
-        if (!isValidForDimension(state.length)) {
+        if (!isValidForDimension(state.length + 1)) {
             throw new IllegalArgumentException("state.length " + state.length + " index0 " + index0);
         }
+
         state[index0] += vector.get(0);
         state[index0 + 1] += vector.get(1);
         state[index0 + 2] += vector.get(2);
