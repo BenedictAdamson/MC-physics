@@ -521,6 +521,68 @@ public class HarmonicVector3Test {
     public class Constructor {
 
         @Nested
+        public class ConstantAcceleration {
+
+            @Test
+            public void a() {
+                test(T_1, V_1, V_2, V_3, 13, 17);
+            }
+
+            @Test
+            public void b() {
+                test(T_2, V_2, V_3, V_4, 17, 19);
+            }
+
+            private HarmonicVector3 test(final Duration t0, final ImmutableVector3 f0, final ImmutableVector3 f1,
+                    final ImmutableVector3 f2, final double we, final double wh) {
+                final HarmonicVector3 expectedDxdt = new HarmonicVector3(t0, f1, f2.scale(2), ImmutableVector3.ZERO,
+                        ImmutableVector3.ZERO, ImmutableVector3.ZERO, we, wh);
+                final HarmonicVector3 expectedD2dt2 = new HarmonicVector3(t0, f2.scale(2), ImmutableVector3.ZERO,
+                        ImmutableVector3.ZERO, ImmutableVector3.ZERO, ImmutableVector3.ZERO, we, wh);
+
+                final HarmonicVector3 x = Constructor.this.test(t0, f0, f1, f2, ImmutableVector3.ZERO,
+                        ImmutableVector3.ZERO, we, wh);
+
+                final HarmonicVector3 dxdt = x.getTimeDerivative();
+                assertEquals(expectedDxdt, dxdt, "velocity");
+                assertEquals(expectedD2dt2, dxdt.getTimeDerivative(), "acceleration");
+
+                return x;
+            }
+        }// class
+
+        @Nested
+        public class ConstantVelocity {
+
+            @Test
+            public void a() {
+                test(T_1, V_1, V_2, 13, 17);
+            }
+
+            @Test
+            public void b() {
+                test(T_2, V_2, V_3, 17, 19);
+            }
+
+            private HarmonicVector3 test(final Duration t0, final ImmutableVector3 f0, final ImmutableVector3 f1,
+                    final double we, final double wh) {
+                final HarmonicVector3 expectedDxdt = new HarmonicVector3(t0, f1, ImmutableVector3.ZERO,
+                        ImmutableVector3.ZERO, ImmutableVector3.ZERO, ImmutableVector3.ZERO, we, wh);
+                final HarmonicVector3 zero = new HarmonicVector3(t0, ImmutableVector3.ZERO, ImmutableVector3.ZERO,
+                        ImmutableVector3.ZERO, ImmutableVector3.ZERO, ImmutableVector3.ZERO, we, wh);
+
+                final HarmonicVector3 x = Constructor.this.test(t0, f0, f1, ImmutableVector3.ZERO,
+                        ImmutableVector3.ZERO, ImmutableVector3.ZERO, we, wh);
+
+                final HarmonicVector3 dxdt = x.getTimeDerivative();
+                assertEquals(expectedDxdt, dxdt, "time derivative");
+                assertEquals(zero, dxdt.getTimeDerivative(), "zero second derivative");
+
+                return x;
+            }
+        }// class
+
+        @Nested
         public class Different {
 
             @Test
@@ -635,19 +697,50 @@ public class HarmonicVector3Test {
 
         }// class
 
+        @Nested
+        public class Stationary {
+
+            @Test
+            public void a() {
+                final double we = 0.0;
+                final double wh = 0.0;
+                test(T_1, V_1, we, wh);
+            }
+
+            @Test
+            public void b() {
+                final double we = 5.0;
+                final double wh = 7.0;
+                test(T_2, V_2, we, wh);
+            }
+
+            private HarmonicVector3 test(final Duration t0, final ImmutableVector3 x, final double we,
+                    final double wh) {
+                final HarmonicVector3 zero = new HarmonicVector3(t0, ImmutableVector3.ZERO, ImmutableVector3.ZERO,
+                        ImmutableVector3.ZERO, ImmutableVector3.ZERO, ImmutableVector3.ZERO, we, wh);
+
+                final HarmonicVector3 vector = Constructor.this.test(t0, x, ImmutableVector3.ZERO,
+                        ImmutableVector3.ZERO, ImmutableVector3.ZERO, ImmutableVector3.ZERO, we, wh);
+
+                assertEquals(zero, vector.getTimeDerivative(), "zero time derivative");
+                assertEquals(zero, vector.getTimeDerivative().getTimeDerivative(), "zero second derivative");
+                return vector;
+            }
+        }// class
+
         @Test
         public void a() {
-            test(T_1, V_1, V_2, V_3, V_4, V_5, V_6, 7, 8);
+            test(T_1, V_1, V_2, V_3, V_4, V_5, 7, 8);
         }
 
         @Test
         public void t0_2() {
-            test(T_2, V_6, V_5, V_4, V_3, V_2, V_1, 2, 1);
+            test(T_2, V_6, V_5, V_4, V_3, V_2, 2, 1);
         }
 
-        private HarmonicVector3 test(@NonNull final Duration t0, final ImmutableVector3 f0, final ImmutableVector3 fc,
-                final ImmutableVector3 fs, final ImmutableVector3 f1, final ImmutableVector3 f2,
-                final ImmutableVector3 f3, final double we, final double wh) {
+        private HarmonicVector3 test(@NonNull final Duration t0, final ImmutableVector3 f0, final ImmutableVector3 f1,
+                final ImmutableVector3 f2, final ImmutableVector3 fc, final ImmutableVector3 fs, final double we,
+                final double wh) {
             final HarmonicVector3 v = new HarmonicVector3(t0, f0, f1, f2, fc, fs, we, wh);
 
             assertInvariants(v);
@@ -690,22 +783,24 @@ public class HarmonicVector3Test {
         return result;
     }
 
-    public static void assertEquals(final HarmonicVector3 v1, final HarmonicVector3 v2, final String message) {
-        Assertions.assertEquals(v1.getF0(), v2.getF0(), message + ",f0");
-        Assertions.assertEquals(v1.getF1(), v2.getF1(), message + ",f1");
-        Assertions.assertEquals(v1.getF2(), v2.getF2(), message + ",f2");
-        Assertions.assertEquals(v1.getFc(), v2.getFc(), message + ",fc");
-        Assertions.assertEquals(v1.getFs(), v2.getFs(), message + ",fs");
-        Assertions.assertEquals(v1.getT0(), v2.getT0(), message + ",t0");
-        Assertions.assertEquals(v1.getWe(), v2.getWe(), message + ",we");
-        Assertions.assertEquals(v1.getWh(), v2.getWh(), message + ",wh");
-        Assertions.assertEquals(v1, v2, "equals");
+    public static void assertEquals(final HarmonicVector3 expected, final HarmonicVector3 actual,
+            final String message) {
+        Assertions.assertEquals(expected.getF0(), actual.getF0(), message + ",f0");
+        Assertions.assertEquals(expected.getF1(), actual.getF1(), message + ",f1");
+        Assertions.assertEquals(expected.getF2(), actual.getF2(), message + ",f2");
+        Assertions.assertEquals(expected.getFc(), actual.getFc(), message + ",fc");
+        Assertions.assertEquals(expected.getFs(), actual.getFs(), message + ",fs");
+        Assertions.assertEquals(expected.getT0(), actual.getT0(), message + ",t0");
+        Assertions.assertEquals(expected.getWe(), actual.getWe(), message + ",we");
+        Assertions.assertEquals(expected.getWh(), actual.getWh(), message + ",wh");
+        Assertions.assertEquals(expected, actual, "equals");
     }
 
-    public static void assertInvariants(final HarmonicVector3 s) {
-        AbstractTimeVaryingVector3Test.assertInvariants(s);// inherited
+    public static void assertInvariants(final HarmonicVector3 v) {
+        AbstractTimeVaryingVector3Test.assertInvariants(v);// inherited
 
-        assertNotNull(s.getT0(), "Not null, t0");
+        assertNotNull(v.getT0(), "Not null, t0");
+        assertTimeDerivativeInvariants(v);
     }
 
     public static void assertInvariants(final HarmonicVector3 s, final Duration t) {
@@ -726,6 +821,20 @@ public class HarmonicVector3Test {
 
         assertFalse(equal && v1.getWe() != v2.getWe(), "Equality requires equivalent attributes (we)");
         assertFalse(equal && v1.getWh() != v2.getWh(), "Equality requires equivalent attributes (wh)");
+    }
+
+    private static HarmonicVector3 assertTimeDerivativeInvariants(final HarmonicVector3 v) {
+        final HarmonicVector3 derivative = v.getTimeDerivative();
+
+        assertNotNull(derivative, "Not null, timeDerivative");// guard
+        assertSame(v.getT0(), derivative.getT0(),
+                "The time derivative of this time varying vector has the same time origin as this vector.");
+        Assertions.assertEquals(v.getWe(), derivative.getWe(),
+                "The time derivative of this time varying vector has an exponential frequency term equal to the value of this vector.");
+        Assertions.assertEquals(v.getWh(), derivative.getWh(),
+                "The time derivative of this time varying vector has a harmonic frequency term equal to the value of this vector.");
+
+        return derivative;
     }
 
     public static ImmutableVector3 at(final HarmonicVector3 s, final Duration t) {

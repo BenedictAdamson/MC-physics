@@ -18,12 +18,10 @@ package uk.badamson.mc.physics.kinematics;
  * along with MC-physics.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import java.time.Duration;
 import java.util.Objects;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import net.jcip.annotations.Immutable;
-import uk.badamson.mc.math.ImmutableVector3;
 import uk.badamson.mc.physics.HarmonicVector3;
 
 /**
@@ -59,14 +57,8 @@ public final class HarmonicParticleTrajectory implements ParticleTrajectory {
      */
     public HarmonicParticleTrajectory(final HarmonicVector3 position) {
         this.position = Objects.requireNonNull(position, "position");
-        final Duration t0 = position.getT0();
-        final double we = position.getWe();
-        final double wh = position.getWh();
-        final ImmutableVector3 f22 = position.getF2().scale(2);
-        velocity = new HarmonicVector3(t0, position.getF1(), f22, ImmutableVector3.ZERO, ImmutableVector3.ZERO,
-                ImmutableVector3.ZERO, we, wh);// FIXME
-        acceleration = new HarmonicVector3(t0, f22, ImmutableVector3.ZERO, ImmutableVector3.ZERO, ImmutableVector3.ZERO,
-                ImmutableVector3.ZERO, we, wh);// FIXME
+        velocity = position.getTimeDerivative();
+        acceleration = velocity.getTimeDerivative();
     }
 
     @Override

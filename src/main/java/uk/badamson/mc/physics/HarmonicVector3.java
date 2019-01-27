@@ -252,6 +252,30 @@ public final class HarmonicVector3 extends AbstractTimeVaryingVector3 {
 
     /**
      * <p>
+     * Compute the time derivative of this time varying vector.
+     * </p>
+     * <ul>
+     * <li>Always have a (non null) time derivative.</li>
+     * <li>The time derivative of this time varying vector has the same
+     * {@linkplain #getT0() time origin} as this vector.</li>
+     * <li>The time derivative of this time varying vector has an
+     * {@linkplain #getWe() exponential frequency term} equal to the value of this
+     * vector.</li>
+     * <li>The time derivative of this time varying vector has a
+     * {@linkplain #getWh() harmonic frequency term} equal to the value of this
+     * vector.</li>
+     * </ul>
+     *
+     * @return the derivative.
+     */
+    @NonNull
+    public final HarmonicVector3 getTimeDerivative() {
+        return new HarmonicVector3(t0, getF1(), getF2().scale(2), ImmutableVector3.ZERO, ImmutableVector3.ZERO,
+                ImmutableVector3.ZERO, we, wh);// TODO
+    }
+
+    /**
+     * <p>
      * The &omega;<sub>e</sub> parameter; the exponential frequency term.
      * </p>
      * <p>
@@ -291,5 +315,4 @@ public final class HarmonicVector3 extends AbstractTimeVaryingVector3 {
         result = prime * result + (int) (temp ^ temp >>> 32);
         return result;
     }
-
 }
