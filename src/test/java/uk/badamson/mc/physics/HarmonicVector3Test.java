@@ -583,6 +583,32 @@ public class HarmonicVector3Test {
         }// class
 
         @Nested
+        public class Cosine {
+
+            @Test
+            public void a() {
+                test(T_1, V_1, 13);
+            }
+
+            @Test
+            public void b() {
+                test(T_2, V_2, 17);
+            }
+
+            private HarmonicVector3 test(final Duration t0, final ImmutableVector3 x0, final double w) {
+                final HarmonicVector3 expectedDxdt = new HarmonicVector3(t0, ImmutableVector3.ZERO,
+                        ImmutableVector3.ZERO, ImmutableVector3.ZERO, ImmutableVector3.ZERO,
+                        x0.scale(-w).plus(ImmutableVector3.ZERO), 0, w);
+
+                final HarmonicVector3 x = Constructor.this.test(t0, ImmutableVector3.ZERO, ImmutableVector3.ZERO,
+                        ImmutableVector3.ZERO, x0, ImmutableVector3.ZERO, 0, w);
+
+                assertEquals(expectedDxdt, x.getTimeDerivative(), "time derivative");
+                return x;
+            }
+        }// class
+
+        @Nested
         public class Different {
 
             @Test
@@ -695,6 +721,56 @@ public class HarmonicVector3Test {
                 assertEquals(v1, v2, "equivalent");
             }
 
+        }// class
+
+        @Nested
+        public class Exponential {
+
+            @Test
+            public void a() {
+                test(T_1, V_1, 13);
+            }
+
+            @Test
+            public void b() {
+                test(T_2, V_2, 17);
+            }
+
+            private HarmonicVector3 test(final Duration t0, final ImmutableVector3 x0, final double w) {
+                final HarmonicVector3 expectedDxdt = new HarmonicVector3(t0, ImmutableVector3.ZERO,
+                        ImmutableVector3.ZERO, ImmutableVector3.ZERO, x0.scale(w), ImmutableVector3.ZERO, w, 0);
+
+                final HarmonicVector3 x = Constructor.this.test(t0, ImmutableVector3.ZERO, ImmutableVector3.ZERO,
+                        ImmutableVector3.ZERO, x0, ImmutableVector3.ZERO, w, 0);
+
+                assertEquals(expectedDxdt, x.getTimeDerivative(), "time derivative");
+                return x;
+            }
+        }// class
+
+        @Nested
+        public class Sine {
+
+            @Test
+            public void a() {
+                test(T_1, V_1, 13);
+            }
+
+            @Test
+            public void b() {
+                test(T_2, V_2, 17);
+            }
+
+            private HarmonicVector3 test(final Duration t0, final ImmutableVector3 x0, final double w) {
+                final HarmonicVector3 expectedDxdt = new HarmonicVector3(t0, ImmutableVector3.ZERO,
+                        ImmutableVector3.ZERO, ImmutableVector3.ZERO, x0.scale(w), ImmutableVector3.ZERO, 0, w);
+
+                final HarmonicVector3 x = Constructor.this.test(t0, ImmutableVector3.ZERO, ImmutableVector3.ZERO,
+                        ImmutableVector3.ZERO, ImmutableVector3.ZERO, x0, 0, w);
+
+                assertEquals(expectedDxdt, x.getTimeDerivative(), "time derivative");
+                return x;
+            }
         }// class
 
         @Nested

@@ -270,8 +270,9 @@ public final class HarmonicVector3 extends AbstractTimeVaryingVector3 {
      */
     @NonNull
     public final HarmonicVector3 getTimeDerivative() {
-        return new HarmonicVector3(t0, getF1(), getF2().scale(2), ImmutableVector3.ZERO, ImmutableVector3.ZERO,
-                ImmutableVector3.ZERO, we, wh);// TODO
+        return new HarmonicVector3(t0, getF1(), getF2().scale(2), ImmutableVector3.ZERO,
+                ImmutableVector3.sum(getFc().scale(we), getFs().scale(wh)),
+                ImmutableVector3.sum(getFc().scale(-wh), getFs().scale(we)), we, wh);
     }
 
     /**
