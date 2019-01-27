@@ -1,7 +1,5 @@
 package uk.badamson.mc.physics.solver.mapper;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.time.Duration;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -57,9 +55,6 @@ public class HarmonicVector3MapperTest {
             final HarmonicVector3Mapper mapper = new HarmonicVector3Mapper(index0, scale);
 
             assertInvariants(mapper);
-            assertTrue(mapper.isValidForDimension(index0 + 19),
-                    "This mapper is valid for a state space dimension vector if, and only if, "
-                            + "the dimension is at least 19 more than the given index position origin (minimum).");
 
             return mapper;
         }

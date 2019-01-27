@@ -99,7 +99,7 @@ public final class ImmutableVector1StateSpaceMapper implements VectorStateSpaceM
         if (n < 1) {
             throw new IllegalArgumentException("n " + n);
         }
-        return index + 1 <= n;
+        return index < n;
     }
 
     @Override

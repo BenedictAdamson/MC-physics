@@ -88,7 +88,7 @@ public final class DurationMapper implements ObjectStateSpaceMapper<Duration> {
 
     @Override
     public final boolean isValidForDimension(final int n) {
-        return index0 <= n;
+        return index0 < n;
     }
 
     @Override

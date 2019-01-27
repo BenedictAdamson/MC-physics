@@ -53,8 +53,8 @@ public final class HarmonicVector3Mapper implements ObjectStateSpaceMapper<Harmo
      * </p>
      * <ul>
      * <li>This mapper {@linkplain #isValidForDimension(int) is valid for a state
-     * space dimension vector} if, and only if, the dimension is at least 17 more
-     * than the given index position origin.</li>
+     * space dimension vector} if, and only if, the dimension is greater than 19
+     * more than the given index position origin.</li>
      * </ul>
      *
      * @param index0
@@ -106,7 +106,7 @@ public final class HarmonicVector3Mapper implements ObjectStateSpaceMapper<Harmo
         if (n < 1) {
             throw new IllegalArgumentException("n " + n);
         }
-        return index0 + 19 <= n;
+        return index0 + 19 < n;
     }
 
     @Override

@@ -91,7 +91,7 @@ public final class QuaternionStateSpaceMapper implements ObjectStateSpaceMapper<
         if (n < 1) {
             throw new IllegalArgumentException("n " + n);
         }
-        return index0 + 3 <= n;
+        return index0 + 3 < n;
     }
 
     /**
