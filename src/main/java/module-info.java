@@ -23,6 +23,8 @@
  */
 module uk.badamson.mc.physics {
     exports uk.badamson.mc.physics;
+    exports uk.badamson.mc.physics.solver;
+    exports uk.badamson.mc.physics.solver.mapper;
 
     requires com.github.spotbugs.annotations;
     requires transitive uk.badamson.mc.math;
