@@ -20,6 +20,8 @@ package uk.badamson.mc.physics.solver.mapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.Arrays;
+
 import org.junit.jupiter.api.Test;
 
 import uk.badamson.mc.math.ImmutableVectorN;
@@ -41,19 +43,17 @@ public class QuaternionStateSpaceMapperTest {
         ObjectStateSpaceMapperTest.assertInvariants(mapper1, mapper2);// inherited
     }
 
-    private static void fromObject(final int index0, final int stateSize, final Quaternion q1, final Quaternion q2) {
-        final double tolerance = (q1.norm() + q2.norm()) * (Math.nextAfter(1.0, 2.0) - 1.0);
-        final Quaternion sum = q1.plus(q2);
+    private static void fromObject(final int index0, final int stateSize, final Quaternion q) {
+        final double tolerance = q.norm() * (Math.nextAfter(1.0, 2.0) - 1.0);
         final QuaternionStateSpaceMapper mapper = new QuaternionStateSpaceMapper(index0);
         final double[] state = new double[stateSize];
-        mapper.fromObject(state, q1);
 
-        fromObject(mapper, state, q2);
+        fromObject(mapper, state, q);
 
-        assertEquals(sum.getA(), state[index0], tolerance, "state[index0]");
-        assertEquals(sum.getB(), state[index0 + 1], tolerance, "state[index0+1]");
-        assertEquals(sum.getC(), state[index0 + 2], tolerance, "state[index0+2]");
-        assertEquals(sum.getD(), state[index0 + 3], tolerance, "state[index0+3]");
+        assertEquals(q.getA(), state[index0], tolerance, "state[index0]");
+        assertEquals(q.getB(), state[index0 + 1], tolerance, "state[index0+1]");
+        assertEquals(q.getC(), state[index0 + 2], tolerance, "state[index0+2]");
+        assertEquals(q.getD(), state[index0 + 3], tolerance, "state[index0+3]");
     }
 
     public static void fromObject(final QuaternionStateSpaceMapper mapper, final double[] state,
@@ -66,6 +66,7 @@ public class QuaternionStateSpaceMapperTest {
     private static void fromToObjectSymmetry(final int index0, final int stateSize, final Quaternion original) {
         final QuaternionStateSpaceMapper mapper = new QuaternionStateSpaceMapper(index0);
         final double[] state = new double[stateSize];
+        Arrays.fill(state, Double.NaN);
 
         fromToObjectSymmetry(mapper, state, original);
     }
@@ -92,50 +93,42 @@ public class QuaternionStateSpaceMapperTest {
     public void fromObject_2i() {
         final int index = 0;
         final int stateSize = 4;
-        fromObject(index, stateSize, Quaternion.ZERO, Quaternion.I.scale(2));
+        fromObject(index, stateSize, Quaternion.I.scale(2));
     }
 
     @Test
     public void fromObject_extraAfter() {
         final int index = 0;
         final int stateSize = 6;
-        fromObject(index, stateSize, Quaternion.ZERO, Quaternion.I);
+        fromObject(index, stateSize, Quaternion.I);
     }
 
     @Test
     public void fromObject_extraBefore() {
         final int index = 2;
         final int stateSize = 6;
-        fromObject(index, stateSize, Quaternion.ZERO, Quaternion.I);
+        fromObject(index, stateSize, Quaternion.I);
     }
 
     @Test
     public void fromObject_i() {
         final int index = 0;
         final int stateSize = 4;
-        fromObject(index, stateSize, Quaternion.ZERO, Quaternion.I);
-    }
-
-    @Test
-    public void fromObject_initialState() {
-        final int index = 0;
-        final int stateSize = 4;
-        final Quaternion q = Quaternion.create(1, 2, 3, 4);
-        fromObject(index, stateSize, q, q);
+        fromObject(index, stateSize, Quaternion.I);
     }
 
     @Test
     public void fromObject_j() {
         final int index = 0;
         final int stateSize = 4;
-        fromObject(index, stateSize, Quaternion.ZERO, Quaternion.J);
+        fromObject(index, stateSize, Quaternion.J);
     }
 
     @Test
     public void fromObject_k() {
         final int index = 0;
         final int stateSize = 4;
-        fromObject(index, stateSize, Quaternion.ZERO, Quaternion.K);
+        fromObject(index, stateSize, Quaternion.K);
     }
 
     @Test

@@ -92,22 +92,19 @@ public class Rotation3AxisAngleStateSpaceMapperTest {
         return new IsCloseTo(operand, tolerance);
     }
 
-    private static void fromObject(final int index0, final int stateSize, final Rotation3AxisAngle r1,
-            final Rotation3AxisAngle r2) {
+    private static void fromObject(final int index0, final int stateSize, final Rotation3AxisAngle r) {
         final double tolerance = 2 * (Math.nextAfter(1.0, 2.0) - 1.0);
         final ImmutableVector3StateSpaceMapper axisMapper = new ImmutableVector3StateSpaceMapper(index0 + 1);
         final Rotation3AxisAngleStateSpaceMapper rotationMapper = new Rotation3AxisAngleStateSpaceMapper(index0,
                 axisMapper);
         final double[] state = new double[stateSize];
-        rotationMapper.fromObject(state, r1);
-        final double[] state0 = Arrays.copyOf(state, stateSize);
 
-        fromObject(rotationMapper, state, r2);
+        fromObject(rotationMapper, state, r);
 
-        assertEquals(state0[index0] + r2.getAngle(), state[index0], tolerance, "state[index0]");
-        assertEquals(state0[index0 + 1] + r2.getAxis().get(0), state[index0 + 1], tolerance, "state[index0+1]");
-        assertEquals(state0[index0 + 2] + r2.getAxis().get(1), state[index0 + 2], tolerance, "state[index0+2]");
-        assertEquals(state0[index0 + 3] + r2.getAxis().get(2), state[index0 + 3], tolerance, "state[index0+3]");
+        assertEquals(r.getAngle(), state[index0], tolerance, "state[index0]");
+        assertEquals(r.getAxis().get(0), state[index0 + 1], tolerance, "state[index0+1]");
+        assertEquals(r.getAxis().get(1), state[index0 + 2], tolerance, "state[index0+2]");
+        assertEquals(r.getAxis().get(2), state[index0 + 3], tolerance, "state[index0+3]");
     }
 
     public static void fromObject(final Rotation3AxisAngleStateSpaceMapper mapper, final double[] state,
@@ -122,6 +119,7 @@ public class Rotation3AxisAngleStateSpaceMapperTest {
         final Rotation3AxisAngleStateSpaceMapper rotationMapper = new Rotation3AxisAngleStateSpaceMapper(index0,
                 axisMapper);
         final double[] state = new double[stateSize];
+        Arrays.fill(state, Double.NaN);
 
         fromToObjectSymmetry(rotationMapper, state, original);
     }
@@ -149,63 +147,49 @@ public class Rotation3AxisAngleStateSpaceMapperTest {
     public void fromObject_0() {
         final int index = 0;
         final int stateSize = 4;
-        fromObject(index, stateSize, Rotation3AxisAngle.ZERO, Rotation3AxisAngle.ZERO);
+        fromObject(index, stateSize, Rotation3AxisAngle.ZERO);
     }
 
     @Test
     public void fromObject_extraAfter() {
         final int index = 0;
         final int stateSize = 6;
-        fromObject(index, stateSize, Rotation3AxisAngle.ZERO,
-                Rotation3AxisAngle.valueOfAxisAngle(ImmutableVector3.I, SMALL_ANGLE));
+        fromObject(index, stateSize, Rotation3AxisAngle.valueOfAxisAngle(ImmutableVector3.I, SMALL_ANGLE));
     }
 
     @Test
     public void fromObject_extraBefore() {
         final int index = 2;
         final int stateSize = 6;
-        fromObject(index, stateSize, Rotation3AxisAngle.ZERO,
-                Rotation3AxisAngle.valueOfAxisAngle(ImmutableVector3.I, SMALL_ANGLE));
+        fromObject(index, stateSize, Rotation3AxisAngle.valueOfAxisAngle(ImmutableVector3.I, SMALL_ANGLE));
     }
 
     @Test
     public void fromObject_iA() {
         final int index = 0;
         final int stateSize = 4;
-        fromObject(index, stateSize, Rotation3AxisAngle.ZERO,
-                Rotation3AxisAngle.valueOfAxisAngle(ImmutableVector3.I, SMALL_ANGLE));
+        fromObject(index, stateSize, Rotation3AxisAngle.valueOfAxisAngle(ImmutableVector3.I, SMALL_ANGLE));
     }
 
     @Test
     public void fromObject_iB() {
         final int index = 0;
         final int stateSize = 4;
-        fromObject(index, stateSize, Rotation3AxisAngle.ZERO,
-                Rotation3AxisAngle.valueOfAxisAngle(ImmutableVector3.I, Math.PI * 0.5));
-    }
-
-    @Test
-    public void fromObject_initialState() {
-        final int index = 0;
-        final int stateSize = 4;
-        final Rotation3AxisAngle q = Rotation3AxisAngle.valueOfAxisAngle(ImmutableVector3.create(1, 2, 3), SMALL_ANGLE);
-        fromObject(index, stateSize, q, q);
+        fromObject(index, stateSize, Rotation3AxisAngle.valueOfAxisAngle(ImmutableVector3.I, Math.PI * 0.5));
     }
 
     @Test
     public void fromObject_j() {
         final int index = 0;
         final int stateSize = 4;
-        fromObject(index, stateSize, Rotation3AxisAngle.ZERO,
-                Rotation3AxisAngle.valueOfAxisAngle(ImmutableVector3.J, SMALL_ANGLE));
+        fromObject(index, stateSize, Rotation3AxisAngle.valueOfAxisAngle(ImmutableVector3.J, SMALL_ANGLE));
     }
 
     @Test
     public void fromObject_k() {
         final int index = 0;
         final int stateSize = 4;
-        fromObject(index, stateSize, Rotation3AxisAngle.ZERO,
-                Rotation3AxisAngle.valueOfAxisAngle(ImmutableVector3.K, SMALL_ANGLE));
+        fromObject(index, stateSize, Rotation3AxisAngle.valueOfAxisAngle(ImmutableVector3.K, SMALL_ANGLE));
     }
 
     @Test

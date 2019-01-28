@@ -84,9 +84,9 @@ public final class ImmutableVector3StateSpaceMapper implements VectorStateSpaceM
             throw new IllegalArgumentException("state.length " + state.length + " index0 " + index0);
         }
 
-        state[index0] += vector.get(0);
-        state[index0 + 1] += vector.get(1);
-        state[index0 + 2] += vector.get(2);
+        state[index0] = vector.get(0);
+        state[index0 + 1] = vector.get(1);
+        state[index0 + 2] = vector.get(2);
     }
 
     /**

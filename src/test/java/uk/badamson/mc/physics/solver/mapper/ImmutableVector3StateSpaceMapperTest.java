@@ -20,6 +20,8 @@ package uk.badamson.mc.physics.solver.mapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.Arrays;
+
 import org.junit.jupiter.api.Test;
 
 import uk.badamson.mc.math.ImmutableVector3;
@@ -50,19 +52,16 @@ public class ImmutableVector3StateSpaceMapperTest {
         assertInvariants(mapper);// check for side-effects
     }
 
-    private static void fromObject(final int index0, final int stateSize, final ImmutableVector3 v1,
-            final ImmutableVector3 v2) {
-        final double tolerance = (v1.magnitude() + v2.magnitude()) * (Math.nextAfter(1.0, 2.0) - 1.0);
-        final ImmutableVector3 sum = v1.plus(v2);
+    private static void fromObject(final int index0, final int stateSize, final ImmutableVector3 v) {
+        final double tolerance = v.magnitude() * (Math.nextAfter(1.0, 2.0) - 1.0);
         final ImmutableVector3StateSpaceMapper mapper = new ImmutableVector3StateSpaceMapper(index0);
         final double[] state = new double[stateSize];
-        mapper.fromObject(state, v1);
 
-        fromObject(mapper, state, v2);
+        fromObject(mapper, state, v);
 
-        assertEquals(sum.get(0), state[index0], tolerance, "state[index0]");
-        assertEquals(sum.get(1), state[index0 + 1], tolerance, "state[index0+1]");
-        assertEquals(sum.get(2), state[index0 + 2], tolerance, "state[index0+2]");
+        assertEquals(v.get(0), state[index0], tolerance, "state[index0]");
+        assertEquals(v.get(1), state[index0 + 1], tolerance, "state[index0+1]");
+        assertEquals(v.get(2), state[index0 + 2], tolerance, "state[index0+2]");
     }
 
     private static void fromToObjectSymmetry(final ImmutableVector3StateSpaceMapper mapper, final double[] state,
@@ -78,6 +77,7 @@ public class ImmutableVector3StateSpaceMapperTest {
     private static void fromToObjectSymmetry(final int index0, final int stateSize, final ImmutableVector3 original) {
         final ImmutableVector3StateSpaceMapper mapper = new ImmutableVector3StateSpaceMapper(index0);
         final double[] state = new double[stateSize];
+        Arrays.fill(state, Double.NaN);
 
         fromToObjectSymmetry(mapper, state, original);
     }
@@ -119,50 +119,42 @@ public class ImmutableVector3StateSpaceMapperTest {
     public void fromObject_2i() {
         final int index = 0;
         final int stateSize = 3;
-        fromObject(index, stateSize, ImmutableVector3.ZERO, ImmutableVector3.I.scale(2));
+        fromObject(index, stateSize, ImmutableVector3.I.scale(2));
     }
 
     @Test
     public void fromObject_extraAfter() {
         final int index = 0;
         final int stateSize = 5;
-        fromObject(index, stateSize, ImmutableVector3.ZERO, ImmutableVector3.I);
+        fromObject(index, stateSize, ImmutableVector3.I);
     }
 
     @Test
     public void fromObject_extraBefore() {
         final int index = 2;
         final int stateSize = 5;
-        fromObject(index, stateSize, ImmutableVector3.ZERO, ImmutableVector3.I);
+        fromObject(index, stateSize, ImmutableVector3.I);
     }
 
     @Test
     public void fromObject_i() {
         final int index = 0;
         final int stateSize = 3;
-        fromObject(index, stateSize, ImmutableVector3.ZERO, ImmutableVector3.I);
-    }
-
-    @Test
-    public void fromObject_initialState() {
-        final int index = 0;
-        final int stateSize = 3;
-        final ImmutableVector3 v = ImmutableVector3.create(1, 2, 3);
-        fromObject(index, stateSize, v, v);
+        fromObject(index, stateSize, ImmutableVector3.I);
     }
 
     @Test
     public void fromObject_j() {
         final int index = 0;
         final int stateSize = 3;
-        fromObject(index, stateSize, ImmutableVector3.ZERO, ImmutableVector3.J);
+        fromObject(index, stateSize, ImmutableVector3.J);
     }
 
     @Test
     public void fromObject_k() {
         final int index = 0;
         final int stateSize = 3;
-        fromObject(index, stateSize, ImmutableVector3.ZERO, ImmutableVector3.K);
+        fromObject(index, stateSize, ImmutableVector3.K);
     }
 
     @Test

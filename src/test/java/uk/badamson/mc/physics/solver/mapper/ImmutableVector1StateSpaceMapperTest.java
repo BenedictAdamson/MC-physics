@@ -20,6 +20,8 @@ package uk.badamson.mc.physics.solver.mapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.Arrays;
+
 import org.junit.jupiter.api.Test;
 
 import uk.badamson.mc.math.ImmutableVector1;
@@ -51,16 +53,16 @@ public class ImmutableVector1StateSpaceMapperTest {
         assertInvariants(mapper);// check for side-effects
     }
 
-    private static void fromObject(final int index, final int stateSize, final double state0, final double x) {
-        final double tolerance = (Math.abs(state0) + Math.abs(x)) * (Math.nextAfter(1.0, 2.0) - 1.0);
+    private static void fromObject(final int index, final int stateSize, final double x) {
+        final double tolerance = Math.abs(x) * (Math.nextAfter(1.0, 2.0) - 1.0);
         final ImmutableVector1StateSpaceMapper mapper = new ImmutableVector1StateSpaceMapper(index);
         final double[] state = new double[stateSize];
-        state[index] = state0;
+        state[index] = Double.NaN;
         final ImmutableVector1 vector = ImmutableVector1.create(x);
 
         fromObject(mapper, state, vector);
 
-        assertEquals(state0 + x, state[index], tolerance, "state[index]");
+        assertEquals(x, state[index], tolerance, "state[index]");
     }
 
     private static void fromToObjectSymmetry(final ImmutableVector1StateSpaceMapper mapper, final double[] state,
@@ -76,6 +78,7 @@ public class ImmutableVector1StateSpaceMapperTest {
     private static void fromToObjectSymmetry(final int index, final int stateSize, final ImmutableVector1 original) {
         final ImmutableVector1StateSpaceMapper mapper = new ImmutableVector1StateSpaceMapper(index);
         final double[] state = new double[stateSize];
+        Arrays.fill(state, Double.NaN);
 
         fromToObjectSymmetry(mapper, state, original);
     }
@@ -117,40 +120,21 @@ public class ImmutableVector1StateSpaceMapperTest {
     public void fromObject_2i() {
         final int index = 0;
         final int stateSize = 1;
-        final double state0 = 0;
-        fromObject(index, stateSize, state0, 2.0);
-    }
-
-    @Test
-    public void fromObject_extraAfter() {
-        final int index = 0;
-        final int stateSize = 2;
-        final double state0 = 0;
-        fromObject(index, stateSize, state0, 1.0);
-    }
-
-    @Test
-    public void fromObject_extraBefore() {
-        final int index = 2;
-        final int stateSize = 3;
-        final double state0 = 0;
-        fromObject(index, stateSize, state0, 1.0);
+        fromObject(index, stateSize, 2.0);
     }
 
     @Test
     public void fromObject_i() {
         final int index = 0;
         final int stateSize = 1;
-        final double state0 = 0;
-        fromObject(index, stateSize, state0, 1.0);
+        fromObject(index, stateSize, 1.0);
     }
 
     @Test
     public void fromObject_initialState() {
         final int index = 0;
         final int stateSize = 1;
-        final double state0 = 7.0;
-        fromObject(index, stateSize, state0, 1.0);
+        fromObject(index, stateSize, 1.0);
     }
 
     @Test
@@ -158,20 +142,6 @@ public class ImmutableVector1StateSpaceMapperTest {
         final int index = 0;
         final int stateSize = 1;
         fromToObjectSymmetry(index, stateSize, ImmutableVector1.I.scale(2));
-    }
-
-    @Test
-    public void fromToObjectSymmetry_extraAfter() {
-        final int index = 0;
-        final int stateSize = 1;
-        fromToObjectSymmetry(index, stateSize, ImmutableVector1.I);
-    }
-
-    @Test
-    public void fromToObjectSymmetry_extraBefore() {
-        final int index = 2;
-        final int stateSize = 3;
-        fromToObjectSymmetry(index, stateSize, ImmutableVector1.I);
     }
 
     @Test

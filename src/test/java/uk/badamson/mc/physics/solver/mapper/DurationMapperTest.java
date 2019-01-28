@@ -21,6 +21,7 @@ package uk.badamson.mc.physics.solver.mapper;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.Duration;
+import java.util.Arrays;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -96,6 +97,7 @@ public class DurationMapperTest {
         private void test(final int index0, final Duration scale, final Duration object) {
             final DurationMapper mapper = new DurationMapper(index0, scale);
             final double[] state = new double[index0 + 17];
+            Arrays.fill(state, Double.NaN);
 
             fromToObjectSymmetry(mapper, state, object);
         }

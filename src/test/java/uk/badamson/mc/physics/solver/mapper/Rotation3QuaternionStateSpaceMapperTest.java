@@ -21,6 +21,8 @@ package uk.badamson.mc.physics.solver.mapper;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.Arrays;
+
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -28,7 +30,6 @@ import org.junit.jupiter.api.Test;
 
 import uk.badamson.mc.math.ImmutableVector3;
 import uk.badamson.mc.math.ImmutableVectorN;
-import uk.badamson.mc.math.Quaternion;
 import uk.badamson.mc.math.Rotation3;
 import uk.badamson.mc.math.Rotation3Quaternion;
 
@@ -91,22 +92,19 @@ public class Rotation3QuaternionStateSpaceMapperTest {
         return new IsCloseTo(operand, tolerance);
     }
 
-    private static void fromObject(final int index0, final int stateSize, final Rotation3Quaternion r1,
-            final Rotation3Quaternion r2) {
+    private static void fromObject(final int index0, final int stateSize, final Rotation3Quaternion r) {
         final double tolerance = 2 * (Math.nextAfter(1.0, 2.0) - 1.0);
-        final Quaternion sum = r1.getVersor().plus(r2.getVersor());
         final QuaternionStateSpaceMapper quaternionMapper = new QuaternionStateSpaceMapper(index0);
         final Rotation3QuaternionStateSpaceMapper rotationMapper = new Rotation3QuaternionStateSpaceMapper(
                 quaternionMapper);
         final double[] state = new double[stateSize];
-        rotationMapper.fromObject(state, r1);
 
-        fromObject(rotationMapper, state, r2);
+        fromObject(rotationMapper, state, r);
 
-        assertEquals(sum.getA(), state[index0], tolerance, "state[index0]");
-        assertEquals(sum.getB(), state[index0 + 1], tolerance, "state[index0+1]");
-        assertEquals(sum.getC(), state[index0 + 2], tolerance, "state[index0+2]");
-        assertEquals(sum.getD(), state[index0 + 3], tolerance, "state[index0+3]");
+        assertEquals(r.getVersor().getA(), state[index0], tolerance, "state[index0]");
+        assertEquals(r.getVersor().getB(), state[index0 + 1], tolerance, "state[index0+1]");
+        assertEquals(r.getVersor().getC(), state[index0 + 2], tolerance, "state[index0+2]");
+        assertEquals(r.getVersor().getD(), state[index0 + 3], tolerance, "state[index0+3]");
     }
 
     public static void fromObject(final Rotation3QuaternionStateSpaceMapper mapper, final double[] state,
@@ -122,6 +120,7 @@ public class Rotation3QuaternionStateSpaceMapperTest {
         final Rotation3QuaternionStateSpaceMapper rotationMapper = new Rotation3QuaternionStateSpaceMapper(
                 quaternionMapper);
         final double[] state = new double[stateSize];
+        Arrays.fill(state, Double.NaN);
 
         fromToObjectSymmetry(rotationMapper, state, original);
     }
@@ -149,64 +148,49 @@ public class Rotation3QuaternionStateSpaceMapperTest {
     public void fromObject_0() {
         final int index = 0;
         final int stateSize = 4;
-        fromObject(index, stateSize, Rotation3Quaternion.ZERO, Rotation3Quaternion.ZERO);
+        fromObject(index, stateSize, Rotation3Quaternion.ZERO);
     }
 
     @Test
     public void fromObject_extraAfter() {
         final int index = 0;
         final int stateSize = 6;
-        fromObject(index, stateSize, Rotation3Quaternion.ZERO,
-                Rotation3Quaternion.valueOfAxisAngle(ImmutableVector3.I, SMALL_ANGLE));
+        fromObject(index, stateSize, Rotation3Quaternion.valueOfAxisAngle(ImmutableVector3.I, SMALL_ANGLE));
     }
 
     @Test
     public void fromObject_extraBefore() {
         final int index = 2;
         final int stateSize = 6;
-        fromObject(index, stateSize, Rotation3Quaternion.ZERO,
-                Rotation3Quaternion.valueOfAxisAngle(ImmutableVector3.I, SMALL_ANGLE));
+        fromObject(index, stateSize, Rotation3Quaternion.valueOfAxisAngle(ImmutableVector3.I, SMALL_ANGLE));
     }
 
     @Test
     public void fromObject_iA() {
         final int index = 0;
         final int stateSize = 4;
-        fromObject(index, stateSize, Rotation3Quaternion.ZERO,
-                Rotation3Quaternion.valueOfAxisAngle(ImmutableVector3.I, SMALL_ANGLE));
+        fromObject(index, stateSize, Rotation3Quaternion.valueOfAxisAngle(ImmutableVector3.I, SMALL_ANGLE));
     }
 
     @Test
     public void fromObject_iB() {
         final int index = 0;
         final int stateSize = 4;
-        fromObject(index, stateSize, Rotation3Quaternion.ZERO,
-                Rotation3Quaternion.valueOfAxisAngle(ImmutableVector3.I, Math.PI * 0.5));
-    }
-
-    @Test
-    public void fromObject_initialState() {
-        final int index = 0;
-        final int stateSize = 4;
-        final Rotation3Quaternion q = Rotation3Quaternion.valueOfAxisAngle(ImmutableVector3.create(1, 2, 3),
-                SMALL_ANGLE);
-        fromObject(index, stateSize, q, q);
+        fromObject(index, stateSize, Rotation3Quaternion.valueOfAxisAngle(ImmutableVector3.I, Math.PI * 0.5));
     }
 
     @Test
     public void fromObject_j() {
         final int index = 0;
         final int stateSize = 4;
-        fromObject(index, stateSize, Rotation3Quaternion.ZERO,
-                Rotation3Quaternion.valueOfAxisAngle(ImmutableVector3.J, SMALL_ANGLE));
+        fromObject(index, stateSize, Rotation3Quaternion.valueOfAxisAngle(ImmutableVector3.J, SMALL_ANGLE));
     }
 
     @Test
     public void fromObject_k() {
         final int index = 0;
         final int stateSize = 4;
-        fromObject(index, stateSize, Rotation3Quaternion.ZERO,
-                Rotation3Quaternion.valueOfAxisAngle(ImmutableVector3.K, SMALL_ANGLE));
+        fromObject(index, stateSize, Rotation3Quaternion.valueOfAxisAngle(ImmutableVector3.K, SMALL_ANGLE));
     }
 
     @Test

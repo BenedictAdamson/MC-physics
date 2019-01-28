@@ -74,7 +74,7 @@ public final class ImmutableVector1StateSpaceMapper implements VectorStateSpaceM
         if (vector.getDimension() != 1) {
             throw new IllegalArgumentException("vector dimension " + vector.getDimension());
         }
-        state[index] += vector.get(0);
+        state[index] = vector.get(0);
     }
 
     /**

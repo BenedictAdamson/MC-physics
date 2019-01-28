@@ -83,7 +83,7 @@ public final class DurationMapper implements ObjectStateSpaceMapper<Duration> {
             throw new IllegalArgumentException("state.length " + state.length + " index0 " + index0);
         }
 
-        state[index0] += object.dividedBy(scale);
+        state[index0] = object.dividedBy(scale);
     }
 
     @Override

@@ -72,7 +72,7 @@ public final class Rotation3AxisAngleStateSpaceMapper implements ObjectStateSpac
     public final void fromObject(@NonNull final double[] state, @NonNull final Rotation3AxisAngle object) {
         Objects.requireNonNull(state, "state");
         Objects.requireNonNull(object, "object");
-        state[rotationIndex] += object.getAngle();
+        state[rotationIndex] = object.getAngle();
         axisMapper.fromObject(state, object.getAxis());
     }
 

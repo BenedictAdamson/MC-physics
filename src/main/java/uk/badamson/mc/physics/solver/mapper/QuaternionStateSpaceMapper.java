@@ -74,10 +74,10 @@ public final class QuaternionStateSpaceMapper implements ObjectStateSpaceMapper<
     public final void fromObject(@NonNull final double[] state, @NonNull final Quaternion object) {
         Objects.requireNonNull(state, "state");
         Objects.requireNonNull(object, "object");
-        state[index0] += object.getA();
-        state[index0 + 1] += object.getB();
-        state[index0 + 2] += object.getC();
-        state[index0 + 3] += object.getD();
+        state[index0] = object.getA();
+        state[index0 + 1] = object.getB();
+        state[index0 + 2] = object.getC();
+        state[index0 + 3] = object.getD();
     }
 
     /**

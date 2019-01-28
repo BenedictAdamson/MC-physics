@@ -1,6 +1,7 @@
 package uk.badamson.mc.physics.solver.mapper;
 
 import java.time.Duration;
+import java.util.Arrays;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -97,6 +98,7 @@ public class HarmonicVector3MapperTest {
         private void test(final int index0, final Duration scale, final HarmonicVector3 object) {
             final HarmonicVector3Mapper mapper = new HarmonicVector3Mapper(index0, scale);
             final double[] state = new double[index0 + 20];
+            Arrays.fill(state, Double.NaN);
 
             fromToObjectSymmetry(mapper, state, object);
         }

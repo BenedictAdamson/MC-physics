@@ -55,9 +55,8 @@ public interface VectorStateSpaceMapper<VECTOR extends Vector> extends MatrixSta
      * vector.
      * </p>
      * <ul>
-     * <li>The method <em>adds</em> to the components of the given state-space
-     * vector. Normally, the state-space vector should have been initialised to
-     * zero.</li>
+     * <li>The method sets components of the given state-space vector. Normally, the
+     * state-space vector should have been initialised to zero.</li>
      * <li>This is the inverse operation of the {@link #toObject(ImmutableVectorN)}
      * method.</li>
      * </ul>
