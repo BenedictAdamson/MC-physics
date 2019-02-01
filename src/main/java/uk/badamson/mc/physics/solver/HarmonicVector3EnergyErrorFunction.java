@@ -121,6 +121,39 @@ public final class HarmonicVector3EnergyErrorFunction implements EnergyErrorFunc
 
         /**
          * <p>
+         * Whether this is <dfn>equivalent</dfn> to another object.
+         * </p>
+         * <p>
+         * The {@link ErrorValueAndGradients} class has <i>value semantics</i>: this is
+         * equivalent to another object if, and only if, the other object is also a
+         * {@link ErrorValueAndGradients} and the two have equivalent attributes.
+         * </p>
+         *
+         * @param obj
+         *            The other object.
+         * @return whether this and the other object are equivalent.
+         */
+        @Override
+        public boolean equals(final Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (!(obj instanceof ErrorValueAndGradients)) {
+                return false;
+            }
+            final ErrorValueAndGradients other = (ErrorValueAndGradients) obj;
+            return Double.doubleToLongBits(e) == Double.doubleToLongBits(other.e)
+                    && Double.doubleToLongBits(dedwe) == Double.doubleToLongBits(other.dedwe)
+                    && Double.doubleToLongBits(dedwh) == Double.doubleToLongBits(other.dedwh)
+                    && dedf0.equals(other.dedf0) && dedf1.equals(other.dedf1) && dedf2.equals(other.dedf2)
+                    && dedfc.equals(other.dedfc) && dedfs.equals(other.dedfs);
+        }
+
+        /**
+         * <p>
          * The rate of change of the {@linkplain #getE() error value} with respect to
          * the components of the {@linkplain HarmonicVector3#getF0() the constant term}
          * of the {@linkplain HarmonicVector3 functor}.
@@ -221,13 +254,38 @@ public final class HarmonicVector3EnergyErrorFunction implements EnergyErrorFunc
             return e;
         }
 
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            long temp;
+            temp = Double.doubleToLongBits(dedwe);
+            result = prime * result + (int) (temp ^ temp >>> 32);
+            temp = Double.doubleToLongBits(dedwh);
+            result = prime * result + (int) (temp ^ temp >>> 32);
+            temp = Double.doubleToLongBits(e);
+            result = prime * result + (int) (temp ^ temp >>> 32);
+            result = prime * result + dedf0.hashCode();
+            result = prime * result + dedf1.hashCode();
+            result = prime * result + dedf2.hashCode();
+            result = prime * result + dedfc.hashCode();
+            result = prime * result + dedfs.hashCode();
+            return result;
+        }
+
+        @Override
+        public String toString() {
+            return "ErrorValueAndGradients [e=" + e + ", dedf0=" + dedf0 + ", dedf1=" + dedf1 + ", dedf2=" + dedf2
+                    + ", dedfc=" + dedfc + ", dedfs=" + dedfs + ", dedwe=" + dedwe + ", dedwh=" + dedwh + "]";
+        }
+
     }// class
 
     /**
      * <p>
-     * A contributor to the {@linkplain HarmonicVector3EnergyErrorFunction physical
-     * modelling error of a functor for a time varying 3D vector property that can
-     * have damped harmonic variation}.
+     * A contributor to the {@linkplain ;EnergyErrorFunction physical modelling
+     * error of a functor for a time varying 3D vector property that can have damped
+     * harmonic variation}.
      * </p>
      * <p>
      * The term calculates an error value that has dimensions of energy.

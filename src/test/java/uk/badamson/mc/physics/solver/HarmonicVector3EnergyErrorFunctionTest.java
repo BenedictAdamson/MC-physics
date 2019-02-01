@@ -19,6 +19,8 @@ package uk.badamson.mc.physics.solver;
  */
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
@@ -41,6 +43,32 @@ public class HarmonicVector3EnergyErrorFunctionTest {
         @Nested
         public class Constructor {
 
+            @Nested
+            public class Equivalent {
+
+                @Test
+                public void a() {
+                    test(0, V_1, V_2, V_3, V_4, V_5, 13, 17);
+                }
+
+                @Test
+                public void b() {
+                    test(2, V_2, V_3, V_4, V_5, V_6, 17, 19);
+                }
+
+                private void test(final double e, final ImmutableVector3 dedf0, final ImmutableVector3 dedf1,
+                        final ImmutableVector3 dedf2, final ImmutableVector3 dedfc, final ImmutableVector3 dedfs,
+                        final double dedwe, final double dedwh) {
+                    final HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients value1 = new HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients(
+                            e, dedf0, dedf1, dedf2, dedfc, dedfs, dedwe, dedwh);
+                    final HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients value2 = new HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients(
+                            e, dedf0, dedf1, dedf2, dedfc, dedfs, dedwe, dedwh);
+
+                    assertInvariants(value1, value2);
+                    assertEquals(value1, value2);
+                }
+            }// class
+
             @Test
             public void a() {
                 test(0, V_1, V_2, V_3, V_4, V_5, 13, 17);
@@ -49,6 +77,94 @@ public class HarmonicVector3EnergyErrorFunctionTest {
             @Test
             public void b() {
                 test(2, V_2, V_3, V_4, V_5, V_6, 17, 19);
+            }
+
+            @Test
+            public void different_dedf0() {
+                final HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients value1 = new HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients(
+                        0, V_1, V_2, V_3, V_4, V_5, 13, 17);
+                final HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients value2 = new HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients(
+                        0, V_6, V_2, V_3, V_4, V_5, 13, 17);
+
+                assertInvariants(value1, value2);
+                assertNotEquals(value1, value2);
+            }
+
+            @Test
+            public void different_dedf1() {
+                final HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients value1 = new HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients(
+                        0, V_1, V_2, V_3, V_4, V_5, 13, 17);
+                final HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients value2 = new HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients(
+                        0, V_1, V_6, V_3, V_4, V_5, 13, 17);
+
+                assertInvariants(value1, value2);
+                assertNotEquals(value1, value2);
+            }
+
+            @Test
+            public void different_dedf2() {
+                final HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients value1 = new HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients(
+                        0, V_1, V_2, V_3, V_4, V_5, 13, 17);
+                final HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients value2 = new HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients(
+                        0, V_1, V_2, V_6, V_4, V_5, 13, 17);
+
+                assertInvariants(value1, value2);
+                assertNotEquals(value1, value2);
+            }
+
+            @Test
+            public void different_dedfc() {
+                final HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients value1 = new HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients(
+                        0, V_1, V_2, V_3, V_4, V_5, 13, 17);
+                final HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients value2 = new HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients(
+                        0, V_1, V_2, V_3, V_6, V_5, 13, 17);
+
+                assertInvariants(value1, value2);
+                assertNotEquals(value1, value2);
+            }
+
+            @Test
+            public void different_dedfs() {
+                final HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients value1 = new HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients(
+                        0, V_1, V_2, V_3, V_4, V_5, 13, 17);
+                final HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients value2 = new HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients(
+                        0, V_1, V_2, V_3, V_4, V_6, 13, 17);
+
+                assertInvariants(value1, value2);
+                assertNotEquals(value1, value2);
+            }
+
+            @Test
+            public void different_dedwe() {
+                final HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients value1 = new HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients(
+                        0, V_1, V_2, V_3, V_4, V_5, 13, 17);
+                final HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients value2 = new HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients(
+                        0, V_1, V_2, V_3, V_4, V_5, 19, 17);
+
+                assertInvariants(value1, value2);
+                assertNotEquals(value1, value2);
+            }
+
+            @Test
+            public void different_dedwh() {
+                final HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients value1 = new HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients(
+                        0, V_1, V_2, V_3, V_4, V_5, 13, 17);
+                final HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients value2 = new HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients(
+                        0, V_1, V_2, V_3, V_4, V_5, 13, 19);
+
+                assertInvariants(value1, value2);
+                assertNotEquals(value1, value2);
+            }
+
+            @Test
+            public void different_e() {
+                final HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients value1 = new HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients(
+                        0, V_1, V_2, V_3, V_4, V_5, 13, 17);
+                final HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients value2 = new HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients(
+                        1, V_1, V_2, V_3, V_4, V_5, 13, 17);
+
+                assertInvariants(value1, value2);
+                assertNotEquals(value1, value2);
             }
 
             private HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients test(final double e,
@@ -85,6 +201,16 @@ public class HarmonicVector3EnergyErrorFunctionTest {
         public static void assertInvariants(final HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients e1,
                 final HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients e2) {
             ObjectTest.assertInvariants(e1, e2);// inherited
+
+            final boolean equals = e1.equals(e2);
+            assertFalse(equals && !(e1.getE() == e2.getE()), "Value semantics, e");
+            assertFalse(equals && !(e1.getDedwe() == e2.getDedwe()), "Value semantics, dedwe");
+            assertFalse(equals && !(e1.getDedwh() == e2.getDedwh()), "Value semantics, dedwh");
+            assertFalse(equals && !e1.getDedf0().equals(e2.getDedf0()), "Value semantics, dedf0");
+            assertFalse(equals && !e1.getDedf1().equals(e2.getDedf1()), "Value semantics, dedf1");
+            assertFalse(equals && !e1.getDedf2().equals(e2.getDedf2()), "Value semantics, dedf2");
+            assertFalse(equals && !e1.getDedfc().equals(e2.getDedfc()), "Value semantics, dedfc");
+            assertFalse(equals && !e1.getDedfs().equals(e2.getDedfs()), "Value semantics, dedfs");
         }
     }// class
 
