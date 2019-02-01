@@ -1,7 +1,7 @@
 package uk.badamson.mc.physics.solver;
-/* 
+/*
  * © Copyright Benedict Adamson 2018-19.
- * 
+ *
  * This file is part of MC-physics.
  *
  * MC-physics is free software: you can redistribute it and/or modify
@@ -25,9 +25,7 @@ import uk.badamson.mc.math.FunctionNWithGradient;
 import uk.badamson.mc.math.FunctionNWithGradientValue;
 import uk.badamson.mc.math.ImmutableVector3;
 import uk.badamson.mc.math.ImmutableVectorN;
-import uk.badamson.mc.math.MinN;
 import uk.badamson.mc.physics.HarmonicVector3;
-import uk.badamson.mc.physics.TimeVaryingVector3;
 import uk.badamson.mc.physics.solver.mapper.HarmonicVector3Mapper;
 
 /**
@@ -43,7 +41,8 @@ public final class HarmonicVector3EnergyErrorFunction implements EnergyErrorFunc
 
     /**
      * <p>
-     * An error, and its rates of change with respect to the parameters of a  {@linkplain HarmonicVector3 functor}.
+     * An error, and its rates of change with respect to the parameters of a
+     * {@linkplain HarmonicVector3 functor}.
      * </p>
      */
     @Immutable
@@ -61,7 +60,7 @@ public final class HarmonicVector3EnergyErrorFunction implements EnergyErrorFunc
          * <p>
          * Construct a value with given attributes.
          * </p>
-         * 
+         *
          * @param e
          *            The energy error value.
          * @param dedf0
@@ -97,18 +96,19 @@ public final class HarmonicVector3EnergyErrorFunction implements EnergyErrorFunc
          *            The rate of change of the {@linkplain #getE() error value} with
          *            respect to the {@linkplain HarmonicVector3#getWh() harmonic
          *            frequency term} of the {@linkplain HarmonicVector3 functor}.
-         *            
-         *            @throws NullPointerException
-         *            <ul>
-         *            <li>If {@code dedf0} is null</li>
-         *            <li>If {@code dedf1} is null</li>
-         *            <li>If {@code dedf2} is null</li>
-         *            <li>If {@code dedfc} is null</li>
-         *            <li>If {@code dedfs} is null</li>
-         *            </ul>
+         *
+         * @throws NullPointerException
+         *             <ul>
+         *             <li>If {@code dedf0} is null</li>
+         *             <li>If {@code dedf1} is null</li>
+         *             <li>If {@code dedf2} is null</li>
+         *             <li>If {@code dedfc} is null</li>
+         *             <li>If {@code dedfs} is null</li>
+         *             </ul>
          */
-        public ErrorValueAndGradients(double e, ImmutableVector3 dedf0, ImmutableVector3 dedf1, ImmutableVector3 dedf2,
-                ImmutableVector3 dedfc, ImmutableVector3 dedfs, double dedwe, double dedwh) {
+        public ErrorValueAndGradients(final double e, final ImmutableVector3 dedf0, final ImmutableVector3 dedf1,
+                final ImmutableVector3 dedf2, final ImmutableVector3 dedfc, final ImmutableVector3 dedfs,
+                final double dedwe, final double dedwh) {
             this.e = e;
             this.dedf0 = dedf0;
             this.dedf1 = dedf1;
@@ -121,22 +121,11 @@ public final class HarmonicVector3EnergyErrorFunction implements EnergyErrorFunc
 
         /**
          * <p>
-         * The energy error value.
-         * </p>
-         * 
-         * @return the error value.
-         */
-        public final double getE() {
-            return e;
-        }
-
-        /**
-         * <p>
          * The rate of change of the {@linkplain #getE() error value} with respect to
          * the components of the {@linkplain HarmonicVector3#getF0() the constant term}
          * of the {@linkplain HarmonicVector3 functor}.
          * </p>
-         * 
+         *
          * @return the rate of change; not null.
          */
         public final ImmutableVector3 getDedf0() {
@@ -149,7 +138,7 @@ public final class HarmonicVector3EnergyErrorFunction implements EnergyErrorFunc
          * the components of the {@linkplain HarmonicVector3#getF1() the linear term} of
          * the {@linkplain HarmonicVector3 functor}.
          * </p>
-         * 
+         *
          * @return the rate of change; not null.
          */
         public final ImmutableVector3 getDedf1() {
@@ -162,7 +151,7 @@ public final class HarmonicVector3EnergyErrorFunction implements EnergyErrorFunc
          * the components of the {@linkplain HarmonicVector3#getF2() the quadratic term}
          * of the {@linkplain HarmonicVector3 functor}.
          * </p>
-         * 
+         *
          * @return the rate of change; not null.
          */
         public final ImmutableVector3 getDedf2() {
@@ -175,7 +164,7 @@ public final class HarmonicVector3EnergyErrorFunction implements EnergyErrorFunc
          * the components of the {@linkplain HarmonicVector3#getFc() the cosine term} of
          * the {@linkplain HarmonicVector3 functor}.
          * </p>
-         * 
+         *
          * @return the rate of change; not null.
          */
         public final ImmutableVector3 getDedfc() {
@@ -188,7 +177,7 @@ public final class HarmonicVector3EnergyErrorFunction implements EnergyErrorFunc
          * the components of the {@linkplain HarmonicVector3#getFs() the sine term} of
          * the {@linkplain HarmonicVector3 functor}.
          * </p>
-         * 
+         *
          * @return the rate of change; not null.
          */
         public final ImmutableVector3 getDedfs() {
@@ -201,7 +190,7 @@ public final class HarmonicVector3EnergyErrorFunction implements EnergyErrorFunc
          * the {@linkplain HarmonicVector3#getWe() exponential frequency term} of the
          * {@linkplain HarmonicVector3 functor}.
          * </p>
-         * 
+         *
          * @return the rate of change; not null.
          */
         public final double getDedwe() {
@@ -214,11 +203,22 @@ public final class HarmonicVector3EnergyErrorFunction implements EnergyErrorFunc
          * the {@linkplain HarmonicVector3#getWh() harmonic frequency term} of the
          * {@linkplain HarmonicVector3 functor}.
          * </p>
-         * 
+         *
          * @return the rate of change; not null.
          */
         public final double getDedwh() {
             return dedwh;
+        }
+
+        /**
+         * <p>
+         * The energy error value.
+         * </p>
+         *
+         * @return the error value.
+         */
+        public final double getE() {
+            return e;
         }
 
     }// class
@@ -238,9 +238,9 @@ public final class HarmonicVector3EnergyErrorFunction implements EnergyErrorFunc
 
         /**
          * <p>
-         * Calculate the value of this error term for a given functor,
-         *  and its rates of change with respect to the parameters of the functor
-     * </p>
+         * Calculate the value of this error term for a given functor, and its rates of
+         * change with respect to the parameters of the functor
+         * </p>
          *
          * @param f
          *            The functor for which the error term is to be computed.
@@ -255,20 +255,40 @@ public final class HarmonicVector3EnergyErrorFunction implements EnergyErrorFunc
 
     private final HarmonicVector3Mapper mapper;
     private final Set<Term> terms;
-    
-    
 
     /**
      * @param mapper
+     *            The Strategy for mapping from the {@linkplain HarmonicVector3
+     *            object representation} of the time varying 3D vector property to
+     *            (part of) a state-space representation, and vice versa.
+     * @param terms
+     *            The contributors to this function
+     */
+    public HarmonicVector3EnergyErrorFunction(final HarmonicVector3Mapper mapper, final Set<Term> terms) {
+        this.mapper = mapper;
+        this.terms = terms;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getDimension() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    /**
+     * <p>
      * The Strategy for mapping from the {@linkplain HarmonicVector3 object
      * representation} of the time varying 3D vector property to (part of) a
      * state-space representation, and vice versa.
-     * @param terms
-     * The contributors to this function
+     * </p>
+     *
+     * @return the mapper; not null
      */
-    public HarmonicVector3EnergyErrorFunction(HarmonicVector3Mapper mapper, Set<Term> terms) {
-        this.mapper = mapper;
-        this.terms = terms;
+    public final HarmonicVector3Mapper getMapper() {
+        return mapper;
     }
 
     /**
@@ -286,36 +306,14 @@ public final class HarmonicVector3EnergyErrorFunction implements EnergyErrorFunc
     }
 
     /**
-     * <p>
-     * The Strategy for mapping from the {@linkplain HarmonicVector3 object
-     * representation} of the time varying 3D vector property to (part of) a
-     * state-space representation, and vice versa.
-     * </p>
-     * 
-     * @return the mapper; not null
-     */
-    public final HarmonicVector3Mapper getMapper() {
-        return mapper;
-    }
-
-    /**
      * {@inheritDoc}
-     */
-    @Override
-    public int getDimension() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
+     *
      * @param state
      *            {@inheritDoc}
      * @return {@inheritDoc}
      */
     @Override
-    public FunctionNWithGradientValue value(ImmutableVectorN state) {
+    public FunctionNWithGradientValue value(final ImmutableVectorN state) {
         // TODO Auto-generated method stub
         return null;
     }
