@@ -19,6 +19,7 @@ package uk.badamson.mc.physics.solver;
  */
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 import org.junit.jupiter.api.Nested;
@@ -73,6 +74,12 @@ public class HarmonicVector3EnergyErrorFunctionTest {
 
         public static void assertInvariants(final HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients e) {
             ObjectTest.assertInvariants(e);// inherited
+
+            assertNotNull(e.getDedf0(), "Not null, dedf0");
+            assertNotNull(e.getDedf1(), "Not null, dedf1");
+            assertNotNull(e.getDedf2(), "Not null, dedf2");
+            assertNotNull(e.getDedfc(), "Not null, dedfc");
+            assertNotNull(e.getDedfs(), "Not null, dedfs");
         }
 
         public static void assertInvariants(final HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients e1,
