@@ -18,11 +18,11 @@ package uk.badamson.mc.physics.solver;
  * along with MC-physics.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import net.jcip.annotations.Immutable;
 import uk.badamson.mc.math.FunctionNWithGradient;
 import uk.badamson.mc.math.FunctionNWithGradientValue;
@@ -52,6 +52,11 @@ public final class HarmonicVector3EnergyErrorFunction
      * <p>
      * Construct an object with given associations.
      * </p>
+     * <ul>
+     * <li>The {@linkplain #getMapper() mapper} of this is the given mapper.</li>
+     * <li>The {@linkplain #getTerms() terms} of this
+     * {@linkplain List#equals(Object) equals} the given terms.</li>
+     * </ul>
      *
      * @param mapper
      *            The Strategy for mapping from the {@linkplain HarmonicVector3
@@ -66,8 +71,8 @@ public final class HarmonicVector3EnergyErrorFunction
      *             <li>If {@code terms} contains a null.</li>
      *             </ul>
      */
-    public HarmonicVector3EnergyErrorFunction(final HarmonicVector3Mapper mapper,
-            final Collection<Function<HarmonicVector3, HarmonicVector3EnergyErrorValueAndGradients>> terms) {
+    public HarmonicVector3EnergyErrorFunction(@NonNull final HarmonicVector3Mapper mapper,
+            @NonNull final List<Function<HarmonicVector3, HarmonicVector3EnergyErrorValueAndGradients>> terms) {
         this.mapper = Objects.requireNonNull(mapper, "mapper");
         @SuppressWarnings("unchecked")
         final Function<HarmonicVector3, HarmonicVector3EnergyErrorValueAndGradients>[] termsArray = new Function[0];
@@ -134,8 +139,8 @@ public final class HarmonicVector3EnergyErrorFunction
      * <li>The collection of terms may be a newly created object.</li>
      * </ul>
      */
-    public final Collection<Function<HarmonicVector3, HarmonicVector3EnergyErrorValueAndGradients>> getTerms() {
-        return java.util.Collections.unmodifiableList(Arrays.asList(terms));
+    public final List<Function<HarmonicVector3, HarmonicVector3EnergyErrorValueAndGradients>> getTerms() {
+        return List.of(terms);
     }
 
     /**
