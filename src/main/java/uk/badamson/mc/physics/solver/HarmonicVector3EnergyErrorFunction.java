@@ -18,8 +18,9 @@ package uk.badamson.mc.physics.solver;
  * along with MC-physics.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Objects;
-import java.util.Set;
 
 import net.jcip.annotations.Immutable;
 import uk.badamson.mc.math.FunctionNWithGradient;
@@ -379,19 +380,33 @@ public final class HarmonicVector3EnergyErrorFunction implements EnergyErrorFunc
     }// interface
 
     private final HarmonicVector3Mapper mapper;
-    private final Set<Term> terms;
+    private final Term[] terms;
 
     /**
+     * <p>
+     * Construct an object with given associations.
+     * </p>
+     *
      * @param mapper
      *            The Strategy for mapping from the {@linkplain HarmonicVector3
      *            object representation} of the time varying 3D vector property to
      *            (part of) a state-space representation, and vice versa.
      * @param terms
      *            The contributors to this function
+     * @throws NullPointerException
+     *             <ul>
+     *             <li>If {@code mapper} is null.</li>
+     *             <li>If {@code terms} is null.</li>
+     *             <li>If {@code terms} contains a null.</li>
+     *             </ul>
      */
-    public HarmonicVector3EnergyErrorFunction(final HarmonicVector3Mapper mapper, final Set<Term> terms) {
-        this.mapper = mapper;
-        this.terms = terms;
+    public HarmonicVector3EnergyErrorFunction(final HarmonicVector3Mapper mapper, final Collection<Term> terms) {
+        this.mapper = Objects.requireNonNull(mapper, "mapper");
+        this.terms = Objects.requireNonNull(terms, "terms").toArray(new Term[0]);
+        // Check after copy to avoid race hazards
+        for (final var term : this.terms) {
+            Objects.requireNonNull(term, "term");
+        }
     }
 
     /**
@@ -405,8 +420,8 @@ public final class HarmonicVector3EnergyErrorFunction implements EnergyErrorFunc
 
     /**
      * <p>
-     * The Strategy for mapping from the {@linkplain HarmonicVector3 object
-     * representation} of the time varying 3D vector property to (part of) a
+     * The associated Strategy for mapping from the {@linkplain HarmonicVector3
+     * object representation} of the time varying 3D vector property to (part of) a
      * state-space representation, and vice versa.
      * </p>
      *
@@ -418,16 +433,17 @@ public final class HarmonicVector3EnergyErrorFunction implements EnergyErrorFunc
 
     /**
      * <p>
-     * The contributors to this function
+     * The assocaited contributors to this function
      * </p>
      * <ul>
-     * <li>Always have a (non null) set of terms.</li>
-     * <li>The set of terms does not contain a null term.</li>
-     * <li>The set of terms is not modifiable.</li>
+     * <li>Always have a (non null) collection of terms.</li>
+     * <li>The collection of terms does not contain a null term.</li>
+     * <li>The collection of terms is not modifiable.</li>
+     * <li>The collection of terms may be a newly created object.</li>
      * </ul>
      */
-    public final Set<Term> getTerms() {
-        return terms;
+    public final Collection<Term> getTerms() {
+        return java.util.Collections.unmodifiableList(Arrays.asList(terms));
     }
 
     /**
