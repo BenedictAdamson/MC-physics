@@ -18,6 +18,7 @@ package uk.badamson.mc.physics.solver;
  * along with MC-physics.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import java.util.Objects;
 import java.util.Set;
 
 import net.jcip.annotations.Immutable;
@@ -47,6 +48,44 @@ public final class HarmonicVector3EnergyErrorFunction implements EnergyErrorFunc
      */
     @Immutable
     public static final class ErrorValueAndGradients {
+
+        /**
+         * <p>
+         * A value that has zero values for all its attributes.
+         * </p>
+         */
+        public static final ErrorValueAndGradients ZERO = new ErrorValueAndGradients(0, ImmutableVector3.ZERO,
+                ImmutableVector3.ZERO, ImmutableVector3.ZERO, ImmutableVector3.ZERO, ImmutableVector3.ZERO, 0, 0);
+
+        /**
+         * <p>
+         * A value that is equivalent to the sum of several values.
+         * </p>
+         * <ul>
+         * <li>Always return a (non null) sum.</li>
+         * <li>The sum of an empty sequence of values is {@linkplain #ZERO zero}.</li>
+         * <li>The sum of a singleton sequence of values is that sole value.</li>
+         * <li>The sum of a multi component sequence has attributes equal to the sum of
+         * the corresponding attributes of the sequence.</li>
+         * </ul>
+         *
+         * @param values
+         *            The values to sum
+         * @throws NullPointerException
+         *             <ul>
+         *             <li>If {@code values} is null.</li>
+         *             <li>If {@code values} contains a null.</li>
+         *             </ul>
+         */
+        public static ErrorValueAndGradients sum(final ErrorValueAndGradients... values) {
+            Objects.requireNonNull(values, "values");
+            if (values.length == 0) {
+                return ErrorValueAndGradients.ZERO;
+            } else {// TODO
+                return values[0];
+            }
+        }
+
         private final double e;
         private final ImmutableVector3 dedf0;
         private final ImmutableVector3 dedf1;

@@ -188,6 +188,48 @@ public class HarmonicVector3EnergyErrorFunctionTest {
             }
         }// class
 
+        @Nested
+        public class Sum {
+
+            @Nested
+            public class One {
+                @Test
+                public void a() {
+                    test(new HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients(0, V_1, V_2, V_3, V_4, V_5, 13,
+                            17));
+                }
+
+                @Test
+                public void b() {
+                    test(new HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients(2, V_2, V_3, V_4, V_5, V_6, 17,
+                            19));
+                }
+
+                private void test(final HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients value) {
+                    final HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients total = Sum.this.test(value);
+                    assertEquals(value, total);
+                }
+            }// class
+
+            private HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients test(
+                    final HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients... values) {
+                final HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients total = HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients
+                        .sum(values);
+                assertNotNull(total, "Always returns a sum");// guard
+                assertInvariants(total);
+                for (final var value : values) {
+                    assertInvariants(total, value);
+                }
+                return total;
+            }
+
+            @Test
+            public void zero() {
+                final HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients total = test();
+                assertEquals(HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients.ZERO, total, "zero");
+            }
+        }// class
+
         public static void assertInvariants(final HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients e) {
             ObjectTest.assertInvariants(e);// inherited
 
