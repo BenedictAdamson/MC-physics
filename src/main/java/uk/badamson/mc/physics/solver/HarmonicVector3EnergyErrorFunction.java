@@ -37,9 +37,13 @@ import uk.badamson.mc.physics.solver.mapper.HarmonicVector3Mapper;
  * {@linkplain HarmonicVector3 functor for a time varying 3D vector property
  * that can have damped harmonic variation}.
  * </p>
+ * <p>
+ * This also acts as a Composite of a collection of function terms.
+ * </p>
  */
 @Immutable
-public final class HarmonicVector3EnergyErrorFunction implements EnergyErrorFunction {
+public final class HarmonicVector3EnergyErrorFunction
+        implements EnergyErrorFunction, Function<HarmonicVector3, HarmonicVector3EnergyErrorValueAndGradients> {
 
     private final HarmonicVector3Mapper mapper;
     private final Function<HarmonicVector3, HarmonicVector3EnergyErrorValueAndGradients>[] terms;
@@ -72,6 +76,29 @@ public final class HarmonicVector3EnergyErrorFunction implements EnergyErrorFunc
         for (final var term : this.terms) {
             Objects.requireNonNull(term, "term");
         }
+    }
+
+    /**
+     * <p>
+     * The total {@linkplain HarmonicVector3EnergyErrorValueAndGradients error} of
+     * the {@linkplain #getTerms() terms}, for a given functor.
+     * </p>
+     * <p>
+     * This method provides the class with the functionality of a Composite.
+     * </p>
+     *
+     * @param v
+     *            The functor for which to compute the total error.
+     *
+     * @return The error value and its gradients; not null.
+     * @throws NullPointerException
+     *             If {@code v} is null.
+     */
+    @Override
+    public HarmonicVector3EnergyErrorValueAndGradients apply(final HarmonicVector3 v) {
+        Objects.requireNonNull(v, "v");
+        // TODO Auto-generated method stub
+        return null;
     }
 
     /**
