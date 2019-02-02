@@ -91,6 +91,12 @@ public final class HarmonicVector3EnergyErrorFunction
      * <p>
      * This method provides the class with the functionality of a Composite.
      * </p>
+     * <ul>
+     * <li>The total error is the
+     * {@linkplain HarmonicVector3EnergyErrorValueAndGradients#sum(HarmonicVector3EnergyErrorValueAndGradients...)
+     * sum} of the errors computed for each of the {@linkplain #getTerms()
+     * terms}.</li>
+     * </ul>
      *
      * @param v
      *            The functor for which to compute the total error.
@@ -100,10 +106,14 @@ public final class HarmonicVector3EnergyErrorFunction
      *             If {@code v} is null.
      */
     @Override
-    public HarmonicVector3EnergyErrorValueAndGradients apply(final HarmonicVector3 v) {
+    public final HarmonicVector3EnergyErrorValueAndGradients apply(final HarmonicVector3 v) {
         Objects.requireNonNull(v, "v");
-        // TODO Auto-generated method stub
-        return null;
+        final HarmonicVector3EnergyErrorValueAndGradients[] values = new HarmonicVector3EnergyErrorValueAndGradients[terms.length];
+        for (int i = 0; i < terms.length; i++) {
+            final var term = terms[i];
+            values[i] = term.apply(v);
+        }
+        return HarmonicVector3EnergyErrorValueAndGradients.sum(values);
     }
 
     /**
