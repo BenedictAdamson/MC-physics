@@ -118,11 +118,18 @@ public final class HarmonicVector3EnergyErrorFunction
 
     /**
      * {@inheritDoc}
+     *
+     * <p>
+     * The dimension of the function equals the
+     * {@linkplain HarmonicVector3Mapper#getMinimumStateSpaceDimension() minimum
+     * space dimension} of the {@linkplain #getMapper() mapper}.
+     * </p>
+     *
+     * @return {@inheritDoc}
      */
     @Override
-    public int getDimension() {
-        // TODO Auto-generated method stub
-        return 0;
+    public final int getDimension() {
+        return mapper.getMinimumStateSpaceDimension();
     }
 
     /**
@@ -140,7 +147,7 @@ public final class HarmonicVector3EnergyErrorFunction
 
     /**
      * <p>
-     * The assocaited contributors to this function
+     * The associated contributors to this function
      * </p>
      * <ul>
      * <li>Always have a (non null) collection of terms.</li>

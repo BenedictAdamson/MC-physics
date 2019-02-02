@@ -35,6 +35,7 @@ import uk.badamson.mc.ObjectTest;
 import uk.badamson.mc.math.ImmutableVector3;
 import uk.badamson.mc.physics.HarmonicVector3;
 import uk.badamson.mc.physics.solver.mapper.HarmonicVector3Mapper;
+import uk.badamson.mc.physics.solver.mapper.HarmonicVector3MapperTest;
 
 /**
  * <p>
@@ -165,6 +166,19 @@ public class HarmonicVector3EnergyErrorFunctionTest {
     public static void assertInvariants(final HarmonicVector3EnergyErrorFunction f) {
         ObjectTest.assertInvariants(f);// inherited
         EnergyErrorFunctionTest.assertInvariants(f);// inherited
+
+        final HarmonicVector3Mapper mapper = f.getMapper();
+        final List<Function<HarmonicVector3, HarmonicVector3EnergyErrorValueAndGradients>> terms = f.getTerms();
+        assertNotNull(mapper, "Not null, mapper");// guard
+        assertNotNull(terms, "Always have a collection of terms.");// guard
+
+        HarmonicVector3MapperTest.assertInvariants(mapper);
+
+        assertEquals(mapper.getMinimumStateSpaceDimension(), f.getDimension(),
+                "The dimension of the function equals the minimum space dimension of the mapper.");
+        for (final var term : terms) {
+            assertNotNull(term, "The collection of terms does not contain a null term.");
+        }
     }
 
     public static void assertInvariants(final HarmonicVector3EnergyErrorFunction f1,
