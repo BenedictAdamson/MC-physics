@@ -56,22 +56,21 @@ public interface ObjectStateSpaceMapper<OBJECT> {
      * @throws RuntimeException
      *             (Typically an {@link IndexOutOfBoundsException} or
      *             {@link IllegalArgumentException}). If the length of the
-     *             {@code state} array is not {@linkplain #isValidForDimension(int)
-     *             valid} for this mapper.
+     *             {@code state} array less than the
+     *             {@linkplain #getMinimumStateSpaceDimension() minimum state space
+     *             dimension} of this mapper.
      */
     public void fromObject(@NonNull double[] state, @NonNull OBJECT object);
 
     /**
      * <p>
-     * Whether this mapper can be used for a state-space vector that has a given
-     * number of variables.
+     * The smallest {@linkplain ImmutableVectorN#getDimension() dimension} of a
+     * state-space vector that this mapper can be used with.
      * </p>
      *
-     * @return whether valid.
-     * @throws IllegalArgumentException
-     *             If {@code n} is not positive.
+     * @return the minimum dimension; positive.
      */
-    public boolean isValidForDimension(int n);
+    public int getMinimumStateSpaceDimension();
 
     /**
      * <p>
@@ -85,9 +84,11 @@ public interface ObjectStateSpaceMapper<OBJECT> {
      *             If {@code state} is null.
      * @throws RuntimeException
      *             (Typically an {@link IndexOutOfBoundsException} or
-     *             {@link IllegalArgumentException}). If the length of the
-     *             {@code state} array is not {@linkplain #isValidForDimension(int)
-     *             valid} for this mapper.
+     *             {@link IllegalArgumentException}). If the
+     *             {@linkplain ImmutableVectorN#getDimension() dimension} of the
+     *             {@code state} less than the
+     *             {@linkplain #getMinimumStateSpaceDimension() minimum state space
+     *             dimension} of this mapper.
      */
     public @NonNull OBJECT toObject(@NonNull ImmutableVectorN state);
 }

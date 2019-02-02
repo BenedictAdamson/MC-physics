@@ -77,8 +77,8 @@ public final class Rotation3AxisAngleStateSpaceMapper implements ObjectStateSpac
     }
 
     @Override
-    public final boolean isValidForDimension(final int n) {
-        return axisMapper.isValidForDimension(n) && rotationIndex < n;
+    public final int getMinimumStateSpaceDimension() {
+        return Math.max(axisMapper.getMinimumStateSpaceDimension(), rotationIndex + 1);
     }
 
     /**

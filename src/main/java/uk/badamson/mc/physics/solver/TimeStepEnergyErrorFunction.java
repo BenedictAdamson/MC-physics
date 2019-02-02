@@ -1,22 +1,22 @@
 package uk.badamson.mc.physics.solver;
 /*
-                               * © Copyright Benedict Adamson 2018-19.
-                               *
-                               * This file is part of MC-physics.
-                               *
-                               * MC-physics is free software: you can redistribute it and/or modify
-                               * it under the terms of the GNU General Public License as published by
-                               * the Free Software Foundation, either version 3 of the License, or
-                               * (at your option) any later version.
-                               *
-                               * MC-physics is distributed in the hope that it will be useful,
-                               * but WITHOUT ANY WARRANTY; without even the implied warranty of
-                               * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-                               * GNU General Public License for more details.
-                               *
-                               * You should have received a copy of the GNU General Public License
-                               * along with MC-physics.  If not, see <https://www.gnu.org/licenses/>.
-                               */
+ * © Copyright Benedict Adamson 2018-19.
+ *
+ * This file is part of MC-physics.
+ *
+ * MC-physics is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MC-physics is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with MC-physics.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -108,14 +108,8 @@ public final class TimeStepEnergyErrorFunction implements FunctionNWithGradient 
      *             <li>If {@code terms} contains any null references.</li>
      *             </ul>
      * @throws IllegalArgumentException
-     *             <ul>
-     *             <li>If {@code dt} is not positive and
-     *             {@linkplain Double#isInfinite() finite}.</li>
-     *             <li>If and of the {@code terms} is not
-     *             {@linkplain TimeStepEnergyErrorFunctionTerm#isValidForDimension(int)
-     *             valid} for the {@linkplain ImmutableVectorN#getDimension()
-     *             dimension} of {@code x0}.</li>
-     *             </ul>
+     *             If {@code dt} is not positive and {@linkplain Double#isInfinite()
+     *             finite}.</li>
      */
     public TimeStepEnergyErrorFunction(final ImmutableVectorN x0, final double dt,
             final List<TimeStepEnergyErrorFunctionTerm> terms) {
@@ -128,15 +122,6 @@ public final class TimeStepEnergyErrorFunction implements FunctionNWithGradient 
         this.x0 = x0;
         this.dt = dt;
         this.terms = Collections.unmodifiableList(new ArrayList<>(terms));
-
-        /* Check precondition after construction to avoid race hazards. */
-        final int dimension = x0.getDimension();
-        for (final TimeStepEnergyErrorFunctionTerm term : this.terms) {
-            Objects.requireNonNull(term, "term");
-            if (!term.isValidForDimension(dimension)) {
-                throw new IllegalArgumentException("term <" + term + "> not valid for " + dimension + " dimensions");
-            }
-        }
     }
 
     /**

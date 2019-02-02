@@ -42,11 +42,6 @@ public final class DurationMapper implements ObjectStateSpaceMapper<Duration> {
      * Construct a mapper object that maps a {@link Duration} to a contiguous
      * sequence of state vector components.
      * </p>
-     * <ul>
-     * <li>This mapper {@linkplain #isValidForDimension(int) is valid for a state
-     * space dimension vector} if, and only if, the dimension is at least 1 more
-     * than the given index position origin.</li>
-     * </ul>
      *
      * @param index0
      *            The index position origin: the position in the state-space vector
@@ -79,7 +74,7 @@ public final class DurationMapper implements ObjectStateSpaceMapper<Duration> {
     public final void fromObject(@NonNull final double[] state, @NonNull final Duration object) {
         Objects.requireNonNull(state, "state");
         Objects.requireNonNull(object, "object");
-        if (!isValidForDimension(state.length)) {
+        if (state.length < getMinimumStateSpaceDimension()) {
             throw new IllegalArgumentException("state.length " + state.length + " index0 " + index0);
         }
 
@@ -87,8 +82,8 @@ public final class DurationMapper implements ObjectStateSpaceMapper<Duration> {
     }
 
     @Override
-    public final boolean isValidForDimension(final int n) {
-        return index0 < n;
+    public final int getMinimumStateSpaceDimension() {
+        return index0 + 1;
     }
 
     @Override

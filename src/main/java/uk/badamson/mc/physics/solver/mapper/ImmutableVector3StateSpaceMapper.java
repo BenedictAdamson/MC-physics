@@ -48,9 +48,9 @@ public final class ImmutableVector3StateSpaceMapper implements VectorStateSpaceM
      * contiguous sequence of state vector components.
      * </p>
      * <ul>
-     * <li>This mapper {@linkplain #isValidForDimension(int) is valid for a state
-     * space dimension vector} if, and only if, the dimension is at least 2 more
-     * than the given index position origin.</li>
+     * <li>This mapper {@linkplain #getMinimumStateSpaceDimension(int) is valid for
+     * a state space dimension vector} if, and only if, the dimension is at least 2
+     * more than the given index position origin.</li>
      * </ul>
      *
      * @param index0
@@ -80,7 +80,7 @@ public final class ImmutableVector3StateSpaceMapper implements VectorStateSpaceM
     public final void fromVector(@NonNull final double[] state, @NonNull final Vector vector) {
         Objects.requireNonNull(state, "state");
         Objects.requireNonNull(vector, "vector");
-        if (!isValidForDimension(state.length + 1)) {
+        if (state.length < getMinimumStateSpaceDimension()) {
             throw new IllegalArgumentException("state.length " + state.length + " index0 " + index0);
         }
 
@@ -100,24 +100,15 @@ public final class ImmutableVector3StateSpaceMapper implements VectorStateSpaceM
         return 3;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @throws IllegalArgumentException
-     *             {@inheritDoc}
-     */
     @Override
-    public final boolean isValidForDimension(final int n) {
-        if (n < 1) {
-            throw new IllegalArgumentException("n " + n);
-        }
-        return index0 + 2 < n;
+    public final int getMinimumStateSpaceDimension() {
+        return index0 + 3;
     }
 
     @Override
     public final @NonNull ImmutableVector3 toObject(@NonNull final ImmutableVectorN state) {
         Objects.requireNonNull(state, "state");
-        if (!isValidForDimension(state.getDimension())) {
+        if (state.getDimension() < getMinimumStateSpaceDimension()) {
             throw new IllegalArgumentException("state.dimension " + state.getDimension() + " index " + index0);
         }
         return ImmutableVector3.create(state.get(index0), state.get(index0 + 1), state.get(index0 + 2));

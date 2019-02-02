@@ -18,8 +18,6 @@ package uk.badamson.mc.physics.solver.mapper;
  * along with MC-physics.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.time.Duration;
 import java.util.Arrays;
 
@@ -52,9 +50,6 @@ public class DurationMapperTest {
             final DurationMapper mapper = new DurationMapper(index0, scale);
 
             assertInvariants(mapper);
-            assertTrue(mapper.isValidForDimension(index0 + 1),
-                    "This mapper is valid for a state space dimension vector if, and only if, "
-                            + "the dimension is at least 1 more than the given index position origin (minimum).");
 
             return mapper;
         }

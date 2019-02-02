@@ -80,18 +80,9 @@ public final class QuaternionStateSpaceMapper implements ObjectStateSpaceMapper<
         state[index0 + 3] = object.getD();
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @throws IllegalArgumentException
-     *             {@inheritDoc}
-     */
     @Override
-    public final boolean isValidForDimension(final int n) {
-        if (n < 1) {
-            throw new IllegalArgumentException("n " + n);
-        }
-        return index0 + 3 < n;
+    public final int getMinimumStateSpaceDimension() {
+        return index0 + 4;
     }
 
     /**

@@ -72,8 +72,8 @@ public final class Rotation3QuaternionStateSpaceMapper implements ObjectStateSpa
     }
 
     @Override
-    public final boolean isValidForDimension(final int n) {
-        return quaternionMapper.isValidForDimension(n);
+    public final int getMinimumStateSpaceDimension() {
+        return quaternionMapper.getMinimumStateSpaceDimension();
     }
 
     /**

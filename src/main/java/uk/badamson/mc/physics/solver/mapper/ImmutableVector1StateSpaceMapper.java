@@ -68,7 +68,7 @@ public final class ImmutableVector1StateSpaceMapper implements VectorStateSpaceM
     public final void fromVector(@NonNull final double[] state, @NonNull final Vector vector) {
         Objects.requireNonNull(state, "state");
         Objects.requireNonNull(vector, "vector");
-        if (!isValidForDimension(state.length)) {
+        if (state.length < getMinimumStateSpaceDimension()) {
             throw new IllegalArgumentException("state.length " + state.length + " index " + index);
         }
         if (vector.getDimension() != 1) {
@@ -88,24 +88,15 @@ public final class ImmutableVector1StateSpaceMapper implements VectorStateSpaceM
         return 1;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @throws IllegalArgumentException
-     *             {@inheritDoc}
-     */
     @Override
-    public final boolean isValidForDimension(final int n) {
-        if (n < 1) {
-            throw new IllegalArgumentException("n " + n);
-        }
-        return index < n;
+    public final int getMinimumStateSpaceDimension() {
+        return index + 1;
     }
 
     @Override
     public final ImmutableVector1 toObject(@NonNull final ImmutableVectorN state) {
         Objects.requireNonNull(state, "state");
-        if (!isValidForDimension(state.getDimension())) {
+        if (state.getDimension() < getMinimumStateSpaceDimension()) {
             throw new IllegalArgumentException("state.dimension " + state.getDimension() + " index " + index);
         }
         return ImmutableVector1.create(state.get(index));

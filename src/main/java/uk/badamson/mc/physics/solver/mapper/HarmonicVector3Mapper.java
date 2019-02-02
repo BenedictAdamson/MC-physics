@@ -52,9 +52,9 @@ public final class HarmonicVector3Mapper implements ObjectStateSpaceMapper<Harmo
      * contiguous sequence of state vector components.
      * </p>
      * <ul>
-     * <li>This mapper {@linkplain #isValidForDimension(int) is valid for a state
-     * space dimension vector} if, and only if, the dimension is greater than 19
-     * more than the given index position origin.</li>
+     * <li>This mapper {@linkplain #getMinimumStateSpaceDimension(int) is valid for
+     * a state space dimension vector} if, and only if, the dimension is greater
+     * than 19 more than the given index position origin.</li>
      * </ul>
      *
      * @param index0
@@ -102,11 +102,8 @@ public final class HarmonicVector3Mapper implements ObjectStateSpaceMapper<Harmo
     }
 
     @Override
-    public final boolean isValidForDimension(final int n) {
-        if (n < 1) {
-            throw new IllegalArgumentException("n " + n);
-        }
-        return index0 + 19 < n;
+    public final int getMinimumStateSpaceDimension() {
+        return index0 + 20;
     }
 
     @Override
