@@ -21,6 +21,7 @@ package uk.badamson.mc.physics.solver;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.function.Function;
 
 import net.jcip.annotations.Immutable;
 import uk.badamson.mc.math.FunctionNWithGradient;
@@ -40,38 +41,8 @@ import uk.badamson.mc.physics.solver.mapper.HarmonicVector3Mapper;
 @Immutable
 public final class HarmonicVector3EnergyErrorFunction implements EnergyErrorFunction {
 
-    /**
-     * <p>
-     * A contributor to the {@linkplain ;EnergyErrorFunction physical modelling
-     * error of a functor for a time varying 3D vector property that can have damped
-     * harmonic variation}.
-     * </p>
-     * <p>
-     * The term calculates an error value that has dimensions of energy.
-     * </p>
-     */
-    @Immutable
-    public interface Term {
-
-        /**
-         * <p>
-         * Calculate the value of this error term for a given functor, and its rates of
-         * change with respect to the parameters of the functor
-         * </p>
-         *
-         * @param f
-         *            The functor for which the error term is to be computed.
-         * @return the value, which has dimensions of energy.
-         *
-         * @throws NullPointerException
-         *             If {@code f} is null.
-         */
-        public HarmonicVector3EnergyErrorValueAndGradients evaluate(HarmonicVector3 f);
-
-    }// interface
-
     private final HarmonicVector3Mapper mapper;
-    private final Term[] terms;
+    private final Function<HarmonicVector3, HarmonicVector3EnergyErrorValueAndGradients>[] terms;
 
     /**
      * <p>
@@ -91,9 +62,12 @@ public final class HarmonicVector3EnergyErrorFunction implements EnergyErrorFunc
      *             <li>If {@code terms} contains a null.</li>
      *             </ul>
      */
-    public HarmonicVector3EnergyErrorFunction(final HarmonicVector3Mapper mapper, final Collection<Term> terms) {
+    public HarmonicVector3EnergyErrorFunction(final HarmonicVector3Mapper mapper,
+            final Collection<Function<HarmonicVector3, HarmonicVector3EnergyErrorValueAndGradients>> terms) {
         this.mapper = Objects.requireNonNull(mapper, "mapper");
-        this.terms = Objects.requireNonNull(terms, "terms").toArray(new Term[0]);
+        @SuppressWarnings("unchecked")
+        final Function<HarmonicVector3, HarmonicVector3EnergyErrorValueAndGradients>[] termsArray = new Function[0];
+        this.terms = Objects.requireNonNull(terms, "terms").toArray(termsArray);
         // Check after copy to avoid race hazards
         for (final var term : this.terms) {
             Objects.requireNonNull(term, "term");
@@ -133,7 +107,7 @@ public final class HarmonicVector3EnergyErrorFunction implements EnergyErrorFunc
      * <li>The collection of terms may be a newly created object.</li>
      * </ul>
      */
-    public final Collection<Term> getTerms() {
+    public final Collection<Function<HarmonicVector3, HarmonicVector3EnergyErrorValueAndGradients>> getTerms() {
         return java.util.Collections.unmodifiableList(Arrays.asList(terms));
     }
 
