@@ -211,6 +211,46 @@ public class HarmonicVector3EnergyErrorFunctionTest {
                 }
             }// class
 
+            @Nested
+            public class Two {
+
+                @Test
+                public void a() {
+                    test(1, V_1, V_2, V_3, V_4, V_5, 2, 3, 4, V_5, V_4, V_3, V_2, V_1, 6, 7);
+                }
+
+                @Test
+                public void b() {
+                    test(3, V_1, V_2, V_3, V_4, V_5, 5, 7, 11, V_2, V_3, V_4, V_5, V_6, 13, 17);
+                }
+
+                private void test(final double e1, final ImmutableVector3 dedf01, final ImmutableVector3 dedf11,
+                        final ImmutableVector3 dedf21, final ImmutableVector3 dedfc1, final ImmutableVector3 dedfs1,
+                        final double dedwe1, final double dedwh1, final double e2, final ImmutableVector3 dedf02,
+                        final ImmutableVector3 dedf12, final ImmutableVector3 dedf22, final ImmutableVector3 dedfc2,
+                        final ImmutableVector3 dedfs2, final double dedwe2, final double dedwh2) {
+                    final HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients value1 = new HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients(
+                            e1, dedf01, dedf11, dedf21, dedfc1, dedfs1, dedwe1, dedwh1);
+                    final HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients value2 = new HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients(
+                            e2, dedf02, dedf12, dedf22, dedfc2, dedfs2, dedwe2, dedwh2);
+
+                    final HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients total = Sum.this.test(value1,
+                            value2);
+
+                    assertInvariants(value1, total);
+                    assertInvariants(value2, total);
+
+                    assertEquals(e1 + e2, total.getE(), "e");
+                    assertEquals(dedf01.plus(dedf02), total.getDedf0(), "dedf0");
+                    assertEquals(dedf11.plus(dedf12), total.getDedf1(), "dedf1");
+                    assertEquals(dedf21.plus(dedf22), total.getDedf2(), "dedf2");
+                    assertEquals(dedfc1.plus(dedfc2), total.getDedfc(), "dedfc");
+                    assertEquals(dedfs1.plus(dedfs2), total.getDedfs(), "dedfs");
+                    assertEquals(dedwe1 + dedwe2, total.getDedwe(), "dedwe");
+                    assertEquals(dedwh1 + dedwh2, total.getDedwh(), "dedwh");
+                }
+            }// class
+
             private HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients test(
                     final HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients... values) {
                 final HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients total = HarmonicVector3EnergyErrorFunction.ErrorValueAndGradients

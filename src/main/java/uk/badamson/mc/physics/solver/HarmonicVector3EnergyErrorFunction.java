@@ -80,9 +80,37 @@ public final class HarmonicVector3EnergyErrorFunction implements EnergyErrorFunc
         public static ErrorValueAndGradients sum(final ErrorValueAndGradients... values) {
             Objects.requireNonNull(values, "values");
             if (values.length == 0) {
+                // Optimization
                 return ErrorValueAndGradients.ZERO;
-            } else {// TODO
+            } else if (values.length == 1) {
+                // Optimization
                 return values[0];
+            } else {
+                double e = 0;
+                double dedwe = 0;
+                double dedwh = 0;
+                final ImmutableVector3[] dedf0Array = new ImmutableVector3[values.length];
+                final ImmutableVector3[] dedf1Array = new ImmutableVector3[values.length];
+                final ImmutableVector3[] dedf2Array = new ImmutableVector3[values.length];
+                final ImmutableVector3[] dedfcArray = new ImmutableVector3[values.length];
+                final ImmutableVector3[] dedfsArray = new ImmutableVector3[values.length];
+                for (int v = 0; v < values.length; v++) {
+                    final ErrorValueAndGradients value = values[v];
+                    e += value.getE();
+                    dedf0Array[v] = value.getDedf0();
+                    dedf1Array[v] = value.getDedf1();
+                    dedf2Array[v] = value.getDedf2();
+                    dedfcArray[v] = value.getDedfc();
+                    dedfsArray[v] = value.getDedfs();
+                    dedwe += value.getDedwe();
+                    dedwh += value.getDedwh();
+                } // for
+                final ImmutableVector3 dedf0 = ImmutableVector3.sum(dedf0Array);
+                final ImmutableVector3 dedf1 = ImmutableVector3.sum(dedf1Array);
+                final ImmutableVector3 dedf2 = ImmutableVector3.sum(dedf2Array);
+                final ImmutableVector3 dedfc = ImmutableVector3.sum(dedfcArray);
+                final ImmutableVector3 dedfs = ImmutableVector3.sum(dedfsArray);
+                return new ErrorValueAndGradients(e, dedf0, dedf1, dedf2, dedfc, dedfs, dedwe, dedwh);
             }
         }
 
