@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import uk.badamson.mc.math.ImmutableVector3;
@@ -35,8 +36,42 @@ import uk.badamson.mc.math.Vector;
  */
 public class ImmutableVector3StateSpaceMapperTest {
 
+    @Nested
+    public class Constructor {
+
+        @Test
+        public void a() {
+            test(0);
+        }
+
+        @Test
+        public void b() {
+            test(13);
+        }
+
+        private ImmutableVector3StateSpaceMapper test(final int index0) {
+            final var mapper = new ImmutableVector3StateSpaceMapper(index0);
+
+            assertInvariants(mapper);
+            assertEquals(index0, mapper.getIndex0(),
+                    "The index position origin of this mapper is equal to the given index position origin.");
+
+            return mapper;
+        }
+    }// class
+
+    public static int assertComponentIndexInvariants(final ImmutableVector3StateSpaceMapper mapper, final int i,
+            final int j) {
+        final int index = VectorStateSpaceMapperTest.assertComponentIndexInvariants(mapper, i, j);// inherited
+
+        assertInvariants(mapper);// check for side effects
+
+        return index;
+    }
+
     public static void assertInvariants(final ImmutableVector3StateSpaceMapper mapper) {
         VectorStateSpaceMapperTest.assertInvariants(mapper);// inherited
+
         assertEquals(3, mapper.getDimension(), "Number of dimensions");
     }
 
@@ -104,6 +139,16 @@ public class ImmutableVector3StateSpaceMapperTest {
         VectorStateSpaceMapperTest.fromVector(mapper, state, vector);
 
         assertInvariants(mapper);// check for side-effects
+    }
+
+    public static int getComponentIndex(final ImmutableVector3StateSpaceMapper mapper, final int i) {
+        final int index = VectorStateSpaceMapperTest.assertComponentIndexInvariants(mapper, i);// inherited
+
+        assertInvariants(mapper);// check for side effects
+        assertEquals(mapper.getIndex0() + i, index,
+                "The component index of row i is equal to the index origin of this mapper plus i.");
+
+        return index;
     }
 
     public static ImmutableVector3 toObject(final ImmutableVector3StateSpaceMapper mapper,

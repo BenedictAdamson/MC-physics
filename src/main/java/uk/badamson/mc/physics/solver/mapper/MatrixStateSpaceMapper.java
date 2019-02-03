@@ -30,4 +30,32 @@ import uk.badamson.mc.math.Matrix;
 @Immutable
 public interface MatrixStateSpaceMapper<MATRIX extends Matrix> extends ObjectStateSpaceMapper<MATRIX> {
 
+    /**
+     * <p>
+     * The component of the state-space vector that corresponds to an element of the
+     * {@linkplain Matrix matrix} that this maps.
+     * </p>
+     * <ul>
+     * <li>The component of the state-pace vector is non negative.</li>
+     * </ul>
+     *
+     * @param i
+     *            the cardinal number of the row of the element (0 for the first
+     *            row, 1 for the second row, and so on).
+     * @param j
+     *            the cardinal number of the column of the element (0 for the first
+     *            column, 1 for the second column, and so on).
+     * @return the component of the state-space vector.
+     *
+     * @throws IndexOutOfBoundsException
+     *             <ul>
+     *             <li>If {@code i} is negative.</li>
+     *             <li>If {@code i} is greater than or equal to the number of
+     *             {@linkplain Matrix#getRows() rows} of the matrix.</li>
+     *             <li>If {@code j} is negative.</li>
+     *             <li>If {@code j} is greater than or equal to the number of
+     *             {@linkplain Matrix#getColumns() columns} of the matrix.</li>
+     *             </ul>
+     */
+    public int getComponentIndex(int i, int j);
 }

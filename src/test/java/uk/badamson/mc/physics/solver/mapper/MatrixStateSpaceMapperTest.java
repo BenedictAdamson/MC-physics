@@ -18,6 +18,8 @@ package uk.badamson.mc.physics.solver.mapper;
  * along with MC-physics.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.number.OrderingComparison.greaterThanOrEqualTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import uk.badamson.mc.math.ImmutableVectorN;
@@ -29,6 +31,16 @@ import uk.badamson.mc.math.Matrix;
  * interface.
  */
 public class MatrixStateSpaceMapperTest {
+
+    public static <MATRIX extends Matrix> int assertComponentIndexInvariants(
+            final MatrixStateSpaceMapper<MATRIX> mapper, final int i, final int j) {
+        final int index = mapper.getComponentIndex(i, j);
+
+        assertThat("The component of the state-pace vector is non negative.", Integer.valueOf(index),
+                greaterThanOrEqualTo(Integer.valueOf(0)));
+
+        return index;
+    }
 
     public static <MATRIX extends Matrix> void assertInvariants(final MatrixStateSpaceMapper<MATRIX> mapper) {
         ObjectStateSpaceMapperTest.assertInvariants(mapper);// inherited

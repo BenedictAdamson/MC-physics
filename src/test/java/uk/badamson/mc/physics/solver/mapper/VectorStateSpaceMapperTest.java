@@ -19,6 +19,7 @@ package uk.badamson.mc.physics.solver.mapper;
  */
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.number.OrderingComparison.greaterThanOrEqualTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import uk.badamson.mc.math.ImmutableVectorN;
@@ -31,11 +32,34 @@ import uk.badamson.mc.math.Vector;
  */
 public class VectorStateSpaceMapperTest {
 
+    public static <VECTOR extends Vector> int assertComponentIndexInvariants(
+            final VectorStateSpaceMapper<VECTOR> mapper, final int i) {
+        final int index = mapper.getComponentIndex(i);
+
+        assertThat("The component of the state-pace vector is non negative.", Integer.valueOf(index),
+                greaterThanOrEqualTo(Integer.valueOf(0)));
+        assertEquals(mapper.getComponentIndex(i, 0), index,
+                "The component of row i is equal to the component of row i of column 0.");
+
+        return index;
+    }
+
+    public static <VECTOR extends Vector> int assertComponentIndexInvariants(
+            final VectorStateSpaceMapper<VECTOR> mapper, final int i, final int j) {
+        final int index = MatrixStateSpaceMapperTest.assertComponentIndexInvariants(mapper, i, j);// inherited
+
+        return index;
+    }
+
     public static <VECTOR extends Vector> void assertInvariants(final VectorStateSpaceMapper<VECTOR> mapper) {
         MatrixStateSpaceMapperTest.assertInvariants(mapper);// inherited
 
-        assertThat("Number of dimensions", Integer.valueOf(mapper.getDimension()),
+        final int dimension = mapper.getDimension();
+        assertThat("Number of dimensions", Integer.valueOf(dimension),
                 org.hamcrest.number.OrderingComparison.greaterThanOrEqualTo(Integer.valueOf(1)));
+        for (int i = 0; i < dimension; ++i) {
+            assertComponentIndexInvariants(mapper, i);
+        }
     }
 
     public static <VECTOR extends Vector> void assertInvariants(final VectorStateSpaceMapper<VECTOR> mapper1,

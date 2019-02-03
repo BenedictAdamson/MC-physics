@@ -48,9 +48,8 @@ public final class ImmutableVector3StateSpaceMapper implements VectorStateSpaceM
      * contiguous sequence of state vector components.
      * </p>
      * <ul>
-     * <li>This mapper {@linkplain #getMinimumStateSpaceDimension(int) is valid for
-     * a state space dimension vector} if, and only if, the dimension is at least 2
-     * more than the given index position origin.</li>
+     * <li>The {@linkplain #getIndex0() index position origin} of this mapper is
+     * equal to the given index position origin.</li>
      * </ul>
      *
      * @param index0
@@ -91,6 +90,54 @@ public final class ImmutableVector3StateSpaceMapper implements VectorStateSpaceM
 
     /**
      * {@inheritDoc}
+     * <ul>
+     * <li>The component index of row <var>i</var> is equal to the
+     * {@linkplain #getIndex0() index origin} of this mapper plus <var>i</var>.</li>
+     * </ul>
+     *
+     * @param i
+     *            {@inheritDoc}
+     * @return {@inheritDoc}
+     * @throws IndexOutOfBoundsException
+     *             <ul>
+     *             <li>If {@code i} is negative.</li>
+     *             <li>If {@code i} is greater than or equal to the number of
+     *             {@linkplain #getDimension() dimensions} of this mapper.</li>
+     *             </ul>
+     */
+    @Override
+    public final int getComponentIndex(final int i) {
+        Objects.checkIndex(i, getDimension());
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param i
+     *            {@inheritDoc}
+     * @param j
+     *            {@inheritDoc}
+     * @throws IndexOutOfBoundsException
+     *             <ul>
+     *             <li>If {@code i} is negative.</li>
+     *             <li>If {@code i} is greater than or equal to the number of
+     *             {@linkplain #getDimension() dimensions} of this mapper.</li>
+     *             <li>If {@code j} is not 0.</li>
+     *             </ul>
+     * @return {@inheritDoc}
+     */
+    @Override
+    public final int getComponentIndex(final int i, final int j) {
+        Objects.checkIndex(i, getDimension());
+        Objects.checkIndex(j, 1);
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    /**
+     * {@inheritDoc}
      * <p>
      * The dimension is 3.
      * </p>
@@ -98,6 +145,18 @@ public final class ImmutableVector3StateSpaceMapper implements VectorStateSpaceM
     @Override
     public final int getDimension() {
         return 3;
+    }
+
+    /**
+     * <p>
+     * The index position origin: the position in the state-space vector of the
+     * first component of the 3D vector.
+     * </p>
+     *
+     * @return the index of the first component; not negative.
+     */
+    public final int getIndex0() {
+        return index0;
     }
 
     @Override
@@ -113,4 +172,5 @@ public final class ImmutableVector3StateSpaceMapper implements VectorStateSpaceM
         }
         return ImmutableVector3.create(state.get(index0), state.get(index0 + 1), state.get(index0 + 2));
     }
+
 }

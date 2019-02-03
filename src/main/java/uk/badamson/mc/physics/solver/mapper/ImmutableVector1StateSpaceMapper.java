@@ -43,6 +43,14 @@ public final class ImmutableVector1StateSpaceMapper implements VectorStateSpaceM
     private final int index;
 
     /**
+     * <p>
+     * Construct a mapper with a given index.
+     * </p>
+     * <ul>
+     * <li>The {@linkplain #getIndex() index} of this mapper is equal to the given
+     * index.</li>
+     * </ul>
+     *
      * @param index
      *            The position in the state-space vector of the component that maps
      *            to the component of the 1D vector. If the state-space is
@@ -79,6 +87,50 @@ public final class ImmutableVector1StateSpaceMapper implements VectorStateSpaceM
 
     /**
      * {@inheritDoc}
+     * <ul>
+     * <li>The component index of the (sole) component is equal to the
+     * {@linkplain #getIndex() index} of this mapper.</li>
+     * </ul>
+     *
+     * @param i
+     *            {@inheritDoc}
+     * @return {@inheritDoc}
+     * @throws IndexOutOfBoundsException
+     *             {@inheritDoc}
+     */
+    @Override
+    public final int getComponentIndex(final int i) {
+        Objects.checkIndex(i, 1);
+        return index;
+    }
+
+    /**
+     * {@inheritDoc}
+     * <ul>
+     * <li>The component index of the (sole) component is equal to the
+     * {@linkplain #getIndex() index} of this mapper.</li>
+     * </ul>
+     *
+     * @param i
+     *            {@inheritDoc}
+     * @param j
+     *            {@inheritDoc}
+     * @throws IndexOutOfBoundsException
+     *             <ul>
+     *             <li>If {@code i} is not 0.</li>
+     *             <li>If {@code j} is not 0.</li>
+     *             </ul>
+     * @return {@inheritDoc}
+     */
+    @Override
+    public final int getComponentIndex(final int i, final int j) {
+        Objects.checkIndex(i, 1);
+        Objects.checkIndex(j, 1);
+        return index;
+    }
+
+    /**
+     * {@inheritDoc}
      * <p>
      * The dimension is 1.
      * </p>
@@ -86,6 +138,23 @@ public final class ImmutableVector1StateSpaceMapper implements VectorStateSpaceM
     @Override
     public final int getDimension() {
         return 1;
+    }
+
+    /**
+     * <p>
+     * The position in the state-space vector of the component that maps to the
+     * component of the 1D vector.
+     * </p>
+     * <p>
+     * If the state-space is {@linkplain ImmutableVectorN vector} <var>v</var>,
+     * {@linkplain ImmutableVectorN#get(int) component} <var>v</var><sub>index</sub>
+     * is the component of the 1D vector.
+     * </p>
+     *
+     * @return the index; not negative.
+     */
+    public final int getIndex() {
+        return index;
     }
 
     @Override

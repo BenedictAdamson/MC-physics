@@ -18,10 +18,13 @@ package uk.badamson.mc.physics.solver.mapper;
  * along with MC-physics.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.number.OrderingComparison.greaterThanOrEqualTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import uk.badamson.mc.math.ImmutableVector1;
@@ -35,10 +38,55 @@ import uk.badamson.mc.math.Vector;
  */
 public class ImmutableVector1StateSpaceMapperTest {
 
+    @Nested
+    public class Constructor {
+
+        @Test
+        public void a() {
+            test(0);
+        }
+
+        @Test
+        public void b() {
+            test(13);
+        }
+
+        private ImmutableVector1StateSpaceMapper test(final int index) {
+            final var mapper = new ImmutableVector1StateSpaceMapper(index);
+
+            assertInvariants(mapper);
+            assertEquals(index, mapper.getIndex(), "The index of this mapper is equal to the given index.");
+
+            return mapper;
+        }
+    }
+
+    public static int assertComponentIndexInvariants(final ImmutableVector1StateSpaceMapper mapper, final int i) {
+        final int index = VectorStateSpaceMapperTest.assertComponentIndexInvariants(mapper, i);// inherited
+
+        assertThat("The component of the state-pace vector is non negative.", Integer.valueOf(index),
+                greaterThanOrEqualTo(Integer.valueOf(0)));
+        assertEquals(mapper.getComponentIndex(i, 0), index,
+                "The component of row i is equal to the component of row i of column 0.");
+
+        return index;
+    }
+
+    public static int assertComponentIndexInvariants(final ImmutableVector1StateSpaceMapper mapper, final int i,
+            final int j) {
+        final int index = VectorStateSpaceMapperTest.assertComponentIndexInvariants(mapper, i, j);// inherited
+
+        assertEquals(mapper.getIndex(), index,
+                "The component index of the (sole) component is equal to the index of this mapper.");
+        return index;
+    }
+
     public static void assertInvariants(final ImmutableVector1StateSpaceMapper mapper) {
         VectorStateSpaceMapperTest.assertInvariants(mapper);// inherited
 
         assertEquals(mapper.getDimension(), 1, "Number of dimensions");
+        assertComponentIndexInvariants(mapper, 0);
+        assertComponentIndexInvariants(mapper, 0, 0);
     }
 
     public static void assertInvariants(final ImmutableVector1StateSpaceMapper mapper1,
@@ -178,5 +226,4 @@ public class ImmutableVector1StateSpaceMapperTest {
         final int stateSize = 3;
         fromToVectorSymmetry(index, stateSize, ImmutableVector1.I);
     }
-
 }

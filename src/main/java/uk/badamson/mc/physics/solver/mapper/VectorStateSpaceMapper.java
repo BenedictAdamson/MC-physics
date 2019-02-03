@@ -21,6 +21,7 @@ package uk.badamson.mc.physics.solver.mapper;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import net.jcip.annotations.Immutable;
 import uk.badamson.mc.math.ImmutableVectorN;
+import uk.badamson.mc.math.Matrix;
 import uk.badamson.mc.math.Vector;
 
 /**
@@ -79,6 +80,32 @@ public interface VectorStateSpaceMapper<VECTOR extends Vector> extends MatrixSta
      *             dimension} of this mapper.
      */
     public void fromVector(@NonNull double[] state, @NonNull Vector vector);
+
+    /**
+     * <p>
+     * The component of the state-space vector that corresponds to an element of the
+     * {@linkplain Matrix Vector} that this maps.
+     * </p>
+     * <ul>
+     * <li>The component of the state-space vector is non negative.</li>
+     * <li>The component of row <var>i</var> is equal to the
+     * {@linkplain #getComponentIndex(int, int) component of} row <var>i</var> of
+     * column 0.</li>
+     * </ul>
+     *
+     * @param i
+     *            the cardinal number of the row of the element (0 for the first
+     *            row, 1 for the second row, and so on).
+     * @return the component of the state-space vector.
+     *
+     * @throws IndexOutOfBoundsException
+     *             <ul>
+     *             <li>If {@code i} is negative.</li>
+     *             <li>If {@code i} is greater than or equal to the number of
+     *             {@linkplain Vector#getRows() rows} of the vector.</li>
+     *             </ul>
+     */
+    public int getComponentIndex(int i);
 
     /**
      * <p>
