@@ -116,6 +116,12 @@ public final class HarmonicVector3EnergyErrorFunction
         return HarmonicVector3EnergyErrorValueAndGradients.sum(values);
     }
 
+    private ImmutableVectorN convertToStateVectorGradient(
+            final HarmonicVector3EnergyErrorValueAndGradients errorAndGradients) {
+        // FIXME
+        return null;
+    }
+
     /**
      * {@inheritDoc}
      *
@@ -169,7 +175,13 @@ public final class HarmonicVector3EnergyErrorFunction
      */
     @Override
     public FunctionNWithGradientValue value(final ImmutableVectorN state) {
-        // TODO Auto-generated method stub
+        /*
+         * TODO final HarmonicVector3 vector = mapper.toObject(state); final
+         * HarmonicVector3EnergyErrorValueAndGradients errorAndGradients =
+         * apply(vector); final ImmutableVectorN dedx =
+         * convertToStateVectorGradient(errorAndGradients); return new
+         * FunctionNWithGradientValue(state, errorAndGradients.getE(), dedx);
+         */
         return null;
     }
 

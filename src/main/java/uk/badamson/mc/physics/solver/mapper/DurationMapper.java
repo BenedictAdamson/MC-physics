@@ -34,7 +34,7 @@ import uk.badamson.mc.math.ImmutableVectorN;
 @Immutable
 public final class DurationMapper implements ObjectStateSpaceMapper<Duration> {
 
-    private final int index0;
+    private final int index;
     private final Duration scale;
 
     /**
@@ -43,9 +43,9 @@ public final class DurationMapper implements ObjectStateSpaceMapper<Duration> {
      * sequence of state vector components.
      * </p>
      *
-     * @param index0
-     *            The index position origin: the position in the state-space vector
-     *            of the components that map to the components of the Duration.
+     * @param index
+     *            The position in the state-space vector of the component that maps
+     *            to the Duration.
      * @param scale
      *            The time scale to use for converting durations to and from a real
      *            number
@@ -57,16 +57,16 @@ public final class DurationMapper implements ObjectStateSpaceMapper<Duration> {
      *             <li>If {@code scale} is {@linkplain Duration#ZERO}.</li>
      *             </ul>
      */
-    public DurationMapper(final int index0, @NonNull final Duration scale) {
+    public DurationMapper(final int index, @NonNull final Duration scale) {
         Objects.requireNonNull(scale, "scale");
-        if (index0 < 0) {
-            throw new IllegalArgumentException("index0 " + index0);
+        if (index < 0) {
+            throw new IllegalArgumentException("index0 " + index);
         }
         if (Duration.ZERO.equals(scale)) {
             throw new IllegalArgumentException("scale is zero");
         }
 
-        this.index0 = index0;
+        this.index = index;
         this.scale = scale;
     }
 
@@ -75,21 +75,36 @@ public final class DurationMapper implements ObjectStateSpaceMapper<Duration> {
         Objects.requireNonNull(state, "state");
         Objects.requireNonNull(object, "object");
         if (state.length < getMinimumStateSpaceDimension()) {
-            throw new IllegalArgumentException("state.length " + state.length + " index0 " + index0);
+            throw new IllegalArgumentException("state.length " + state.length + " index0 " + index);
         }
 
-        state[index0] = object.dividedBy(scale);
+        state[index] = object.dividedBy(scale);
+    }
+
+    /**
+     * <p>
+     * The position in the state-space vector of the representation of the duration.
+     * </p>
+     * <ul>
+     * <li>The index is not negative.
+     * <li>
+     * </ul>
+     *
+     * @return the index of the representation.
+     */
+    public final int getIndex() {
+        return index;
     }
 
     @Override
     public final int getMinimumStateSpaceDimension() {
-        return index0 + 1;
+        return index + 1;
     }
 
     @Override
     public final @NonNull Duration toObject(@NonNull final ImmutableVectorN state) {
         Objects.requireNonNull(state, "state");
-        return scale.multipliedBy((long) state.get(index0));
+        return scale.multipliedBy((long) state.get(index));
     }
 
 }

@@ -18,6 +18,8 @@ package uk.badamson.mc.physics.solver.mapper;
  * along with MC-physics.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.number.OrderingComparison.greaterThanOrEqualTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
@@ -73,6 +75,8 @@ public class ImmutableVector3StateSpaceMapperTest {
         VectorStateSpaceMapperTest.assertInvariants(mapper);// inherited
 
         assertEquals(3, mapper.getDimension(), "Number of dimensions");
+        assertThat("The index position origin is not negative.", Integer.valueOf(mapper.getIndex0()),
+                greaterThanOrEqualTo(Integer.valueOf(0)));
     }
 
     public static void assertInvariants(final ImmutableVector3StateSpaceMapper mapper1,

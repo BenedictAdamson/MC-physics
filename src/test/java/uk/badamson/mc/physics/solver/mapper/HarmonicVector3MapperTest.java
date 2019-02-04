@@ -1,5 +1,10 @@
 package uk.badamson.mc.physics.solver.mapper;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.number.OrderingComparison.greaterThanOrEqualTo;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.time.Duration;
 import java.util.Arrays;
 
@@ -127,6 +132,36 @@ public class HarmonicVector3MapperTest {
     public static void assertInvariants(final HarmonicVector3Mapper mapper) {
         ObjectTest.assertInvariants(mapper);// inherited
         ObjectStateSpaceMapperTest.assertInvariants(mapper);// inherited
+
+        final DurationMapper t0Mapper = mapper.getT0Mapper();
+        final ImmutableVector3StateSpaceMapper f0Mapper = mapper.getF0Mapper();
+        final ImmutableVector3StateSpaceMapper f1Mapper = mapper.getF1Mapper();
+        final ImmutableVector3StateSpaceMapper f2Mapper = mapper.getF2Mapper();
+        final ImmutableVector3StateSpaceMapper fcMapper = mapper.getFcMapper();
+        final ImmutableVector3StateSpaceMapper fsMapper = mapper.getFsMapper();
+
+        assertAll("Always have mappers for the terms of the functor", () -> assertNotNull(t0Mapper, "time origin."),
+                () -> assertNotNull(f0Mapper, "constant term."), () -> assertNotNull(f1Mapper, "linear term."),
+                () -> assertNotNull(f2Mapper, "quadratic term."), () -> assertNotNull(fcMapper, "cosine term."),
+                () -> assertNotNull(fcMapper, "sine term"));
+
+        DurationMapperTest.assertInvariants(t0Mapper);
+        ImmutableVector3StateSpaceMapperTest.assertInvariants(f0Mapper);
+        ImmutableVector3StateSpaceMapperTest.assertInvariants(f1Mapper);
+        ImmutableVector3StateSpaceMapperTest.assertInvariants(f2Mapper);
+        ImmutableVector3StateSpaceMapperTest.assertInvariants(fcMapper);
+        ImmutableVector3StateSpaceMapperTest.assertInvariants(fsMapper);
+
+        final Integer index0 = Integer.valueOf(mapper.getIndex0());
+        assertThat("The index position origin is not negative.", index0, greaterThanOrEqualTo(Integer.valueOf(0)));
+        assertAll(
+                "The index of the mapper for the terms of the functor are greater than or equal to the index origin of this mapper.",
+                () -> assertThat("time origin", Integer.valueOf(t0Mapper.getIndex()), greaterThanOrEqualTo(index0)),
+                () -> assertThat("constant term", Integer.valueOf(f0Mapper.getIndex0()), greaterThanOrEqualTo(index0)),
+                () -> assertThat("linear term.", Integer.valueOf(f1Mapper.getIndex0()), greaterThanOrEqualTo(index0)),
+                () -> assertThat("quadratic term", Integer.valueOf(f2Mapper.getIndex0()), greaterThanOrEqualTo(index0)),
+                () -> assertThat("cosine term", Integer.valueOf(fcMapper.getIndex0()), greaterThanOrEqualTo(index0)),
+                () -> assertThat("sine term", Integer.valueOf(fsMapper.getIndex0()), greaterThanOrEqualTo(index0)));
     }
 
     public static void assertInvariants(final HarmonicVector3Mapper mapper1, final HarmonicVector3Mapper mapper2) {

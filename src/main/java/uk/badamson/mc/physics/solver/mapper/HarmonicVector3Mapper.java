@@ -39,11 +39,17 @@ import uk.badamson.mc.physics.HarmonicVector3;
 public final class HarmonicVector3Mapper implements ObjectStateSpaceMapper<HarmonicVector3> {
 
     private final int index0;
+
     private final DurationMapper t0Mapper;
+
     private final ImmutableVector3StateSpaceMapper f0Mapper;
+
     private final ImmutableVector3StateSpaceMapper f1Mapper;
+
     private final ImmutableVector3StateSpaceMapper f2Mapper;
+
     private final ImmutableVector3StateSpaceMapper fcMapper;
+
     private final ImmutableVector3StateSpaceMapper fsMapper;
 
     /**
@@ -101,9 +107,135 @@ public final class HarmonicVector3Mapper implements ObjectStateSpaceMapper<Harmo
         fsMapper.fromObject(state, object.getFs());
     }
 
+    /**
+     * <p>
+     * The mapper for the {@linkplain HarmonicVector3#getF0() constant term} of the
+     * functor.
+     * </p>
+     * <ul>
+     * <li>Always have a (non null) mapper for the constant term of the
+     * functor.</li>
+     * <li>The {@linkplain ImmutableVector3StateSpaceMapper#getIndex0() indexes
+     * origin} of the mapper for the constant term of the functor is greater than or
+     * equal to the {@linkplain #getIndex0() index origin} of this mapper.</li>
+     * </ul>
+     *
+     * @return the mapper
+     */
+    public final ImmutableVector3StateSpaceMapper getF0Mapper() {
+        return f0Mapper;
+    }
+
+    /**
+     * <p>
+     * The mapper for the {@linkplain HarmonicVector3#getF1() linear term} of the
+     * functor.
+     * </p>
+     * <ul>
+     * <li>Always have a (non null) mapper for the linear term of the functor.</li>
+     * <li>The {@linkplain ImmutableVector3StateSpaceMapper#getIndex0() indexes
+     * origin} of the mapper for the linear term of the functor is greater than or
+     * equal to the {@linkplain #getIndex0() index origin} of this mapper.</li>
+     * </ul>
+     *
+     * @return the mapper
+     */
+    public final ImmutableVector3StateSpaceMapper getF1Mapper() {
+        return f1Mapper;
+    }
+
+    /**
+     * <p>
+     * The mapper for the {@linkplain HarmonicVector3#getF2() quadratic term} of the
+     * functor.
+     * </p>
+     * <ul>
+     * <li>Always have a (non null) mapper for the quadratic term of the
+     * functor.</li>
+     * <li>The {@linkplain ImmutableVector3StateSpaceMapper#getIndex0() indexes
+     * origin} of the mapper for the quadratic term of the functor is greater than
+     * or equal to the {@linkplain #getIndex0() index origin} of this mapper.</li>
+     * </ul>
+     *
+     * @return the mapper
+     */
+    public final ImmutableVector3StateSpaceMapper getF2Mapper() {
+        return f2Mapper;
+    }
+
+    /**
+     * <p>
+     * The mapper for the {@linkplain HarmonicVector3#getFc() cosine term} of the
+     * functor.
+     * </p>
+     * <ul>
+     * <li>Always have a (non null) mapper for the cosine term of the functor.</li>
+     * <li>The {@linkplain ImmutableVector3StateSpaceMapper#getIndex0() indexes
+     * origin} of the mapper for the cosine term of the functor is greater than or
+     * equal to the {@linkplain #getIndex0() index origin} of this mapper.</li>
+     * </ul>
+     *
+     * @return the mapper
+     */
+    public final ImmutableVector3StateSpaceMapper getFcMapper() {
+        return fcMapper;
+    }
+
+    /**
+     * <p>
+     * The mapper for the {@linkplain HarmonicVector3#getFs() sine term} of the
+     * functor.
+     * </p>
+     * <ul>
+     * <li>Always have a (non null) mapper for the sine term of the functor.</li>
+     * <li>The {@linkplain ImmutableVector3StateSpaceMapper#getIndex0() indexes
+     * origin} of the mapper for the sine term of the functor is greater than or
+     * equal to the {@linkplain #getIndex0() index origin} of this mapper.</li>
+     * </ul>
+     *
+     * @return the mapper
+     */
+    public final ImmutableVector3StateSpaceMapper getFsMapper() {
+        return fsMapper;
+    }
+
+    /**
+     * <p>
+     * The index origin: the position in the state-space vector of the first
+     * component of the functor.
+     * </p>
+     * <ul>
+     * <li>The index position origin is not negative.
+     * <li>
+     * </ul>
+     *
+     * @return the index of the first component.
+     */
+    public final int getIndex0() {
+        return index0;
+    }
+
     @Override
     public final int getMinimumStateSpaceDimension() {
         return index0 + 20;
+    }
+
+    /**
+     * <p>
+     * The mapper for the {@linkplain HarmonicVector3#getT0() time origin} of the
+     * functor.
+     * </p>
+     * <ul>
+     * <li>Always have a (non null) mapper for the time origin of the functor.</li>
+     * <li>The {@linkplain DurationMapper#getIndex() index} of the mapper for the
+     * time origin of the functor is greater than or equal to the
+     * {@linkplain #getIndex0() index origin}of this mapper.</li>
+     * </ul>
+     *
+     * @return the mapper
+     */
+    public final DurationMapper getT0Mapper() {
+        return t0Mapper;
     }
 
     @Override

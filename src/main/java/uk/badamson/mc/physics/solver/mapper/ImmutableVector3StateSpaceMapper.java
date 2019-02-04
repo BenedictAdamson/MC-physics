@@ -149,11 +149,14 @@ public final class ImmutableVector3StateSpaceMapper implements VectorStateSpaceM
 
     /**
      * <p>
-     * The index position origin: the position in the state-space vector of the
-     * first component of the 3D vector.
+     * The indexes origin: the position in the state-space vector of the first
+     * component of the 3D vector.
      * </p>
+     * <ul>
+     * <li>The indexes origin is not negative.</li>
+     * </ul>
      *
-     * @return the index of the first component; not negative.
+     * @return the index of the first component.
      */
     public final int getIndex0() {
         return index0;

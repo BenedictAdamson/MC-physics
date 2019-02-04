@@ -18,6 +18,9 @@ package uk.badamson.mc.physics.solver.mapper;
  * along with MC-physics.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.number.OrderingComparison.greaterThanOrEqualTo;
+
 import java.time.Duration;
 import java.util.Arrays;
 
@@ -109,6 +112,9 @@ public class DurationMapperTest {
     public static void assertInvariants(final DurationMapper mapper) {
         ObjectTest.assertInvariants(mapper);// inherited
         ObjectStateSpaceMapperTest.assertInvariants(mapper);// inherited
+
+        assertThat("The index is not negative.", Integer.valueOf(mapper.getIndex()),
+                greaterThanOrEqualTo(Integer.valueOf(0)));
     }
 
     public static void assertInvariants(final DurationMapper mapper1, final DurationMapper mapper2) {
