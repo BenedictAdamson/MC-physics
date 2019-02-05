@@ -157,9 +157,32 @@ public final class ImmutableVector1StateSpaceMapper implements VectorStateSpaceM
         return index;
     }
 
+    /**
+     * {@inheritDoc}
+     * <ul>
+     * <li>The mapper maps to contiguous components, so the minimum state space
+     * dimension is equal to the {@linkplain #getIndex0() index origin} plus the
+     * {@linkplain #getSize() size}.</li>
+     * </ul>
+     *
+     * @return {@inheritDoc}
+     */
     @Override
     public final int getMinimumStateSpaceDimension() {
         return index + 1;
+    }
+
+    /**
+     * {@inheritDoc}
+     * <ul>
+     * <li>The size is 1.</li>
+     * </ul>
+     *
+     * @return {@inheritDoc}
+     */
+    @Override
+    public final int getSize() {
+        return 1;
     }
 
     @Override
@@ -170,5 +193,4 @@ public final class ImmutableVector1StateSpaceMapper implements VectorStateSpaceM
         }
         return ImmutableVector1.create(state.get(index));
     }
-
 }

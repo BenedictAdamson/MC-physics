@@ -24,6 +24,7 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
+import uk.badamson.mc.ObjectTest;
 import uk.badamson.mc.math.ImmutableVectorN;
 import uk.badamson.mc.math.Quaternion;
 
@@ -35,7 +36,10 @@ import uk.badamson.mc.math.Quaternion;
 public class QuaternionStateSpaceMapperTest {
 
     public static void assertInvariants(final QuaternionStateSpaceMapper mapper) {
+        ObjectTest.assertInvariants(mapper);// inherited
         ObjectStateSpaceMapperTest.assertInvariants(mapper);// inherited
+
+        assertEquals(4, mapper.getSize(), "size");
     }
 
     public static void assertInvariants(final QuaternionStateSpaceMapper mapper1,

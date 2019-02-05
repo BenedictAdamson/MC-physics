@@ -18,6 +18,9 @@ package uk.badamson.mc.physics.solver.mapper;
  * along with MC-physics.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.number.OrderingComparison.greaterThan;
+import static org.hamcrest.number.OrderingComparison.greaterThanOrEqualTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -31,8 +34,16 @@ import uk.badamson.mc.math.ImmutableVectorN;
  */
 public class ObjectStateSpaceMapperTest {
 
+    private static final Integer ZERO = Integer.valueOf(0);
+
     public static <OBJECT> void assertInvariants(final ObjectStateSpaceMapper<OBJECT> mapper) {
-        // Do nothing
+        final Integer minimumStateSpaceDimension = Integer.valueOf(mapper.getMinimumStateSpaceDimension());
+        final Integer size = Integer.valueOf(mapper.getSize());
+
+        assertThat("The minimum state-space dimension is positive.", minimumStateSpaceDimension, greaterThan(ZERO));
+        assertThat("The size is positive.", size, greaterThan(ZERO));
+        assertThat("The minimum state-space dimension is greater than or equal to the size.",
+                minimumStateSpaceDimension, greaterThanOrEqualTo(size));
     }
 
     public static <OBJECT> void assertInvariants(final ObjectStateSpaceMapper<OBJECT> mapper1,

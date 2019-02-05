@@ -67,10 +67,27 @@ public interface ObjectStateSpaceMapper<OBJECT> {
      * The smallest {@linkplain ImmutableVectorN#getDimension() dimension} of a
      * state-space vector that this mapper can be used with.
      * </p>
+     * <ul>
+     * <li>The minimum state-space dimension is positive.</li>
+     * <li>The minimum state-space dimension is greater than or equal to the
+     * {@linkplain #getSize() size}.</li>
+     * </ul>
      *
-     * @return the minimum dimension; positive.
+     * @return the minimum dimension.
      */
     public int getMinimumStateSpaceDimension();
+
+    /**
+     * <p>
+     * The number of elements of the state-space vector that this maps to or from.
+     * </p>
+     * <ul>
+     * <li>The size is positive.</li>
+     * </ul>
+     *
+     * @return the size;
+     */
+    public int getSize();
 
     /**
      * <p>

@@ -27,6 +27,7 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import uk.badamson.mc.ObjectTest;
 import uk.badamson.mc.math.ImmutableVector1;
 import uk.badamson.mc.math.ImmutableVectorN;
 import uk.badamson.mc.math.Vector;
@@ -82,9 +83,13 @@ public class ImmutableVector1StateSpaceMapperTest {
     }
 
     public static void assertInvariants(final ImmutableVector1StateSpaceMapper mapper) {
+        ObjectTest.assertInvariants(mapper);// inherited
         VectorStateSpaceMapperTest.assertInvariants(mapper);// inherited
 
-        assertEquals(mapper.getDimension(), 1, "Number of dimensions");
+        final int size = mapper.getSize();
+        assertEquals(1, size, "size");
+        final int dimension = mapper.getDimension();
+        assertEquals(dimension, 1, "Number of dimensions");
         assertComponentIndexInvariants(mapper, 0);
         assertComponentIndexInvariants(mapper, 0, 0);
     }

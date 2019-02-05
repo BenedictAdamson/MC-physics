@@ -55,6 +55,7 @@ public class VectorStateSpaceMapperTest {
         MatrixStateSpaceMapperTest.assertInvariants(mapper);// inherited
 
         final int dimension = mapper.getDimension();
+        assertEquals(dimension, mapper.getSize(), "The size equals the number of dimensions.");
         assertThat("Number of dimensions", Integer.valueOf(dimension),
                 org.hamcrest.number.OrderingComparison.greaterThanOrEqualTo(Integer.valueOf(1)));
         for (int i = 0; i < dimension; ++i) {

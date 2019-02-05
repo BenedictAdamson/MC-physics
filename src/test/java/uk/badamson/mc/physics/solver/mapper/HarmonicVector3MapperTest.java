@@ -3,6 +3,7 @@ package uk.badamson.mc.physics.solver.mapper;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.number.OrderingComparison.greaterThanOrEqualTo;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.time.Duration;
@@ -152,8 +153,12 @@ public class HarmonicVector3MapperTest {
         ImmutableVector3StateSpaceMapperTest.assertInvariants(fcMapper);
         ImmutableVector3StateSpaceMapperTest.assertInvariants(fsMapper);
 
+        final int size = mapper.getSize();
         final Integer index0 = Integer.valueOf(mapper.getIndex0());
+        assertEquals(18, size, "size");
         assertThat("The index position origin is not negative.", index0, greaterThanOrEqualTo(Integer.valueOf(0)));
+        assertEquals(mapper.getMinimumStateSpaceDimension(), index0 + size,
+                "The mapper maps to contiguous components.");
         assertAll(
                 "The index of the mapper for the terms of the functor are greater than or equal to the index origin of this mapper.",
                 () -> assertThat("time origin", Integer.valueOf(t0Mapper.getIndex()), greaterThanOrEqualTo(index0)),

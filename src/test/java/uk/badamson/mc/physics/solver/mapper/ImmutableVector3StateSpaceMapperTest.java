@@ -27,6 +27,7 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import uk.badamson.mc.ObjectTest;
 import uk.badamson.mc.math.ImmutableVector3;
 import uk.badamson.mc.math.ImmutableVectorN;
 import uk.badamson.mc.math.Vector;
@@ -72,11 +73,17 @@ public class ImmutableVector3StateSpaceMapperTest {
     }
 
     public static void assertInvariants(final ImmutableVector3StateSpaceMapper mapper) {
+        ObjectTest.assertInvariants(mapper);// inherited
         VectorStateSpaceMapperTest.assertInvariants(mapper);// inherited
 
+        final int size = mapper.getSize();
+        final int index0 = mapper.getIndex0();
+        assertEquals(3, size, "size");
         assertEquals(3, mapper.getDimension(), "Number of dimensions");
-        assertThat("The index position origin is not negative.", Integer.valueOf(mapper.getIndex0()),
+        assertThat("The index position origin is not negative.", Integer.valueOf(index0),
                 greaterThanOrEqualTo(Integer.valueOf(0)));
+        assertEquals(mapper.getMinimumStateSpaceDimension(), index0 + size,
+                "The mapper maps to contiguous components.");
     }
 
     public static void assertInvariants(final ImmutableVector3StateSpaceMapper mapper1,

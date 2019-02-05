@@ -205,8 +205,7 @@ public final class HarmonicVector3Mapper implements ObjectStateSpaceMapper<Harmo
      * component of the functor.
      * </p>
      * <ul>
-     * <li>The index position origin is not negative.
-     * <li>
+     * <li>The index origin is not negative.</li>
      * </ul>
      *
      * @return the index of the first component.
@@ -215,9 +214,32 @@ public final class HarmonicVector3Mapper implements ObjectStateSpaceMapper<Harmo
         return index0;
     }
 
+    /**
+     * {@inheritDoc}
+     * <ul>
+     * <li>The mapper maps to contiguous components, so the minimum state space
+     * dimension is equal to the {@linkplain #getIndex0() index origin} plus the
+     * {@linkplain #getSize() size}.</li>
+     * </ul>
+     *
+     * @return {@inheritDoc}
+     */
     @Override
     public final int getMinimumStateSpaceDimension() {
-        return index0 + 20;
+        return index0 + 18;
+    }
+
+    /**
+     * {@inheritDoc}
+     * <ul>
+     * <li>The size is 18.</li>
+     * </ul>
+     *
+     * @return {@inheritDoc}
+     */
+    @Override
+    public final int getSize() {
+        return 18;
     }
 
     /**
@@ -253,5 +275,4 @@ public final class HarmonicVector3Mapper implements ObjectStateSpaceMapper<Harmo
 
         return new HarmonicVector3(t0, f0, f1, f2, fc, fs, fe, fh);
     }
-
 }

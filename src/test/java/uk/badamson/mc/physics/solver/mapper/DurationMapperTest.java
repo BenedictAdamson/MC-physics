@@ -20,6 +20,7 @@ package uk.badamson.mc.physics.solver.mapper;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.number.OrderingComparison.greaterThanOrEqualTo;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.Duration;
 import java.util.Arrays;
@@ -113,6 +114,7 @@ public class DurationMapperTest {
         ObjectTest.assertInvariants(mapper);// inherited
         ObjectStateSpaceMapperTest.assertInvariants(mapper);// inherited
 
+        assertEquals(1, mapper.getSize(), "The size is 1.");
         assertThat("The index is not negative.", Integer.valueOf(mapper.getIndex()),
                 greaterThanOrEqualTo(Integer.valueOf(0)));
     }

@@ -101,10 +101,22 @@ public final class DurationMapper implements ObjectStateSpaceMapper<Duration> {
         return index + 1;
     }
 
+    /**
+     * {@inheritDoc}
+     * <ul>
+     * <li>The size is 1.</li>
+     * </ul>
+     *
+     * @return {@inheritDoc}
+     */
+    @Override
+    public final int getSize() {
+        return 1;
+    }
+
     @Override
     public final @NonNull Duration toObject(@NonNull final ImmutableVectorN state) {
         Objects.requireNonNull(state, "state");
         return scale.multipliedBy((long) state.get(index));
     }
-
 }

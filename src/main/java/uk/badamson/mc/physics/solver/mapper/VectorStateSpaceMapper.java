@@ -116,4 +116,16 @@ public interface VectorStateSpaceMapper<VECTOR extends Vector> extends MatrixSta
      * @return the number of dimensions; positive.
      */
     public int getDimension();
+
+    /**
+     * {@inheritDoc}
+     * <ul>
+     * <li>The size equals the number of {@linkplain #getDimension()
+     * dimensions}.</li>
+     * </ul>
+     *
+     * @return {@inheritDoc}
+     */
+    @Override
+    public int getSize();
 }

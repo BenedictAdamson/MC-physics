@@ -71,9 +71,32 @@ public final class Rotation3QuaternionStateSpaceMapper implements ObjectStateSpa
         quaternionMapper.fromObject(state, object.getVersor());
     }
 
+    /**
+     * {@inheritDoc}
+     * <ul>
+     * <li>The mapper maps to contiguous components, so the minimum state space
+     * dimension is equal to the {@linkplain #getIndex0() index origin} plus the
+     * {@linkplain #getSize() size}.</li>
+     * </ul>
+     *
+     * @return {@inheritDoc}
+     */
     @Override
     public final int getMinimumStateSpaceDimension() {
         return quaternionMapper.getMinimumStateSpaceDimension();
+    }
+
+    /**
+     * {@inheritDoc}
+     * <ul>
+     * <li>The size is 4.</li>
+     * </ul>
+     *
+     * @return {@inheritDoc}
+     */
+    @Override
+    public final int getSize() {
+        return 4;
     }
 
     /**
@@ -88,5 +111,4 @@ public final class Rotation3QuaternionStateSpaceMapper implements ObjectStateSpa
     public final @NonNull Rotation3Quaternion toObject(@NonNull final ImmutableVectorN state) {
         return Rotation3Quaternion.valueOf(quaternionMapper.toObject(state));
     }
-
 }

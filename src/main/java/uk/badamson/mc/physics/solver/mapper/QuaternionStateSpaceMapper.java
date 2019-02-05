@@ -80,9 +80,32 @@ public final class QuaternionStateSpaceMapper implements ObjectStateSpaceMapper<
         state[index0 + 3] = object.getD();
     }
 
+    /**
+     * {@inheritDoc}
+     * <ul>
+     * <li>The mapper maps to contiguous components, so the minimum state space
+     * dimension is equal to the {@linkplain #getIndex0() index origin} plus the
+     * {@linkplain #getSize() size}.</li>
+     * </ul>
+     *
+     * @return {@inheritDoc}
+     */
     @Override
     public final int getMinimumStateSpaceDimension() {
         return index0 + 4;
+    }
+
+    /**
+     * {@inheritDoc}
+     * <ul>
+     * <li>The size is 4.</li>
+     * </ul>
+     *
+     * @return {@inheritDoc}
+     */
+    @Override
+    public final int getSize() {
+        return 4;
     }
 
     /**
@@ -99,5 +122,4 @@ public final class QuaternionStateSpaceMapper implements ObjectStateSpaceMapper<
         return Quaternion.create(state.get(index0), state.get(index0 + 1), state.get(index0 + 2),
                 state.get(index0 + 3));
     }
-
 }

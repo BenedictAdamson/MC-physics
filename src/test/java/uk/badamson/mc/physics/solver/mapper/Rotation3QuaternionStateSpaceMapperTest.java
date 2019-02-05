@@ -28,6 +28,7 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.jupiter.api.Test;
 
+import uk.badamson.mc.ObjectTest;
 import uk.badamson.mc.math.ImmutableVector3;
 import uk.badamson.mc.math.ImmutableVectorN;
 import uk.badamson.mc.math.Rotation3;
@@ -76,7 +77,10 @@ public class Rotation3QuaternionStateSpaceMapperTest {
     private static final double TOLERANCE = 4.0 * (Math.nextUp(1.0) - 1.0);
 
     public static void assertInvariants(final Rotation3QuaternionStateSpaceMapper mapper) {
+        ObjectTest.assertInvariants(mapper);// inherited
         ObjectStateSpaceMapperTest.assertInvariants(mapper);// inherited
+
+        assertEquals(4, mapper.getSize(), "size");
     }
 
     public static void assertInvariants(final Rotation3QuaternionStateSpaceMapper mapper1,
