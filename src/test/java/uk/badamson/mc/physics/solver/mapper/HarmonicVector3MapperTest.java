@@ -165,20 +165,32 @@ public class HarmonicVector3MapperTest {
                 "The mapper maps to contiguous components (size).");
         assertWeIndexInvariants(mapper);
         assertWhIndexInvariants(mapper);
-        assertAll(
-                "The index of the mapper for the terms of the functor are greater than or equal to the index origin of this mapper.",
-                () -> assertThat("time origin", Integer.valueOf(t0Mapper.getIndex()),
-                        greaterThanOrEqualTo(index0Integer)),
-                () -> assertThat("constant term", Integer.valueOf(f0Mapper.getIndex0()),
-                        greaterThanOrEqualTo(index0Integer)),
-                () -> assertThat("linear term.", Integer.valueOf(f1Mapper.getIndex0()),
-                        greaterThanOrEqualTo(index0Integer)),
-                () -> assertThat("quadratic term", Integer.valueOf(f2Mapper.getIndex0()),
-                        greaterThanOrEqualTo(index0Integer)),
-                () -> assertThat("cosine term", Integer.valueOf(fcMapper.getIndex0()),
-                        greaterThanOrEqualTo(index0Integer)),
-                () -> assertThat("sine term", Integer.valueOf(fsMapper.getIndex0()),
-                        greaterThanOrEqualTo(index0Integer)));
+        final int t0MapperIndex = t0Mapper.getIndex();
+        final int f0MapperIndex = f0Mapper.getIndex0();
+        final int f1MapperIndex = f1Mapper.getIndex0();
+        final int f2MapperIndex = f2Mapper.getIndex0();
+        final int fcMapperIndex = fcMapper.getIndex0();
+        final int fsMapperIndex = fsMapper.getIndex0();
+        assertAll("This mapper maps values contiguously (index origins of component mappers)",
+                () -> assertThat("time origin", Integer.valueOf(t0MapperIndex), greaterThanOrEqualTo(index0Integer)),
+                () -> assertThat("constant term", Integer.valueOf(f0MapperIndex), greaterThanOrEqualTo(index0Integer)),
+                () -> assertThat("linear term.", Integer.valueOf(f1MapperIndex), greaterThanOrEqualTo(index0Integer)),
+                () -> assertThat("quadratic term", Integer.valueOf(f2MapperIndex), greaterThanOrEqualTo(index0Integer)),
+                () -> assertThat("cosine term", Integer.valueOf(fcMapperIndex), greaterThanOrEqualTo(index0Integer)),
+                () -> assertThat("sine term", Integer.valueOf(fsMapperIndex), greaterThanOrEqualTo(index0Integer)));
+        assertAll("This mapper maps values contiguously (adjacency of component mappers)", () -> assertEquals(
+                mapper.getWhIndex() + 1, t0MapperIndex,
+                "The mapper for the time origin maps to positions just after the position of the harmonic frequency term."),
+                () -> assertEquals(t0MapperIndex + t0Mapper.getSize(), f0MapperIndex,
+                        "The mapper for the constant term maps to positions just after the position mapped to by the duration term mapper."),
+                () -> assertEquals(f0MapperIndex + f0Mapper.getSize(), f1MapperIndex,
+                        "The mapper for the linear term maps to positions just after the position mapped to by the constant term mapper."),
+                () -> assertEquals(f1MapperIndex + f1Mapper.getSize(), f2MapperIndex,
+                        "The mapper for the quadratic term maps to positions just after the position mapped to by the linear term mapper."),
+                () -> assertEquals(f2MapperIndex + f2Mapper.getSize(), fcMapperIndex,
+                        "The mapper for the cosine term maps to positions just after the position mapped to by the quadratic term mapper."),
+                () -> assertEquals(fcMapperIndex + fcMapper.getSize(), fsMapperIndex,
+                        "The mapper for the sine term maps to positions just after the position mapped to by the cosine term mapper."));
     }
 
     public static void assertInvariants(final HarmonicVector3Mapper mapper1, final HarmonicVector3Mapper mapper2) {

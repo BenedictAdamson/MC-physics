@@ -85,11 +85,11 @@ public final class HarmonicVector3Mapper implements ObjectStateSpaceMapper<Harmo
         }
         this.index0 = index0;
         t0Mapper = new DurationMapper(index0 + 2, scale);
-        f0Mapper = new ImmutableVector3StateSpaceMapper(index0 + 5);
-        f1Mapper = new ImmutableVector3StateSpaceMapper(index0 + 8);
-        f2Mapper = new ImmutableVector3StateSpaceMapper(index0 + 11);
-        fcMapper = new ImmutableVector3StateSpaceMapper(index0 + 14);
-        fsMapper = new ImmutableVector3StateSpaceMapper(index0 + 17);
+        f0Mapper = new ImmutableVector3StateSpaceMapper(t0Mapper.getIndex() + t0Mapper.getSize());
+        f1Mapper = new ImmutableVector3StateSpaceMapper(f0Mapper.getIndex0() + f0Mapper.getSize());
+        f2Mapper = new ImmutableVector3StateSpaceMapper(f1Mapper.getIndex0() + f1Mapper.getSize());
+        fcMapper = new ImmutableVector3StateSpaceMapper(f2Mapper.getIndex0() + f2Mapper.getSize());
+        fsMapper = new ImmutableVector3StateSpaceMapper(fcMapper.getIndex0() + fcMapper.getSize());
     }
 
     @Override
@@ -115,9 +115,13 @@ public final class HarmonicVector3Mapper implements ObjectStateSpaceMapper<Harmo
      * <ul>
      * <li>Always have a (non null) mapper for the constant term of the
      * functor.</li>
-     * <li>The {@linkplain ImmutableVector3StateSpaceMapper#getIndex0() indexes
-     * origin} of the mapper for the constant term of the functor is greater than or
-     * equal to the {@linkplain #getIndex0() index origin} of this mapper.</li>
+     * <li>This mapper maps values contiguously, so the
+     * {@linkplain ImmutableVector3StateSpaceMapper#getIndex0() index origin} of the
+     * mapper for the constant term of the functor is greater than or equal to the
+     * {@linkplain #getIndex0() index origin} of this mapper.</li>
+     * <li>The mapper for the constant term maps to positions just after the
+     * {@linkplain DurationMapper#getIndex position mapped to by} the
+     * {@linkplain #getT0Mapper() duration term mapper}.</li>
      * </ul>
      *
      * @return the mapper
@@ -133,9 +137,13 @@ public final class HarmonicVector3Mapper implements ObjectStateSpaceMapper<Harmo
      * </p>
      * <ul>
      * <li>Always have a (non null) mapper for the linear term of the functor.</li>
-     * <li>The {@linkplain ImmutableVector3StateSpaceMapper#getIndex0() indexes
-     * origin} of the mapper for the linear term of the functor is greater than or
-     * equal to the {@linkplain #getIndex0() index origin} of this mapper.</li>
+     * <li>This mapper maps values contiguously, so the
+     * {@linkplain ImmutableVector3StateSpaceMapper#getIndex0() index origin} of the
+     * mapper for the linear term of the functor is greater than or equal to the
+     * {@linkplain #getIndex0() index origin} of this mapper.</li>
+     * <li>The mapper for the linear term maps to positions just after the
+     * {@linkplain ImmutableVector3StateSpaceMapper#getIndex0() positions} mapped to
+     * by the {@linkplain #getF0Mapper() constant term mapper}.</li>
      * </ul>
      *
      * @return the mapper
@@ -152,9 +160,13 @@ public final class HarmonicVector3Mapper implements ObjectStateSpaceMapper<Harmo
      * <ul>
      * <li>Always have a (non null) mapper for the quadratic term of the
      * functor.</li>
-     * <li>The {@linkplain ImmutableVector3StateSpaceMapper#getIndex0() indexes
-     * origin} of the mapper for the quadratic term of the functor is greater than
-     * or equal to the {@linkplain #getIndex0() index origin} of this mapper.</li>
+     * <li>This mapper maps values contiguously, so the
+     * {@linkplain ImmutableVector3StateSpaceMapper#getIndex0() index origin} of the
+     * mapper for the quadratic term of the functor is greater than or equal to the
+     * {@linkplain #getIndex0() index origin} of this mapper.</li>
+     * <li>The mapper for the quadratic term maps to positions just after the
+     * {@linkplain ImmutableVector3StateSpaceMapper#getIndex0() positions} mapped to
+     * by the {@linkplain #getF1Mapper() linear term mapper}.</li>
      * </ul>
      *
      * @return the mapper
@@ -170,9 +182,13 @@ public final class HarmonicVector3Mapper implements ObjectStateSpaceMapper<Harmo
      * </p>
      * <ul>
      * <li>Always have a (non null) mapper for the cosine term of the functor.</li>
-     * <li>The {@linkplain ImmutableVector3StateSpaceMapper#getIndex0() indexes
-     * origin} of the mapper for the cosine term of the functor is greater than or
-     * equal to the {@linkplain #getIndex0() index origin} of this mapper.</li>
+     * <li>This mapper maps values contiguously, so the
+     * {@linkplain ImmutableVector3StateSpaceMapper#getIndex0() index origin} of the
+     * mapper for the cosine term of the functor is greater than or equal to the
+     * {@linkplain #getIndex0() index origin} of this mapper.</li>
+     * <li>The mapper for the cosine term maps to positions just after the
+     * {@linkplain ImmutableVector3StateSpaceMapper#getIndex0() positions} mapped to
+     * by the {@linkplain #getF2Mapper() quadratic term mapper}.</li>
      * </ul>
      *
      * @return the mapper
@@ -188,9 +204,13 @@ public final class HarmonicVector3Mapper implements ObjectStateSpaceMapper<Harmo
      * </p>
      * <ul>
      * <li>Always have a (non null) mapper for the sine term of the functor.</li>
-     * <li>The {@linkplain ImmutableVector3StateSpaceMapper#getIndex0() indexes
-     * origin} of the mapper for the sine term of the functor is greater than or
-     * equal to the {@linkplain #getIndex0() index origin} of this mapper.</li>
+     * <li>This mapper maps values contiguously, so the
+     * {@linkplain ImmutableVector3StateSpaceMapper#getIndex0() index origin} of the
+     * mapper for the sine term of the functor is greater than or equal to the
+     * {@linkplain #getIndex0() index origin} of this mapper.</li>
+     * <li>The mapper for the sine term maps to positions just after the
+     * {@linkplain ImmutableVector3StateSpaceMapper#getIndex0() positions} mapped to
+     * by the {@linkplain #getFcMapper() cosine term mapper}.</li>
      * </ul>
      *
      * @return the mapper
@@ -239,7 +259,8 @@ public final class HarmonicVector3Mapper implements ObjectStateSpaceMapper<Harmo
      */
     @Override
     public final int getSize() {
-        return 18;
+        return 2 + t0Mapper.getSize() + f0Mapper.getSize() + f1Mapper.getSize() + f2Mapper.getSize()
+                + fcMapper.getSize() + fsMapper.getSize();
     }
 
     /**
@@ -249,9 +270,12 @@ public final class HarmonicVector3Mapper implements ObjectStateSpaceMapper<Harmo
      * </p>
      * <ul>
      * <li>Always have a (non null) mapper for the time origin of the functor.</li>
-     * <li>The {@linkplain DurationMapper#getIndex() index} of the mapper for the
-     * time origin of the functor is greater than or equal to the
-     * {@linkplain #getIndex0() index origin}of this mapper.</li>
+     * <li>This mapper maps values contiguously, so the
+     * {@linkplain DurationMapper#getIndex() index} of the mapper for the time
+     * origin of the functor is greater than or equal to the
+     * {@linkplain #getIndex0() index origin} of this mapper.</li>
+     * <li>The mapper for the time origin maps to positions just after the
+     * {@linkplain #getWhIndex() position of the harmonic frequency term}.</li>
      * </ul>
      *
      * @return the mapper
