@@ -110,6 +110,8 @@ public class HarmonicVector3MapperTest {
         }
     }// class
 
+    private static final Integer ZERO = Integer.valueOf(0);
+
     private static final Duration SCALE_1 = Duration.ofSeconds(1);
 
     private static final Duration SCALE_2 = Duration.ofMillis(1);
@@ -154,24 +156,61 @@ public class HarmonicVector3MapperTest {
         ImmutableVector3StateSpaceMapperTest.assertInvariants(fsMapper);
 
         final int size = mapper.getSize();
-        final Integer index0 = Integer.valueOf(mapper.getIndex0());
+        final int index0 = mapper.getIndex0();
+        final Integer index0Integer = Integer.valueOf(index0);
         assertEquals(18, size, "size");
-        assertThat("The index position origin is not negative.", index0, greaterThanOrEqualTo(Integer.valueOf(0)));
+        assertThat("The index position origin is not negative.", index0Integer,
+                greaterThanOrEqualTo(Integer.valueOf(0)));
         assertEquals(mapper.getMinimumStateSpaceDimension(), index0 + size,
-                "The mapper maps to contiguous components.");
+                "The mapper maps to contiguous components (size).");
+        assertWeIndexInvariants(mapper);
+        assertWhIndexInvariants(mapper);
         assertAll(
                 "The index of the mapper for the terms of the functor are greater than or equal to the index origin of this mapper.",
-                () -> assertThat("time origin", Integer.valueOf(t0Mapper.getIndex()), greaterThanOrEqualTo(index0)),
-                () -> assertThat("constant term", Integer.valueOf(f0Mapper.getIndex0()), greaterThanOrEqualTo(index0)),
-                () -> assertThat("linear term.", Integer.valueOf(f1Mapper.getIndex0()), greaterThanOrEqualTo(index0)),
-                () -> assertThat("quadratic term", Integer.valueOf(f2Mapper.getIndex0()), greaterThanOrEqualTo(index0)),
-                () -> assertThat("cosine term", Integer.valueOf(fcMapper.getIndex0()), greaterThanOrEqualTo(index0)),
-                () -> assertThat("sine term", Integer.valueOf(fsMapper.getIndex0()), greaterThanOrEqualTo(index0)));
+                () -> assertThat("time origin", Integer.valueOf(t0Mapper.getIndex()),
+                        greaterThanOrEqualTo(index0Integer)),
+                () -> assertThat("constant term", Integer.valueOf(f0Mapper.getIndex0()),
+                        greaterThanOrEqualTo(index0Integer)),
+                () -> assertThat("linear term.", Integer.valueOf(f1Mapper.getIndex0()),
+                        greaterThanOrEqualTo(index0Integer)),
+                () -> assertThat("quadratic term", Integer.valueOf(f2Mapper.getIndex0()),
+                        greaterThanOrEqualTo(index0Integer)),
+                () -> assertThat("cosine term", Integer.valueOf(fcMapper.getIndex0()),
+                        greaterThanOrEqualTo(index0Integer)),
+                () -> assertThat("sine term", Integer.valueOf(fsMapper.getIndex0()),
+                        greaterThanOrEqualTo(index0Integer)));
     }
 
     public static void assertInvariants(final HarmonicVector3Mapper mapper1, final HarmonicVector3Mapper mapper2) {
         ObjectTest.assertInvariants(mapper1, mapper2);// inherited
         ObjectStateSpaceMapperTest.assertInvariants(mapper1, mapper2);// inherited
+    }
+
+    private static int assertWeIndexInvariants(final HarmonicVector3Mapper mapper) {
+        final int index = mapper.getWeIndex();
+
+        final Integer indexInteger = Integer.valueOf(index);
+        final int index0 = mapper.getIndex0();
+        assertThat("The index of the exponential frequency term is an index", indexInteger, greaterThanOrEqualTo(ZERO));
+        assertThat("This mapper maps values contiguously (weIndex)", indexInteger,
+                greaterThanOrEqualTo(Integer.valueOf(index0)));
+        assertEquals(index0, index, "The index of the exponential frequency term");
+
+        return index;
+    }
+
+    private static int assertWhIndexInvariants(final HarmonicVector3Mapper mapper) {
+        final int index = mapper.getWhIndex();
+
+        final Integer indexInteger = Integer.valueOf(index);
+        final int index0 = mapper.getIndex0();
+        assertThat("The index of the harmonic frequency term is an index", indexInteger, greaterThanOrEqualTo(ZERO));
+        assertThat("This mapper maps values contiguously (whIndex)", indexInteger,
+                greaterThanOrEqualTo(Integer.valueOf(index0)));
+        assertEquals(mapper.getWeIndex() + 1, index,
+                "This maps the harmonic frequency term to the position just after the exponential frequency term.");
+
+        return index;
     }
 
     public static void fromObject(final HarmonicVector3Mapper mapper, final double[] state,

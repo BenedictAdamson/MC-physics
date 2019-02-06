@@ -97,8 +97,8 @@ public final class HarmonicVector3Mapper implements ObjectStateSpaceMapper<Harmo
         Objects.requireNonNull(state, "state");
         Objects.requireNonNull(object, "object");
 
-        state[index0] = object.getWe();
-        state[index0 + 1] = object.getWh();
+        state[getWeIndex()] = object.getWe();
+        state[getWhIndex()] = object.getWh();
         t0Mapper.fromObject(state, object.getT0());
         f0Mapper.fromObject(state, object.getF0());
         f1Mapper.fromObject(state, object.getF1());
@@ -258,6 +258,48 @@ public final class HarmonicVector3Mapper implements ObjectStateSpaceMapper<Harmo
      */
     public final DurationMapper getT0Mapper() {
         return t0Mapper;
+    }
+
+    /**
+     * <p>
+     * The position in the state vector representation to and from which this maps
+     * the {@linkplain HarmonicVector3#getWe() exponential frequency term}.
+     * </p>
+     * <ul>
+     * <li>The index of the exponential frequency term is an index, and thus not
+     * negative.</li>
+     * <li>This mapper maps values contiguously, so the index of the exponential
+     * frequency term is greater than or equal to the {@linkplain #getIndex0() index
+     * origin} of this mapper.</li>
+     * <li>The index of the exponential frequency term is equal to the
+     * {@linkplain #getIndex0() index origin} of this mapper.</li>
+     * </ul>
+     *
+     * @return the index
+     */
+    public final int getWeIndex() {
+        return index0;
+    }
+
+    /**
+     * <p>
+     * The position in the state vector representation to and from which this maps
+     * the {@linkplain HarmonicVector3#getWh() harmonic frequency term}.
+     * </p>
+     * <ul>
+     * <li>The index of the harmonic frequency term is an index, and thus not
+     * negative.</li>
+     * <li>This mapper maps values contiguously, so the index of the harmonic
+     * frequency term is greater than or equal to the {@linkplain #getIndex0() index
+     * origin} of this mapper.</li>
+     * <li>This maps the harmonic frequency term to the position just after the
+     * {@linkplain #getWeIndex() exponential frequency term}.</li>
+     * </ul>
+     *
+     * @return the index
+     */
+    public final int getWhIndex() {
+        return index0 + 1;
     }
 
     @Override
