@@ -18,6 +18,9 @@ package uk.badamson.mc.physics.solver;
  * along with MC-physics.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+
 import uk.badamson.mc.math.FunctionNWithGradientValue;
 import uk.badamson.mc.math.ImmutableVectorN;
 
@@ -41,6 +44,8 @@ public class EnergyErrorFunctionTest {
         final FunctionNWithGradientValue fx = f.value(x);
 
         assertInvariants(f);
+        assertNotNull(fx, "Always returns a (non null) value.");
+        assertSame(x, fx.getX(), "The domain value of the returned object is the given state vector.");
 
         return fx;
     }
