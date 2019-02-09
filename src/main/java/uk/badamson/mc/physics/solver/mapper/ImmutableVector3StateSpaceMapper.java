@@ -108,8 +108,7 @@ public final class ImmutableVector3StateSpaceMapper implements VectorStateSpaceM
     @Override
     public final int getComponentIndex(final int i) {
         Objects.checkIndex(i, getDimension());
-        // TODO Auto-generated method stub
-        return 0;
+        return index0 + i;
     }
 
     /**
@@ -132,8 +131,7 @@ public final class ImmutableVector3StateSpaceMapper implements VectorStateSpaceM
     public final int getComponentIndex(final int i, final int j) {
         Objects.checkIndex(i, getDimension());
         Objects.checkIndex(j, 1);
-        // TODO Auto-generated method stub
-        return 0;
+        return index0 + i;
     }
 
     /**
