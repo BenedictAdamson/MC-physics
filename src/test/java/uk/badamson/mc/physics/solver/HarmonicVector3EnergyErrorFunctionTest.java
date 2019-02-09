@@ -18,6 +18,7 @@ package uk.badamson.mc.physics.solver;
  * along with MC-physics.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -32,7 +33,9 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import uk.badamson.mc.ObjectTest;
+import uk.badamson.mc.math.FunctionNWithGradientValue;
 import uk.badamson.mc.math.ImmutableVector3;
+import uk.badamson.mc.math.ImmutableVectorN;
 import uk.badamson.mc.physics.HarmonicVector3;
 import uk.badamson.mc.physics.solver.mapper.HarmonicVector3Mapper;
 import uk.badamson.mc.physics.solver.mapper.HarmonicVector3MapperTest;
@@ -155,12 +158,100 @@ public class HarmonicVector3EnergyErrorFunctionTest {
         }
     }// class
 
+    @Nested
+    public class Value {
+
+        @Test
+        public void a() {
+            final int index0 = 0;
+            final Duration scale = Duration.ofSeconds(1);
+            final double e = 2;
+            final ImmutableVector3 dedf0 = ImmutableVector3.create(3, 5, 7);
+            final ImmutableVector3 dedf1 = ImmutableVector3.create(11, 13, 17);
+            final ImmutableVector3 dedf2 = ImmutableVector3.create(19, 23, 29);
+            final ImmutableVector3 dedfc = ImmutableVector3.create(4, 6, 8);
+            final ImmutableVector3 dedfs = ImmutableVector3.create(10, 12, 14);
+            final double dedwe = 16;
+            final double dedwh = 18;
+
+            test(index0, scale, e, dedf0, dedf1, dedf2, dedfc, dedfs, dedwe, dedwh);
+        }
+
+        @Test
+        public void b() {
+            final int index0 = 0;
+            final Duration scale = Duration.ofSeconds(1);
+            final double e = 12;
+            final ImmutableVector3 dedf0 = ImmutableVector3.create(13, 15, 17);
+            final ImmutableVector3 dedf1 = ImmutableVector3.create(21, 23, 27);
+            final ImmutableVector3 dedf2 = ImmutableVector3.create(29, 33, 39);
+            final ImmutableVector3 dedfc = ImmutableVector3.create(14, 16, 18);
+            final ImmutableVector3 dedfs = ImmutableVector3.create(20, 22, 24);
+            final double dedwe = 26;
+            final double dedwh = 28;
+
+            test(index0, scale, e, dedf0, dedf1, dedf2, dedfc, dedfs, dedwe, dedwh);
+        }
+
+        @Test
+        public void c() {
+            final int index0 = 16;
+            final Duration scale = Duration.ofMillis(1);
+            final double e = 2;
+            final ImmutableVector3 dedf0 = ImmutableVector3.create(3, 5, 7);
+            final ImmutableVector3 dedf1 = ImmutableVector3.create(11, 13, 17);
+            final ImmutableVector3 dedf2 = ImmutableVector3.create(19, 23, 29);
+            final ImmutableVector3 dedfc = ImmutableVector3.create(4, 6, 8);
+            final ImmutableVector3 dedfs = ImmutableVector3.create(10, 12, 14);
+            final double dedwe = 16;
+            final double dedwh = 18;
+
+            test(index0, scale, e, dedf0, dedf1, dedf2, dedfc, dedfs, dedwe, dedwh);
+        }
+
+        private void test(final int index0, final Duration scale, final double e, final ImmutableVector3 dedf0,
+                final ImmutableVector3 dedf1, final ImmutableVector3 dedf2, final ImmutableVector3 dedfc,
+                final ImmutableVector3 dedfs, final double dedwe, final double dedwh) {
+            final var valueAndGradient = new HarmonicVector3EnergyErrorValueAndGradients(e, dedf0, dedf1, dedf2, dedfc,
+                    dedfs, dedwe, dedwh);
+            final var mapper = new HarmonicVector3Mapper(index0, scale);
+            final Function<HarmonicVector3, HarmonicVector3EnergyErrorValueAndGradients> term = (
+                    vector) -> valueAndGradient;
+            final var f = new HarmonicVector3EnergyErrorFunction(mapper, List.of(term));
+            final double[] stateElements = new double[mapper.getMinimumStateSpaceDimension()];
+            mapper.fromObject(stateElements, v1);
+            final ImmutableVectorN state = ImmutableVectorN.create(stateElements);
+
+            final FunctionNWithGradientValue value = value(f, state);
+
+            assertEquals(e, value.getF(), "Function e value");
+            final ImmutableVectorN dfDx = value.getDfDx();
+            assertEquals(dedwe, dfDx.get(mapper.getWeIndex()), "Function dedwe value");
+            assertEquals(dedwh, dfDx.get(mapper.getWhIndex()), "Function dedwh value");
+            for (int i = 0; i < 3; ++i) {
+                final int component = i;
+                assertAll("Function gradient value [" + i + "]",
+                        () -> assertEquals(dedf0.get(component),
+                                dfDx.get(mapper.getF0Mapper().getComponentIndex(component)), "dedf0 value"),
+                        () -> assertEquals(dedf1.get(component),
+                                dfDx.get(mapper.getF1Mapper().getComponentIndex(component)), "dedf1 value"),
+                        () -> assertEquals(dedf2.get(component),
+                                dfDx.get(mapper.getF2Mapper().getComponentIndex(component)), "dedf2 value"),
+                        () -> assertEquals(dedfc.get(component),
+                                dfDx.get(mapper.getFcMapper().getComponentIndex(component)), "dedfc value"),
+                        () -> assertEquals(dedfs.get(component),
+                                dfDx.get(mapper.getFsMapper().getComponentIndex(component)), "dedfs value"));
+            } // for
+        }
+
+    }// class
+
     private static HarmonicVector3Mapper mapper1;
+
     private static HarmonicVector3Mapper mapper2;
     private static Function<HarmonicVector3, HarmonicVector3EnergyErrorValueAndGradients> term1;
     private static Function<HarmonicVector3, HarmonicVector3EnergyErrorValueAndGradients> term2;
     private static HarmonicVector3 v1;
-
     private static HarmonicVector3 v2;
 
     public static void assertInvariants(final HarmonicVector3EnergyErrorFunction f) {
@@ -198,5 +289,14 @@ public class HarmonicVector3EnergyErrorFunctionTest {
                 ImmutableVector3.J, ImmutableVector3.K, 3, 4);
         v2 = new HarmonicVector3(Duration.ofSeconds(3), ImmutableVector3.K, ImmutableVector3.I, ImmutableVector3.J,
                 ImmutableVector3.K, ImmutableVector3.I, 5, 7);
+    }
+
+    public static FunctionNWithGradientValue value(final HarmonicVector3EnergyErrorFunction f,
+            final ImmutableVectorN state) {
+        final FunctionNWithGradientValue v = EnergyErrorFunctionTest.value(f, state);
+
+        assertInvariants(f);
+
+        return v;
     }
 }

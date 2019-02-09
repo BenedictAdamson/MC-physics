@@ -116,10 +116,20 @@ public final class HarmonicVector3EnergyErrorFunction
         return HarmonicVector3EnergyErrorValueAndGradients.sum(values);
     }
 
-    private ImmutableVectorN convertToStateVectorGradient(
-            final HarmonicVector3EnergyErrorValueAndGradients errorAndGradients) {
-        // FIXME
-        return null;
+    @NonNull
+    private ImmutableVectorN convertToDeDx(
+            @NonNull final HarmonicVector3EnergyErrorValueAndGradients errorAndGradients) {
+        final double[] dedx = new double[mapper.getMinimumStateSpaceDimension()];
+        dedx[mapper.getWeIndex()] = errorAndGradients.getDedwe();
+        dedx[mapper.getWhIndex()] = errorAndGradients.getDedwh();
+        for (int i = 0; i < 3; ++i) {
+            dedx[mapper.getF0Mapper().getComponentIndex(i)] = errorAndGradients.getDedf0().get(i);
+            dedx[mapper.getF1Mapper().getComponentIndex(i)] = errorAndGradients.getDedf1().get(i);
+            dedx[mapper.getF2Mapper().getComponentIndex(i)] = errorAndGradients.getDedf2().get(i);
+            dedx[mapper.getFcMapper().getComponentIndex(i)] = errorAndGradients.getDedfc().get(i);
+            dedx[mapper.getFsMapper().getComponentIndex(i)] = errorAndGradients.getDedfs().get(i);
+        }
+        return ImmutableVectorN.create(dedx);
     }
 
     /**
@@ -175,14 +185,10 @@ public final class HarmonicVector3EnergyErrorFunction
      */
     @Override
     public FunctionNWithGradientValue value(final ImmutableVectorN state) {
-        /*
-         * TODO final HarmonicVector3 vector = mapper.toObject(state); final
-         * HarmonicVector3EnergyErrorValueAndGradients errorAndGradients =
-         * apply(vector); final ImmutableVectorN dedx =
-         * convertToStateVectorGradient(errorAndGradients); return new
-         * FunctionNWithGradientValue(state, errorAndGradients.getE(), dedx);
-         */
-        return null;
+        final HarmonicVector3 vector = mapper.toObject(state);
+        final HarmonicVector3EnergyErrorValueAndGradients errorAndGradients = apply(vector);
+        final ImmutableVectorN dedx = convertToDeDx(errorAndGradients);
+        return new FunctionNWithGradientValue(state, errorAndGradients.getE(), dedx);
     }
 
 }
