@@ -28,6 +28,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import uk.badamson.mc.math.ImmutableVector3;
 import uk.badamson.mc.physics.HarmonicVector3;
 import uk.badamson.mc.physics.HarmonicVector3Test;
@@ -38,6 +39,21 @@ import uk.badamson.mc.physics.HarmonicVector3Test;
  * </p>
  */
 public class HarmonicVector3EnergyErrorFunctionTermsTest {
+
+    @Nested
+    public class ValueTerm {
+
+        private void test(final double scale, @NonNull final Duration t, @NonNull final ImmutableVector3 wanted,
+                final HarmonicVector3 actual,
+                final HarmonicVector3EnergyErrorValueAndGradients expectedErrorAndGradients, final double delta,
+                final double wScale, final double fScale) {
+            final var term = HarmonicVector3EnergyErrorFunctionTerms.createValueTerm(scale, t, wanted);
+            final var errorAndGradients = HarmonicVector3EnergyErrorFunctionTermsTest.apply(term, actual);
+            HarmonicVector3EnergyErrorValueAndGradientsTest.assertEquals(expectedErrorAndGradients, errorAndGradients,
+                    delta, wScale, fScale, "error");
+        }
+
+    }// class
 
     @Nested
     public class Zero {
@@ -56,7 +72,7 @@ public class HarmonicVector3EnergyErrorFunctionTermsTest {
 
         @Test
         public void b() {
-            apply(v1);
+            apply(v2);
         }
     }// class
 
