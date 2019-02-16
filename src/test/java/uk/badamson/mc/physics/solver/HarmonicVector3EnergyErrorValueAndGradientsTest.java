@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -63,7 +64,7 @@ public class HarmonicVector3EnergyErrorValueAndGradientsTest {
                         dedwe, dedwh);
 
                 assertInvariants(value1, value2);
-                assertEquals(value1, value2);
+                Assertions.assertEquals(value1, value2);
             }
         }// class
 
@@ -156,14 +157,14 @@ public class HarmonicVector3EnergyErrorValueAndGradientsTest {
                     dedwe, dedwh);
 
             assertInvariants(value);
-            assertEquals(e, value.getE(), "e");
+            Assertions.assertEquals(e, value.getE(), "e");
             assertSame(dedf0, value.getDedf0(), "dedf0");
             assertSame(dedf1, value.getDedf1(), "dedf1");
             assertSame(dedf2, value.getDedf2(), "dedf2");
             assertSame(dedfc, value.getDedfc(), "dedfc");
             assertSame(dedfs, value.getDedfs(), "dedfs");
-            assertEquals(dedwe, value.getDedwe(), "dedwe");
-            assertEquals(dedwh, value.getDedwh(), "dedwh");
+            Assertions.assertEquals(dedwe, value.getDedwe(), "dedwe");
+            Assertions.assertEquals(dedwh, value.getDedwh(), "dedwh");
 
             return value;
         }
@@ -186,7 +187,7 @@ public class HarmonicVector3EnergyErrorValueAndGradientsTest {
 
             private void test(final HarmonicVector3EnergyErrorValueAndGradients value) {
                 final HarmonicVector3EnergyErrorValueAndGradients total = Sum.this.test(value);
-                assertEquals(value, total);
+                Assertions.assertEquals(value, total);
             }
         }// class
 
@@ -218,14 +219,14 @@ public class HarmonicVector3EnergyErrorValueAndGradientsTest {
                 assertInvariants(value1, total);
                 assertInvariants(value2, total);
 
-                assertEquals(e1 + e2, total.getE(), "e");
-                assertEquals(dedf01.plus(dedf02), total.getDedf0(), "dedf0");
-                assertEquals(dedf11.plus(dedf12), total.getDedf1(), "dedf1");
-                assertEquals(dedf21.plus(dedf22), total.getDedf2(), "dedf2");
-                assertEquals(dedfc1.plus(dedfc2), total.getDedfc(), "dedfc");
-                assertEquals(dedfs1.plus(dedfs2), total.getDedfs(), "dedfs");
-                assertEquals(dedwe1 + dedwe2, total.getDedwe(), "dedwe");
-                assertEquals(dedwh1 + dedwh2, total.getDedwh(), "dedwh");
+                Assertions.assertEquals(e1 + e2, total.getE(), "e");
+                Assertions.assertEquals(dedf01.plus(dedf02), total.getDedf0(), "dedf0");
+                Assertions.assertEquals(dedf11.plus(dedf12), total.getDedf1(), "dedf1");
+                Assertions.assertEquals(dedf21.plus(dedf22), total.getDedf2(), "dedf2");
+                Assertions.assertEquals(dedfc1.plus(dedfc2), total.getDedfc(), "dedfc");
+                Assertions.assertEquals(dedfs1.plus(dedfs2), total.getDedfs(), "dedfs");
+                Assertions.assertEquals(dedwe1 + dedwe2, total.getDedwe(), "dedwe");
+                Assertions.assertEquals(dedwh1 + dedwh2, total.getDedwh(), "dedwh");
             }
         }// class
 
@@ -244,7 +245,7 @@ public class HarmonicVector3EnergyErrorValueAndGradientsTest {
         @Test
         public void zero() {
             final HarmonicVector3EnergyErrorValueAndGradients total = test();
-            assertEquals(HarmonicVector3EnergyErrorValueAndGradients.ZERO, total, "zero");
+            Assertions.assertEquals(HarmonicVector3EnergyErrorValueAndGradients.ZERO, total, "zero");
         }
 
     }// class
@@ -281,5 +282,19 @@ public class HarmonicVector3EnergyErrorValueAndGradientsTest {
         assertFalse(equals && !e1.getDedf2().equals(e2.getDedf2()), "Value semantics, dedf2");
         assertFalse(equals && !e1.getDedfc().equals(e2.getDedfc()), "Value semantics, dedfc");
         assertFalse(equals && !e1.getDedfs().equals(e2.getDedfs()), "Value semantics, dedfs");
+    }
+
+    public static void assertEquals(HarmonicVector3EnergyErrorValueAndGradients actual,
+            HarmonicVector3EnergyErrorValueAndGradients expected, double delta, double wScale, double fScale, String message) {
+        final double deltaDeDw = delta/wScale;
+        final double deltaDeDf = delta/fScale;
+        Assertions.assertEquals(expected.getE(), actual.getE(), delta, message + " e");
+        Assertions.assertEquals(expected.getDedwe(), actual.getDedwe(), deltaDeDw, message + " dedwe");
+        Assertions.assertEquals(expected.getDedwh(), actual.getDedwh(), deltaDeDw, message + " dedwh");
+        Assertions.assertEquals(0.0, actual.getDedf0().minus(expected.getDedf0()).magnitude(), deltaDeDf, message + " dedf0");
+        Assertions.assertEquals(0.0, actual.getDedf1().minus(expected.getDedf1()).magnitude(), deltaDeDf, message + " dedf1");
+        Assertions.assertEquals(0.0, actual.getDedf2().minus(expected.getDedf2()).magnitude(), deltaDeDf, message + " dedf2");
+        Assertions.assertEquals(0.0, actual.getDedfc().minus(expected.getDedfc()).magnitude(), deltaDeDf, message + " dedfc");
+        Assertions.assertEquals(0.0, actual.getDedfs().minus(expected.getDedfs()).magnitude(), deltaDeDf, message + " dedfs");
     }
 }
