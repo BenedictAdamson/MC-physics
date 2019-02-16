@@ -27,6 +27,8 @@ import net.jcip.annotations.Immutable;
 import uk.badamson.mc.math.FunctionNWithGradient;
 import uk.badamson.mc.math.FunctionNWithGradientValue;
 import uk.badamson.mc.math.ImmutableVectorN;
+import uk.badamson.mc.math.MinN;
+import uk.badamson.mc.math.PoorlyConditionedFunctionException;
 import uk.badamson.mc.physics.HarmonicVector3;
 import uk.badamson.mc.physics.solver.mapper.HarmonicVector3Mapper;
 
@@ -177,6 +179,44 @@ public final class HarmonicVector3EnergyErrorFunction
     }
 
     /**
+     * <p>
+     * Find the {@linkplain HarmonicVector3 time varying 3D vector property} that
+     * minimizes this energy error function.
+     * </p>
+     * <p>
+     * This performs an iterative computation using the Polak-Ribere's modification
+     * of the Fletcher-Reeves conjugate gradient algorithm.
+     * </p>
+     *
+     * @param f0
+     *            An initial guess for the time varying 3D vector property
+     * @param tolerance
+     *            The convergence tolerance fir the iterative procedure.
+     * @return the time varying 3D vector property that minimizes this energy error
+     *         function; not null.
+     *
+     * @throws NullPointerException
+     *             If {@code f0} is null.
+     * @throws IllegalArgumentException
+     *             If {@code tolerance} is not in the range (0.0, 1.0).
+     * @throws PoorlyConditionedFunctionException
+     *             <ul>
+     *             <li>If this does not have a minimum</li>
+     *             <li>If this has a minimum, but it is impossible to find using
+     *             {@code f0} because this has an odd-powered high order term that
+     *             causes the iterative procedure to diverge.</li>
+     *             </ul>
+     */
+    public final @NonNull HarmonicVector3 minimiseEnergyError(@NonNull final HarmonicVector3 f0, final double tolerance)
+            throws PoorlyConditionedFunctionException {
+        final double[] terms = new double[mapper.getMinimumStateSpaceDimension()];
+        mapper.fromObject(terms, f0);
+        final ImmutableVectorN x0 = ImmutableVectorN.create(terms);
+        final FunctionNWithGradientValue minState = MinN.findFletcherReevesPolakRibere(this, x0, tolerance);
+        return mapper.toObject(minState.getX());
+    }
+
+    /**
      * {@inheritDoc}
      *
      * @param state
@@ -190,5 +230,4 @@ public final class HarmonicVector3EnergyErrorFunction
         final ImmutableVectorN dedx = convertToDeDx(errorAndGradients);
         return new FunctionNWithGradientValue(state, errorAndGradients.getE(), dedx);
     }
-
 }

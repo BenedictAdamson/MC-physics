@@ -18,13 +18,17 @@ package uk.badamson.mc.physics.solver;
  * along with MC-physics.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.number.OrderingComparison.lessThanOrEqualTo;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.function.Function;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -32,6 +36,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import uk.badamson.mc.math.ImmutableVector3;
 import uk.badamson.mc.physics.HarmonicVector3;
 import uk.badamson.mc.physics.HarmonicVector3Test;
+import uk.badamson.mc.physics.solver.mapper.HarmonicVector3Mapper;
 
 /**
  * <p>
@@ -150,6 +155,189 @@ public class HarmonicVector3EnergyErrorFunctionTermsTest {
             }
         }// class
 
+        @Nested
+        @Disabled
+        public class MinimiseEnergyError {
+
+            @Test
+            public void decay() {
+                final Duration timeScale = T_1;
+                final double energyScale = 2;
+                final Duration t1 = Duration.ofSeconds(1);
+                final ImmutableVector3 wanted1 = ImmutableVector3.I.scale(16);
+                final Duration t2 = Duration.ofSeconds(2);
+                final ImmutableVector3 wanted2 = ImmutableVector3.I.scale(8);
+                final Duration t3 = Duration.ofSeconds(3);
+                final ImmutableVector3 wanted3 = ImmutableVector3.I.scale(4);
+                final Duration t4 = Duration.ofSeconds(4);
+                final ImmutableVector3 wanted4 = ImmutableVector3.I.scale(2);
+                final Duration t5 = Duration.ofSeconds(5);
+                final ImmutableVector3 wanted5 = ImmutableVector3.I;
+                final HarmonicVector3 f0 = v1;
+                final double delta = 1E-3;
+
+                test(timeScale, energyScale, t1, wanted1, t2, wanted2, t3, wanted3, t4, wanted4, t5, wanted5, f0,
+                        delta);
+            }
+
+            @Test
+            public void exponentialGrowth() {
+                final Duration timeScale = T_1;
+                final double energyScale = 2;
+                final Duration t1 = Duration.ofSeconds(1);
+                final ImmutableVector3 wanted1 = ImmutableVector3.I;
+                final Duration t2 = Duration.ofSeconds(2);
+                final ImmutableVector3 wanted2 = ImmutableVector3.I.scale(2);
+                final Duration t3 = Duration.ofSeconds(3);
+                final ImmutableVector3 wanted3 = ImmutableVector3.I.scale(4);
+                final Duration t4 = Duration.ofSeconds(4);
+                final ImmutableVector3 wanted4 = ImmutableVector3.I.scale(8);
+                final Duration t5 = Duration.ofSeconds(5);
+                final ImmutableVector3 wanted5 = ImmutableVector3.I.scale(16);
+                final HarmonicVector3 f0 = v1;
+                final double delta = 1E-3;
+
+                test(timeScale, energyScale, t1, wanted1, t2, wanted2, t3, wanted3, t4, wanted4, t5, wanted5, f0,
+                        delta);
+            }
+
+            @Test
+            public void linear() {
+                final Duration timeScale = T_1;
+                final double energyScale = 2;
+                final Duration t1 = Duration.ofSeconds(1);
+                final ImmutableVector3 wanted1 = ImmutableVector3.I;
+                final Duration t2 = Duration.ofSeconds(2);
+                final ImmutableVector3 wanted2 = ImmutableVector3.I.scale(2);
+                final Duration t3 = Duration.ofSeconds(3);
+                final ImmutableVector3 wanted3 = ImmutableVector3.I.scale(3);
+                final Duration t4 = Duration.ofSeconds(4);
+                final ImmutableVector3 wanted4 = ImmutableVector3.I.scale(4);
+                final Duration t5 = Duration.ofSeconds(5);
+                final ImmutableVector3 wanted5 = ImmutableVector3.I.scale(5);
+                final HarmonicVector3 f0 = v1;
+                final double delta = 1E-3;
+
+                test(timeScale, energyScale, t1, wanted1, t2, wanted2, t3, wanted3, t4, wanted4, t5, wanted5, f0,
+                        delta);
+            }
+
+            @Test
+            public void oscillateA() {
+                final Duration timeScale = T_1;
+                final double energyScale = 2;
+                final Duration t1 = Duration.ofSeconds(1);
+                final ImmutableVector3 wanted1 = ImmutableVector3.I;
+                final Duration t2 = Duration.ofSeconds(2);
+                final ImmutableVector3 wanted2 = ImmutableVector3.ZERO;
+                final Duration t3 = Duration.ofSeconds(3);
+                final ImmutableVector3 wanted3 = ImmutableVector3.I.scale(-1);
+                final Duration t4 = Duration.ofSeconds(4);
+                final ImmutableVector3 wanted4 = ImmutableVector3.ZERO;
+                final Duration t5 = Duration.ofSeconds(5);
+                final ImmutableVector3 wanted5 = ImmutableVector3.I;
+                final HarmonicVector3 f0 = v1;
+                final double delta = 1E-3;
+
+                test(timeScale, energyScale, t1, wanted1, t2, wanted2, t3, wanted3, t4, wanted4, t5, wanted5, f0,
+                        delta);
+            }
+
+            @Test
+            public void oscillateB() {
+                final Duration timeScale = T_1;
+                final double energyScale = 2;
+                final Duration t1 = Duration.ofSeconds(1);
+                final ImmutableVector3 wanted1 = ImmutableVector3.ZERO;
+                final Duration t2 = Duration.ofSeconds(2);
+                final ImmutableVector3 wanted2 = ImmutableVector3.I;
+                final Duration t3 = Duration.ofSeconds(3);
+                final ImmutableVector3 wanted3 = ImmutableVector3.ZERO;
+                final Duration t4 = Duration.ofSeconds(4);
+                final ImmutableVector3 wanted4 = ImmutableVector3.I.scale(-1);
+                final Duration t5 = Duration.ofSeconds(5);
+                final ImmutableVector3 wanted5 = ImmutableVector3.ZERO;
+                final HarmonicVector3 f0 = v1;
+                final double delta = 1E-3;
+
+                test(timeScale, energyScale, t1, wanted1, t2, wanted2, t3, wanted3, t4, wanted4, t5, wanted5, f0,
+                        delta);
+            }
+
+            @Test
+            public void quadratic() {
+                final Duration timeScale = T_1;
+                final double energyScale = 2;
+                final Duration t1 = Duration.ofSeconds(1);
+                final ImmutableVector3 wanted1 = ImmutableVector3.I;
+                final Duration t2 = Duration.ofSeconds(2);
+                final ImmutableVector3 wanted2 = ImmutableVector3.I.scale(4);
+                final Duration t3 = Duration.ofSeconds(3);
+                final ImmutableVector3 wanted3 = ImmutableVector3.I.scale(9);
+                final Duration t4 = Duration.ofSeconds(4);
+                final ImmutableVector3 wanted4 = ImmutableVector3.I.scale(16);
+                final Duration t5 = Duration.ofSeconds(5);
+                final ImmutableVector3 wanted5 = ImmutableVector3.I.scale(25);
+                final HarmonicVector3 f0 = v1;
+                final double delta = 1E-3;
+
+                test(timeScale, energyScale, t1, wanted1, t2, wanted2, t3, wanted3, t4, wanted4, t5, wanted5, f0,
+                        delta);
+            }
+
+            private void test(final Duration timeScale, final double energyScale, final Duration t1,
+                    final ImmutableVector3 wanted1, final Duration t2, final ImmutableVector3 wanted2,
+                    final Duration t3, final ImmutableVector3 wanted3, final Duration t4,
+                    final ImmutableVector3 wanted4, final Duration t5, final ImmutableVector3 wanted5,
+                    final HarmonicVector3 f0, final double delta) {
+                final Double deltaDouble = Double.valueOf(delta);
+                final HarmonicVector3Mapper mapper = new HarmonicVector3Mapper(0, timeScale);
+                final var term1 = HarmonicVector3EnergyErrorFunctionTerms.createValueTerm(energyScale, t1, wanted1);
+                final var term2 = HarmonicVector3EnergyErrorFunctionTerms.createValueTerm(energyScale, t2, wanted2);
+                final var term3 = HarmonicVector3EnergyErrorFunctionTerms.createValueTerm(energyScale, t3, wanted3);
+                final var term4 = HarmonicVector3EnergyErrorFunctionTerms.createValueTerm(energyScale, t4, wanted4);
+                final var term5 = HarmonicVector3EnergyErrorFunctionTerms.createValueTerm(energyScale, t5, wanted5);
+                final var errorFunction = new HarmonicVector3EnergyErrorFunction(mapper,
+                        Arrays.asList(term1, term2, term3, term4, term5));
+                final double tolerance = 1E-5;
+
+                final HarmonicVector3 solution = HarmonicVector3EnergyErrorFunctionTest
+                        .minimiseEnergyError(errorFunction, f0, tolerance);
+
+                assertThat("Passes through point 1", Double.valueOf(wanted1.minus(solution.at(t1)).magnitude2()),
+                        lessThanOrEqualTo(deltaDouble));
+                assertThat("Passes through point 2", Double.valueOf(wanted2.minus(solution.at(t2)).magnitude2()),
+                        lessThanOrEqualTo(deltaDouble));
+                assertThat("Passes through point 3", Double.valueOf(wanted3.minus(solution.at(t3)).magnitude2()),
+                        lessThanOrEqualTo(deltaDouble));
+                assertThat("Passes through point 4", Double.valueOf(wanted4.minus(solution.at(t4)).magnitude2()),
+                        lessThanOrEqualTo(deltaDouble));
+                assertThat("Passes through point 5", Double.valueOf(wanted5.minus(solution.at(t5)).magnitude2()),
+                        lessThanOrEqualTo(deltaDouble));
+            }
+
+            @Test
+            public void zero() {
+                final Duration timeScale = T_1;
+                final double energyScale = 2;
+                final Duration t1 = T_2;
+                final ImmutableVector3 wanted1 = ImmutableVector3.ZERO;
+                final Duration t2 = T_3;
+                final ImmutableVector3 wanted2 = ImmutableVector3.ZERO;
+                final Duration t3 = T_4;
+                final ImmutableVector3 wanted3 = ImmutableVector3.ZERO;
+                final Duration t4 = T_5;
+                final ImmutableVector3 wanted4 = ImmutableVector3.ZERO;
+                final Duration t5 = T_6;
+                final ImmutableVector3 wanted5 = ImmutableVector3.ZERO;
+                final HarmonicVector3 f0 = v1;
+                final double delta = 1E-3;
+
+                test(timeScale, energyScale, t1, wanted1, t2, wanted2, t3, wanted3, t4, wanted4, t5, wanted5, f0,
+                        delta);
+            }
+        }// class
+
         private void test(final double scale, @NonNull final Duration t, @NonNull final ImmutableVector3 wanted,
                 final HarmonicVector3 actual,
                 final HarmonicVector3EnergyErrorValueAndGradients expectedErrorAndGradients, final double delta,
@@ -199,6 +387,12 @@ public class HarmonicVector3EnergyErrorFunctionTermsTest {
     private static final Duration T_2 = Duration.ofSeconds(3);
 
     private static final Duration T_3 = Duration.ofSeconds(5);
+
+    private static final Duration T_4 = Duration.ofSeconds(7);
+
+    private static final Duration T_5 = Duration.ofSeconds(11);
+
+    private static final Duration T_6 = Duration.ofSeconds(13);
 
     private static HarmonicVector3 v1;
 

@@ -18,6 +18,8 @@ package uk.badamson.mc.physics.solver;
  * along with MC-physics.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.number.OrderingComparison.lessThanOrEqualTo;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -32,11 +34,14 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import uk.badamson.mc.ObjectTest;
 import uk.badamson.mc.math.FunctionNWithGradientValue;
 import uk.badamson.mc.math.ImmutableVector3;
 import uk.badamson.mc.math.ImmutableVectorN;
+import uk.badamson.mc.math.PoorlyConditionedFunctionException;
 import uk.badamson.mc.physics.HarmonicVector3;
+import uk.badamson.mc.physics.HarmonicVector3Test;
 import uk.badamson.mc.physics.solver.mapper.HarmonicVector3Mapper;
 import uk.badamson.mc.physics.solver.mapper.HarmonicVector3MapperTest;
 
@@ -278,6 +283,21 @@ public class HarmonicVector3EnergyErrorFunctionTest {
         EnergyErrorFunctionTest.assertInvariants(f1, f2);// inherited
     }
 
+    public static @NonNull HarmonicVector3 minimiseEnergyError(final HarmonicVector3EnergyErrorFunction f,
+            @NonNull final HarmonicVector3 f0, final double tolerance) throws PoorlyConditionedFunctionException {
+        final double e0 = f.apply(f0).getE();
+
+        final HarmonicVector3 minimum = f.minimiseEnergyError(f0, tolerance);
+
+        assertInvariants(f);// check for side-effects
+        assertNotNull(minimum, "Not null, result");
+        HarmonicVector3Test.assertInvariants(minimum);
+        final double e = f.apply(minimum).getE();
+        assertThat("Did not increase the the error", Double.valueOf(e), lessThanOrEqualTo(Double.valueOf(e0)));
+
+        return minimum;
+    }
+
     @BeforeAll
     public static void setUp() {
         mapper1 = new HarmonicVector3Mapper(0, Duration.ofSeconds(1));
@@ -299,4 +319,5 @@ public class HarmonicVector3EnergyErrorFunctionTest {
 
         return v;
     }
+
 }
