@@ -18,7 +18,6 @@ package uk.badamson.mc.physics.solver;
  * along with MC-physics.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -259,6 +258,26 @@ public class HarmonicVector3EnergyErrorValueAndGradientsTest {
     private static ImmutableVector3 V_5 = ImmutableVector3.create(5, 7, 11);
     private static ImmutableVector3 V_6 = ImmutableVector3.create(13, 17, 19);
 
+    public static void assertEquals(final HarmonicVector3EnergyErrorValueAndGradients actual,
+            final HarmonicVector3EnergyErrorValueAndGradients expected, final double delta, final double wScale,
+            final double fScale, final String message) {
+        final double deltaDeDw = delta / wScale;
+        final double deltaDeDf = delta / fScale;
+        Assertions.assertEquals(expected.getE(), actual.getE(), delta, message + " e");
+        Assertions.assertEquals(expected.getDedwe(), actual.getDedwe(), deltaDeDw, message + " dedwe");
+        Assertions.assertEquals(expected.getDedwh(), actual.getDedwh(), deltaDeDw, message + " dedwh");
+        Assertions.assertEquals(0.0, actual.getDedf0().minus(expected.getDedf0()).magnitude(), deltaDeDf,
+                message + " dedf0");
+        Assertions.assertEquals(0.0, actual.getDedf1().minus(expected.getDedf1()).magnitude(), deltaDeDf,
+                message + " dedf1");
+        Assertions.assertEquals(0.0, actual.getDedf2().minus(expected.getDedf2()).magnitude(), deltaDeDf,
+                message + " dedf2");
+        Assertions.assertEquals(0.0, actual.getDedfc().minus(expected.getDedfc()).magnitude(), deltaDeDf,
+                message + " dedfc");
+        Assertions.assertEquals(0.0, actual.getDedfs().minus(expected.getDedfs()).magnitude(), deltaDeDf,
+                message + " dedfs");
+    }
+
     public static void assertInvariants(final HarmonicVector3EnergyErrorValueAndGradients e) {
         ObjectTest.assertInvariants(e);// inherited
 
@@ -282,19 +301,5 @@ public class HarmonicVector3EnergyErrorValueAndGradientsTest {
         assertFalse(equals && !e1.getDedf2().equals(e2.getDedf2()), "Value semantics, dedf2");
         assertFalse(equals && !e1.getDedfc().equals(e2.getDedfc()), "Value semantics, dedfc");
         assertFalse(equals && !e1.getDedfs().equals(e2.getDedfs()), "Value semantics, dedfs");
-    }
-
-    public static void assertEquals(HarmonicVector3EnergyErrorValueAndGradients actual,
-            HarmonicVector3EnergyErrorValueAndGradients expected, double delta, double wScale, double fScale, String message) {
-        final double deltaDeDw = delta/wScale;
-        final double deltaDeDf = delta/fScale;
-        Assertions.assertEquals(expected.getE(), actual.getE(), delta, message + " e");
-        Assertions.assertEquals(expected.getDedwe(), actual.getDedwe(), deltaDeDw, message + " dedwe");
-        Assertions.assertEquals(expected.getDedwh(), actual.getDedwh(), deltaDeDw, message + " dedwh");
-        Assertions.assertEquals(0.0, actual.getDedf0().minus(expected.getDedf0()).magnitude(), deltaDeDf, message + " dedf0");
-        Assertions.assertEquals(0.0, actual.getDedf1().minus(expected.getDedf1()).magnitude(), deltaDeDf, message + " dedf1");
-        Assertions.assertEquals(0.0, actual.getDedf2().minus(expected.getDedf2()).magnitude(), deltaDeDf, message + " dedf2");
-        Assertions.assertEquals(0.0, actual.getDedfc().minus(expected.getDedfc()).magnitude(), deltaDeDf, message + " dedfc");
-        Assertions.assertEquals(0.0, actual.getDedfs().minus(expected.getDedfs()).magnitude(), deltaDeDf, message + " dedfs");
     }
 }
