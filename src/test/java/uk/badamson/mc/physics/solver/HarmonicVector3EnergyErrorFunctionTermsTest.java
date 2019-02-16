@@ -43,16 +43,86 @@ public class HarmonicVector3EnergyErrorFunctionTermsTest {
     @Nested
     public class ValueTerm {
 
+        @Nested
+        public class HasWanted {
+
+            @Nested
+            public class AtOrigin {
+
+                @Test
+                public void constantA() {
+                    test(1, T_1, F_1, ImmutableVector3.ZERO, ImmutableVector3.ZERO, ImmutableVector3.ZERO,
+                            ImmutableVector3.ZERO, 0, 0);
+                }
+
+                @Test
+                public void constantB() {
+                    test(2, T_2, F_2, ImmutableVector3.ZERO, ImmutableVector3.ZERO, ImmutableVector3.ZERO,
+                            ImmutableVector3.ZERO, 0, 0);
+                }
+
+                @Test
+                public void cosine() {
+                    test(1, T_1, ImmutableVector3.ZERO, ImmutableVector3.ZERO, ImmutableVector3.ZERO, F_1,
+                            ImmutableVector3.ZERO, 0, 2);
+                }
+
+                @Test
+                public void exponential() {
+                    test(1, T_1, ImmutableVector3.ZERO, ImmutableVector3.ZERO, ImmutableVector3.ZERO, F_1,
+                            ImmutableVector3.ZERO, 2, 0);
+                }
+
+                @Test
+                public void linear() {
+                    test(1, T_1, ImmutableVector3.ZERO, F_1, ImmutableVector3.ZERO, ImmutableVector3.ZERO,
+                            ImmutableVector3.ZERO, 0, 0);
+                }
+
+                @Test
+                public void quadratic() {
+                    test(1, T_1, ImmutableVector3.ZERO, ImmutableVector3.ZERO, F_1, ImmutableVector3.ZERO,
+                            ImmutableVector3.ZERO, 0, 0);
+                }
+
+                @Test
+                public void sine() {
+                    test(1, T_1, ImmutableVector3.ZERO, ImmutableVector3.ZERO, ImmutableVector3.ZERO,
+                            ImmutableVector3.ZERO, F_1, 0, 2);
+                }
+
+                private void test(final double scale, @NonNull final Duration t, final ImmutableVector3 f0,
+                        final ImmutableVector3 f1, final ImmutableVector3 f2, final ImmutableVector3 fc,
+                        final ImmutableVector3 fs, final double we, final double wh) {
+                    final Duration t0 = t;
+                    final double wScale = Math.min(we, wh);
+                    final double fScale = Math.max(Math.max(f0.magnitude(), fc.magnitude()), Double.MIN_NORMAL);
+                    final HarmonicVector3 actual = new HarmonicVector3(t0, f0, f1, f2, fc, fs, we, wh);
+
+                    HasWanted.this.test(scale, t, actual, wScale, fScale);
+                }
+            }// class
+
+            private void test(final double scale, @NonNull final Duration t, final HarmonicVector3 actual,
+                    final double wScale, final double fScale) {
+                final ImmutableVector3 wanted = actual.apply(t);
+                final var expectedErrorAndGradients = HarmonicVector3EnergyErrorValueAndGradients.ZERO;
+                final double delta = Math.nextUp(1.0) - 1;
+
+                ValueTerm.this.test(scale, t, wanted, actual, expectedErrorAndGradients, delta, wScale, fScale);
+            }
+        }// class
+
         private void test(final double scale, @NonNull final Duration t, @NonNull final ImmutableVector3 wanted,
                 final HarmonicVector3 actual,
                 final HarmonicVector3EnergyErrorValueAndGradients expectedErrorAndGradients, final double delta,
                 final double wScale, final double fScale) {
             final var term = HarmonicVector3EnergyErrorFunctionTerms.createValueTerm(scale, t, wanted);
+            assertNotNull(term, "Always returns a term.");// guard
             final var errorAndGradients = HarmonicVector3EnergyErrorFunctionTermsTest.apply(term, actual);
             HarmonicVector3EnergyErrorValueAndGradientsTest.assertEquals(expectedErrorAndGradients, errorAndGradients,
                     delta, wScale, fScale, "error");
         }
-
     }// class
 
     @Nested
@@ -76,6 +146,20 @@ public class HarmonicVector3EnergyErrorFunctionTermsTest {
         }
     }// class
 
+    private static final ImmutableVector3 F_1 = ImmutableVector3.I;
+
+    private static final ImmutableVector3 F_2 = ImmutableVector3.J;
+
+    private static final ImmutableVector3 F_3 = ImmutableVector3.K;
+
+    private static final ImmutableVector3 F_4 = ImmutableVector3.create(1, 2, 3);
+
+    private static final ImmutableVector3 F_5 = ImmutableVector3.create(5, 7, 11);
+
+    private static final Duration T_1 = Duration.ofSeconds(2);
+
+    private static final Duration T_2 = Duration.ofSeconds(3);
+
     private static HarmonicVector3 v1;
 
     private static HarmonicVector3 v2;
@@ -93,9 +177,7 @@ public class HarmonicVector3EnergyErrorFunctionTermsTest {
 
     @BeforeAll
     public static void setUp() {
-        v1 = new HarmonicVector3(Duration.ofSeconds(2), ImmutableVector3.J, ImmutableVector3.K, ImmutableVector3.I,
-                ImmutableVector3.J, ImmutableVector3.K, 3, 4);
-        v2 = new HarmonicVector3(Duration.ofSeconds(3), ImmutableVector3.K, ImmutableVector3.I, ImmutableVector3.J,
-                ImmutableVector3.K, ImmutableVector3.I, 5, 7);
+        v1 = new HarmonicVector3(T_1, F_1, F_2, F_3, F_1, F_2, 3, 4);
+        v2 = new HarmonicVector3(T_2, F_2, F_3, F_1, F_2, F_3, 5, 7);
     }
 }

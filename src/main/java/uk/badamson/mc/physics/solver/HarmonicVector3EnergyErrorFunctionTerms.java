@@ -89,6 +89,6 @@ public final class HarmonicVector3EnergyErrorFunctionTerms {
             final double scale, @NonNull final Duration t, @NonNull final ImmutableVector3 f) {
         Objects.requireNonNull(t, "t");
         Objects.requireNonNull(f, "f");
-        return null;// FIXME
+        return ZERO;// FIXME
     }
 }
