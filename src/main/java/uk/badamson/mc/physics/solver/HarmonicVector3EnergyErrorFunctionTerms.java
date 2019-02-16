@@ -89,6 +89,44 @@ public final class HarmonicVector3EnergyErrorFunctionTerms {
             final double scale, @NonNull final Duration t, @NonNull final ImmutableVector3 f) {
         Objects.requireNonNull(t, "t");
         Objects.requireNonNull(f, "f");
-        return ZERO;// FIXME
+        final double scale2 = 2.0 * scale;
+        return (actual) -> {
+            /*
+             * Inline calculation of fa = actual.at(t), so can reuse the intermediate terms.
+             */
+            final Duration tr = t.minus(actual.getT0());
+            final double ts = tr.getSeconds() + 1E-9 * tr.getNano();
+            final ImmutableVector3 fc = actual.getFc();
+            final ImmutableVector3 fs = actual.getFs();
+            final double we = actual.getWe();
+            final double wh = actual.getWh();
+
+            final double tau = we * ts;
+            final double tau2 = tau * tau;
+            final double alpha = wh * ts;
+            final double exp = Math.exp(tau);
+            final double expCos = exp * Math.cos(alpha);
+            final double expSin = exp * Math.sin(alpha);
+
+            final double fWeights[] = { 1.0, tau, tau2, expCos, expSin };
+            final ImmutableVector3 termsArray[] = { actual.getF0(), actual.getF1(), actual.getF2(), fc, fs };
+            final ImmutableVector3 fa = ImmutableVector3.weightedSum(fWeights, termsArray);
+
+            final ImmutableVector3 fe = fa.minus(f);
+            final double e = scale * fe.magnitude2();
+
+            final ImmutableVector3 dedf0 = fe.scale(scale2);
+            final ImmutableVector3 dedf1 = fe.scale(scale2 * tau);
+            final ImmutableVector3 dedf2 = fe.scale(scale2 * tau2);
+            final ImmutableVector3 dedfc = fe.scale(scale2 * expCos);
+            final ImmutableVector3 dedfs = fe.scale(scale2 * expSin);
+            final double dedweWeights[] = { 0, ts, 2.0 * tau * ts, expCos * we * ts, expSin * we * ts };
+            final ImmutableVector3 dfdwe = ImmutableVector3.weightedSum(dedweWeights, termsArray);
+            final double dedwe = scale2 * fe.dot(dfdwe);
+            final ImmutableVector3 dfdwh = fc.scale(-wh * expSin).plus(fs.scale(wh * expCos));
+            final double dedwh = scale2 * fe.dot(dfdwh);
+
+            return new HarmonicVector3EnergyErrorValueAndGradients(e, dedf0, dedf1, dedf2, dedfc, dedfs, dedwe, dedwh);
+        };
     }
 }

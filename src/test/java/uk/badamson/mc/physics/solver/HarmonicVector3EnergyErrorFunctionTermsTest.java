@@ -44,6 +44,43 @@ public class HarmonicVector3EnergyErrorFunctionTermsTest {
     public class ValueTerm {
 
         @Nested
+        public class Constant {
+
+            @Test
+            public void a() {
+                test(1, T_1, F_1, T_2, F_2);
+            }
+
+            @Test
+            public void b() {
+                test(2, T_2, F_3, T_3, F_4);
+            }
+
+            @Test
+            public void c() {
+                test(1, T_2, F_1, T_1, F_2);
+            }
+
+            private void test(final double scale, @NonNull final Duration t, final ImmutableVector3 wanted,
+                    @NonNull final Duration t0, final ImmutableVector3 f0) {
+                final HarmonicVector3 actual = new HarmonicVector3(t0, f0, ImmutableVector3.ZERO, ImmutableVector3.ZERO,
+                        ImmutableVector3.ZERO, ImmutableVector3.ZERO, 0, 0);
+                final double wScale = Double.MIN_NORMAL;
+                final double fScale = Math.max(Math.max(f0.magnitude(), wanted.magnitude()), Double.MIN_NORMAL);
+                final double delta = Math.nextUp(1.0) - 1;
+                final ImmutableVector3 fe = actual.apply(t).minus(wanted);
+                final double eExpected = fe.magnitude2() * scale;
+                final ImmutableVector3 dedf0Expected = fe.scale(2.0 * scale);
+                final ImmutableVector3 dedfcExpected = fe.scale(2.0 * scale);
+                final HarmonicVector3EnergyErrorValueAndGradients expectedErrorAndGradients = new HarmonicVector3EnergyErrorValueAndGradients(
+                        eExpected, dedf0Expected, ImmutableVector3.ZERO, ImmutableVector3.ZERO, dedfcExpected,
+                        ImmutableVector3.ZERO, 0, 0);
+
+                ValueTerm.this.test(scale, t, wanted, actual, expectedErrorAndGradients, delta, wScale, fScale);
+            }
+        }// class
+
+        @Nested
         public class HasWanted {
 
             @Nested
@@ -123,6 +160,7 @@ public class HarmonicVector3EnergyErrorFunctionTermsTest {
             HarmonicVector3EnergyErrorValueAndGradientsTest.assertEquals(expectedErrorAndGradients, errorAndGradients,
                     delta, wScale, fScale, "error");
         }
+
     }// class
 
     @Nested
@@ -159,6 +197,8 @@ public class HarmonicVector3EnergyErrorFunctionTermsTest {
     private static final Duration T_1 = Duration.ofSeconds(2);
 
     private static final Duration T_2 = Duration.ofSeconds(3);
+
+    private static final Duration T_3 = Duration.ofSeconds(5);
 
     private static HarmonicVector3 v1;
 
