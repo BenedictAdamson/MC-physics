@@ -258,8 +258,8 @@ public class HarmonicVector3EnergyErrorValueAndGradientsTest {
     private static ImmutableVector3 V_5 = ImmutableVector3.create(5, 7, 11);
     private static ImmutableVector3 V_6 = ImmutableVector3.create(13, 17, 19);
 
-    public static void assertEquals(final HarmonicVector3EnergyErrorValueAndGradients actual,
-            final HarmonicVector3EnergyErrorValueAndGradients expected, final double delta, final double wScale,
+    public static void assertEquals(final HarmonicVector3EnergyErrorValueAndGradients expected,
+            final HarmonicVector3EnergyErrorValueAndGradients actual, final double delta, final double wScale,
             final double fScale, final String message) {
         final double deltaDeDw = delta / wScale;
         final double deltaDeDf = delta / fScale;
