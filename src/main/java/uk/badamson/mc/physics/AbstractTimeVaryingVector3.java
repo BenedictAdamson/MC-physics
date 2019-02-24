@@ -19,22 +19,23 @@ package uk.badamson.mc.physics;
  */
 
 import java.time.Duration;
-import java.util.function.ToDoubleFunction;
+import java.util.function.Function;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import net.jcip.annotations.Immutable;
+import uk.badamson.mc.math.ImmutableVector3;
 
 /**
  * <p>
- * A skeleton implementation of a functor for a time varying scalar property.
+ * A skeleton implementation of a functor for a time varying 3D vector property.
  * </p>
  *
- * @see AbstractTimeVaryingVector3
+ * @see AbstractTimeVaryingScalar
  */
 @Immutable
-public abstract class AbstractTimeVaryingScalar implements TimeVaryingScalar, ToDoubleFunction<Duration> {
+public abstract class AbstractTimeVaryingVector3 implements TimeVaryingVector3, Function<Duration, ImmutableVector3> {
 
-    protected AbstractTimeVaryingScalar() {
+    protected AbstractTimeVaryingVector3() {
         // Do nothing
     }
 
@@ -43,7 +44,7 @@ public abstract class AbstractTimeVaryingScalar implements TimeVaryingScalar, To
      * Applies this function to the given argument.
      * </p>
      * <ul>
-     * <li>The {@link #applyAsDouble(Duration)} method simply delegates to the
+     * <li>The {@link #apply(Duration)} method simply delegates to the
      * {@link #at(Duration)} method.</li>
      * </ul>
      *
@@ -54,7 +55,7 @@ public abstract class AbstractTimeVaryingScalar implements TimeVaryingScalar, To
      *             If {@code value} is null.
      */
     @Override
-    public final double applyAsDouble(@NonNull final Duration value) {
+    public final @NonNull ImmutableVector3 apply(@NonNull final Duration value) {
         return at(value);
     }
 }

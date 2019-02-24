@@ -1,5 +1,12 @@
+/**
+ * <p>
+ * Classes for mapping from an object representation to (part of) a state-space
+ * representation, and vice versa.
+ * </p>
+ */
+package uk.badamson.mc.physics.solver.mapper;
 /*
- * © Copyright Benedict Adamson 2018.
+ * © Copyright Benedict Adamson 2018-19.
  *
  * This file is part of MC-physics.
  *
@@ -15,20 +22,3 @@
  * You should have received a copy of the GNU General Public License along with
  * MC-physics. If not, see <https://www.gnu.org/licenses/>.
  */
-
-/**
- * <p>
- * A physics engine suitable for parallel discrete event simulation.
- * </p>
- */
-module uk.badamson.mc.physics {
-    exports uk.badamson.mc.physics;
-    exports uk.badamson.mc.physics.solver;
-    exports uk.badamson.mc.physics.solver.mapper;
-
-    requires com.github.spotbugs.annotations;
-    requires transitive uk.badamson.mc.math;
-
-    // Automatic modules:
-    requires static jcip.annotations;
-}

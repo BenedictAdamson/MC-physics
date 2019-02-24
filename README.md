@@ -3,7 +3,7 @@ A physics engine suitable for parallel discrete event simulation.
 
 ## License
 
-© Copyright Benedict Adamson 2018.
+© Copyright Benedict Adamson 2018-19.
  
 ![GPLV3](https://www.gnu.org/graphics/gplv3-with-text-136x68.png)
 

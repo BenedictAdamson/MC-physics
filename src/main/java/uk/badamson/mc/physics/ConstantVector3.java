@@ -21,25 +21,28 @@ package uk.badamson.mc.physics;
 import java.time.Duration;
 import java.util.Objects;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import net.jcip.annotations.Immutable;
+import uk.badamson.mc.math.ImmutableVector3;
 
 /**
  * <p>
- * A {@linkplain TimeVaryingScalar functor for a notionally time varying scalar
- * property} that in fact does not vary with time.
+ * A {@linkplain TimeVaryingVector3 functor for a notionally time varying 3D
+ * vector property} that in fact does not vary with time.
  * </p>
  *
- * @see ConstantVector3
+ * @see ConstantScalar
  */
 @Immutable
-public final class ConstantScalar extends AbstractTimeVaryingScalar {
+public final class ConstantVector3 extends AbstractTimeVaryingVector3 {
 
-    private final double value;
+    @NonNull
+    private final ImmutableVector3 value;
 
     /**
      * <p>
-     * Construct a notionally time varying scalar property that in fact has a given
-     * value at all points in time.
+     * Construct a notionally time varying 3D vector property that in fact has a
+     * given value at all points in time.
      * </p>
      * <ul>
      * <li>The {@linkplain #getValue() value} of this scalar is the given
@@ -47,10 +50,12 @@ public final class ConstantScalar extends AbstractTimeVaryingScalar {
      * </ul>
      *
      * @param value
-     *            The value of the scalar at all points in time.
+     *            The value of the 3D vector at all points in time.
+     * @throws NullPointerException
+     *             If {@code value} is null.
      */
-    public ConstantScalar(final double value) {
-        this.value = value;
+    public ConstantVector3(@NonNull final ImmutableVector3 value) {
+        this.value = Objects.requireNonNull(value, "value");
     }
 
     /**
@@ -67,19 +72,19 @@ public final class ConstantScalar extends AbstractTimeVaryingScalar {
      *             {@inheritDoc}
      */
     @Override
-    public final double at(final Duration t) {
+    public final ImmutableVector3 at(final Duration t) {
         Objects.requireNonNull(t, "t");
         return value;
     }
 
     /**
      * <p>
-     * The value of the scalar at all points in time.
+     * The value of the 3D vector property at all points in time.
      * </p>
      *
-     * @return the value
+     * @return the value; not null
      */
-    public final double getValue() {
+    public final ImmutableVector3 getValue() {
         return value;
     }
 
