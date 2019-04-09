@@ -380,8 +380,6 @@ public class HarmonicVector3EnergyErrorFunctionTermsTest {
 
     private static final ImmutableVector3 F_4 = ImmutableVector3.create(1, 2, 3);
 
-    private static final ImmutableVector3 F_5 = ImmutableVector3.create(5, 7, 11);
-
     private static final Duration T_1 = Duration.ofSeconds(2);
 
     private static final Duration T_2 = Duration.ofSeconds(3);
