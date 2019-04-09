@@ -1,7 +1,7 @@
 # Dockerfile for the use in the Jenkinsfile for the MC-physics project,
 # to set up the build environment for Jenkins to use.
 
-# © Copyright Benedict Adamson 2018.
+# © Copyright Benedict Adamson 201819.
 # 
 # This file is part of MC-physics.
 #
@@ -19,7 +19,8 @@
 # along with MC-physics.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-FROM ubuntu:18.04
+FROM debian:stretch-backports
 RUN apt-get -y update && apt-get -y install \
    maven \
    openjdk-11-jdk-headless
+   
