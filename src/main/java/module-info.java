@@ -28,7 +28,5 @@ module uk.badamson.mc.physics {
 
     requires com.github.spotbugs.annotations;
     requires transitive uk.badamson.mc.math;
-
-    // Automatic modules:
-    requires static jcip.annotations;
+    requires static org.icroco.jcip.annotations;
 }
